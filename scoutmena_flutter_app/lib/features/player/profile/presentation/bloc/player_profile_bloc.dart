@@ -62,7 +62,7 @@ class PlayerProfileBloc extends Bloc<PlayerProfileEvent, PlayerProfileState> {
   ) async {
     // Don't emit loading state here to avoid full screen loader if not needed
     // Or emit a specific loading state if UI handles it
-    
+
     final result = await getAcademiesUseCase();
 
     result.fold(
@@ -96,16 +96,17 @@ class PlayerProfileBloc extends Bloc<PlayerProfileEvent, PlayerProfileState> {
   ) async {
     if (state is PlayerProfileLoaded) {
       final currentProfile = (state as PlayerProfileLoaded).profile;
-      
+
       final result = await getPlayerAnalyticsUseCase();
-      
+
       result.fold(
         (failure) {
           // Silently fail or log error, don't disrupt the profile view
           // Or maybe emit a state with error in analytics field?
           // For now, just keep the current state
         },
-        (analytics) => emit(PlayerProfileLoaded(currentProfile, analytics: analytics)),
+        (analytics) =>
+            emit(PlayerProfileLoaded(currentProfile, analytics: analytics)),
       );
     }
   }

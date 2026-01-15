@@ -8,7 +8,8 @@ import 'player_match_stats_event.dart';
 import 'player_match_stats_state.dart';
 
 @injectable
-class PlayerMatchStatsBloc extends Bloc<PlayerMatchStatsEvent, PlayerMatchStatsState> {
+class PlayerMatchStatsBloc
+    extends Bloc<PlayerMatchStatsEvent, PlayerMatchStatsState> {
   final GetPlayerMatchStatsUseCase getPlayerMatchStatsUseCase;
   final AddPlayerMatchStatUseCase addPlayerMatchStatUseCase;
   final UpdatePlayerMatchStatUseCase updatePlayerMatchStatUseCase;
@@ -62,7 +63,8 @@ class PlayerMatchStatsBloc extends Bloc<PlayerMatchStatsEvent, PlayerMatchStatsS
     result.fold(
       (failure) => emit(MatchStatsError(message: failure.message)),
       (_) {
-        emit(const MatchStatOperationSuccess('Match stat updated successfully'));
+        emit(
+            const MatchStatOperationSuccess('Match stat updated successfully'));
         add(LoadMatchStats());
       },
     );
@@ -77,7 +79,8 @@ class PlayerMatchStatsBloc extends Bloc<PlayerMatchStatsEvent, PlayerMatchStatsS
     result.fold(
       (failure) => emit(MatchStatsError(message: failure.message)),
       (_) {
-        emit(const MatchStatOperationSuccess('Match stat deleted successfully'));
+        emit(
+            const MatchStatOperationSuccess('Match stat deleted successfully'));
         add(LoadMatchStats());
       },
     );

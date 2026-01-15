@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 /// ScoutMena Logo Widget
-/// 
+///
 /// Displays the appropriate ScoutMena logo based on current language.
 /// - English: Shows "Main logo.png"
 /// - Arabic: Shows "Main logo Arabic.png"
@@ -21,7 +21,7 @@ class ScoutMenaLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
-    final logoPath = isArabic 
+    final logoPath = isArabic
         ? 'assets/images/Main logo Arabic.png'
         : 'assets/images/Main logo.png';
 
@@ -51,7 +51,7 @@ class ScoutMenaLogo extends StatelessWidget {
 }
 
 /// App Icon Widget
-/// 
+///
 /// Displays the ScoutMena app icon
 class ScoutMenaAppIcon extends StatelessWidget {
   final double size;

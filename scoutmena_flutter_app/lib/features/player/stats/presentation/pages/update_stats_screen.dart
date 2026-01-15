@@ -6,7 +6,7 @@ import '../../../../../injection.dart';
 import 'save_stats_screen.dart';
 
 class UpdateStatsScreen extends StatefulWidget {
-  const UpdateStatsScreen({Key? key}) : super(key: key);
+  const UpdateStatsScreen({super.key});
 
   @override
   State<UpdateStatsScreen> createState() => _UpdateStatsScreenState();
@@ -53,7 +53,8 @@ class _UpdateStatsScreenState extends State<UpdateStatsScreen> {
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SaveStatsScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const SaveStatsScreen()),
                       );
                       if (result == true) {
                         _loadStats();
@@ -75,7 +76,8 @@ class _UpdateStatsScreenState extends State<UpdateStatsScreen> {
               return Card(
                 margin: const EdgeInsets.only(bottom: 16),
                 child: ListTile(
-                  title: Text('${stats.season} - ${'profile.levels.${stats.level}'.tr()}'),
+                  title: Text(
+                      '${stats.season} - ${'profile.levels.${stats.level}'.tr()}'),
                   subtitle: Text(
                     '${'profile.goals'.tr()}: ${stats.goals}, ${'profile.assists'.tr()}: ${stats.assists}, ${'profile.appearances'.tr()}: ${stats.appearances}',
                   ),

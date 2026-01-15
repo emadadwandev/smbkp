@@ -5,6 +5,7 @@ import '../../../../app/routes.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/services/otp_service.dart';
 import '../../../../core/services/notification_service.dart';
+import '../../../../core/services/firebase_service.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../injection.dart';
 
@@ -42,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _loginWithEmail() async {
     setState(() => _errorMessage = null);
-    
+
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
@@ -55,11 +56,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (mounted) {
         // Save authentication data
-        await _secureStorage.write(key: AppConstants.accessTokenKey, value: response.token);
-        await _secureStorage.write(key: AppConstants.userRoleKey, value: response.user.accountType);
-        await _secureStorage.write(key: AppConstants.userIdKey, value: response.user.id);
+        await _secureStorage.write(
+            key: AppConstants.accessTokenKey, value: response.token);
+        await _secureStorage.write(
+            key: AppConstants.userRoleKey, value: response.user.accountType);
+        await _secureStorage.write(
+            key: AppConstants.userIdKey, value: response.user.id);
         await _secureStorage.write(key: 'user_name', value: response.user.name);
-        
+
         // Register device for notifications
         try {
           final notificationService = getIt<NotificationService>();
@@ -83,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
           default:
             dashboardRoute = AppRoutes.main;
         }
-        
+
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -92,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
             duration: const Duration(seconds: 2),
           ),
         );
-        
+
         // Navigate and clear navigation stack
         Navigator.of(context).pushNamedAndRemoveUntil(
           dashboardRoute,
@@ -114,21 +118,355 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _signInWithGoogle() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('auth.google_sign_in_soon'.tr())),
-    );
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final firebaseService = getIt<FirebaseService>();
+
+      // Verify Firebase is initialized
+      if (!firebaseService.isInitialized) {
+        throw Exception('Firebase not properly initialized. Please restart the app.');
+      }
+
+      debugPrint('🔵 Starting Google Sign-In...');
+
+      // Sign in with Google via Firebase
+      final userCredential = await firebaseService.signInWithGoogle();
+
+      if (userCredential == null) {
+        debugPrint('❌ Google sign-in cancelled by user');
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+        return; // User cancelled - don't show error
+      }
+
+      if (userCredential.user == null) {
+        throw Exception('Failed to get user from Google sign-in');
+      }
+
+      debugPrint('✅ Google user authenticated: ${userCredential.user?.email}');
+
+      // Get Firebase ID token
+      final idToken = await userCredential.user!.getIdToken();
+
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception('Failed to get Firebase ID token');
+      }
+
+      debugPrint('🔐 Sending Firebase token to backend...');
+
+      // Send token to backend for authentication
+      final response = await _otpService.loginWithFirebase(
+        firebaseIdToken: idToken,
+      );
+
+      if (mounted) {
+        // Save authentication data
+        await _secureStorage.write(
+            key: AppConstants.accessTokenKey, value: response.token);
+        await _secureStorage.write(
+            key: AppConstants.userRoleKey, value: response.user.accountType);
+        await _secureStorage.write(
+            key: AppConstants.userIdKey, value: response.user.id);
+        await _secureStorage.write(key: 'user_name', value: response.user.name);
+
+        debugPrint('✅ Authentication data saved');
+
+        // Register device for notifications
+        try {
+          final notificationService = getIt<NotificationService>();
+          await notificationService.registerDevice();
+        } catch (e) {
+          debugPrint('⚠️ Failed to register device: $e');
+        }
+
+        // Navigate to appropriate dashboard
+        String dashboardRoute;
+        switch (response.user.accountType.toLowerCase()) {
+          case 'player':
+            dashboardRoute = AppRoutes.playerDashboard;
+            break;
+          case 'scout':
+            dashboardRoute = AppRoutes.scoutDashboard;
+            break;
+          case 'coach':
+            dashboardRoute = AppRoutes.coachDashboard;
+            break;
+          default:
+            dashboardRoute = AppRoutes.main;
+        }
+
+        debugPrint('✅ Navigating to $dashboardRoute');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('auth.welcome_user'.tr(args: [response.user.name])),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          dashboardRoute,
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      debugPrint('❌ Google Sign-In Error: $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString().replaceAll('Exception:', '').trim();
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage ?? 'Google sign-in failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   Future<void> _signInWithFacebook() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('auth.facebook_sign_in_soon'.tr())),
-    );
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final firebaseService = getIt<FirebaseService>();
+
+      // Verify Firebase is initialized
+      if (!firebaseService.isInitialized) {
+        throw Exception('Firebase not properly initialized. Please restart the app.');
+      }
+
+      debugPrint('🔵 Starting Facebook Sign-In...');
+
+      // Sign in with Facebook via Firebase
+      final userCredential = await firebaseService.signInWithFacebook();
+
+      if (userCredential == null) {
+        debugPrint('❌ Facebook sign-in cancelled by user');
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+        return; // User cancelled - don't show error
+      }
+
+      if (userCredential.user == null) {
+        throw Exception('Failed to get user from Facebook sign-in');
+      }
+
+      debugPrint('✅ Facebook user authenticated: ${userCredential.user?.email}');
+
+      // Get Firebase ID token
+      final idToken = await userCredential.user!.getIdToken();
+
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception('Failed to get Firebase ID token');
+      }
+
+      debugPrint('🔐 Sending Firebase token to backend...');
+
+      // Send token to backend for authentication
+      final response = await _otpService.loginWithFirebase(
+        firebaseIdToken: idToken,
+      );
+
+      if (mounted) {
+        // Save authentication data
+        await _secureStorage.write(
+            key: AppConstants.accessTokenKey, value: response.token);
+        await _secureStorage.write(
+            key: AppConstants.userRoleKey, value: response.user.accountType);
+        await _secureStorage.write(
+            key: AppConstants.userIdKey, value: response.user.id);
+        await _secureStorage.write(key: 'user_name', value: response.user.name);
+
+        debugPrint('✅ Authentication data saved');
+
+        // Register device for notifications
+        try {
+          final notificationService = getIt<NotificationService>();
+          await notificationService.registerDevice();
+        } catch (e) {
+          debugPrint('⚠️ Failed to register device: $e');
+        }
+
+        // Navigate to appropriate dashboard
+        String dashboardRoute;
+        switch (response.user.accountType.toLowerCase()) {
+          case 'player':
+            dashboardRoute = AppRoutes.playerDashboard;
+            break;
+          case 'scout':
+            dashboardRoute = AppRoutes.scoutDashboard;
+            break;
+          case 'coach':
+            dashboardRoute = AppRoutes.coachDashboard;
+            break;
+          default:
+            dashboardRoute = AppRoutes.main;
+        }
+
+        debugPrint('✅ Navigating to $dashboardRoute');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('auth.welcome_user'.tr(args: [response.user.name])),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          dashboardRoute,
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      debugPrint('❌ Facebook Sign-In Error: $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString().replaceAll('Exception:', '').trim();
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage ?? 'Facebook sign-in failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _signInWithApple() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('auth.apple_sign_in_soon'.tr())),
-    );
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final firebaseService = getIt<FirebaseService>();
+
+      // Verify Firebase is initialized
+      if (!firebaseService.isInitialized) {
+        throw Exception('Firebase not properly initialized. Please restart the app.');
+      }
+
+      debugPrint('🔵 Starting Apple Sign-In...');
+
+      // Sign in with Apple via Firebase
+      final userCredential = await firebaseService.signInWithApple();
+
+      if (userCredential == null) {
+        debugPrint('❌ Apple sign-in cancelled by user');
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+        return; // User cancelled - don't show error
+      }
+
+      if (userCredential.user == null) {
+        throw Exception('Failed to get user from Apple sign-in');
+      }
+
+      debugPrint('✅ Apple user authenticated: ${userCredential.user?.email}');
+
+      // Get Firebase ID token
+      final idToken = await userCredential.user!.getIdToken();
+
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception('Failed to get Firebase ID token');
+      }
+
+      debugPrint('🔐 Sending Firebase token to backend...');
+
+      // Send token to backend for authentication
+      final response = await _otpService.loginWithFirebase(
+        firebaseIdToken: idToken,
+      );
+
+      if (mounted) {
+        // Save authentication data
+        await _secureStorage.write(
+            key: AppConstants.accessTokenKey, value: response.token);
+        await _secureStorage.write(
+            key: AppConstants.userRoleKey, value: response.user.accountType);
+        await _secureStorage.write(
+            key: AppConstants.userIdKey, value: response.user.id);
+        await _secureStorage.write(key: 'user_name', value: response.user.name);
+
+        debugPrint('✅ Authentication data saved');
+
+        // Register device for notifications
+        try {
+          final notificationService = getIt<NotificationService>();
+          await notificationService.registerDevice();
+        } catch (e) {
+          debugPrint('⚠️ Failed to register device: $e');
+        }
+
+        // Navigate to appropriate dashboard
+        String dashboardRoute;
+        switch (response.user.accountType.toLowerCase()) {
+          case 'player':
+            dashboardRoute = AppRoutes.playerDashboard;
+            break;
+          case 'scout':
+            dashboardRoute = AppRoutes.scoutDashboard;
+            break;
+          case 'coach':
+            dashboardRoute = AppRoutes.coachDashboard;
+            break;
+          default:
+            dashboardRoute = AppRoutes.main;
+        }
+
+        debugPrint('✅ Navigating to $dashboardRoute');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('auth.welcome_user'.tr(args: [response.user.name])),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          dashboardRoute,
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      debugPrint('❌ Apple Sign-In Error: $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString().replaceAll('Exception:', '').trim();
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage ?? 'Apple sign-in failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -234,7 +572,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
                       onPressed: () {
                         setState(() => _obscurePassword = !_obscurePassword);
@@ -302,50 +642,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                // Divider
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0),
-                  child: Row(
-                    children: [
-                      const Expanded(child: Divider()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          'auth.or_continue_with'.tr(),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                        ),
-                      ),
-                      const Expanded(child: Divider()),
-                    ],
-                  ),
-                ),
-
-                // Social Login Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildSocialButton(
-                      icon: Icons.g_mobiledata,
-                      label: 'Google',
-                      onTap: _signInWithGoogle,
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialButton(
-                      icon: Icons.facebook,
-                      label: 'Facebook',
-                      onTap: _signInWithFacebook,
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialButton(
-                      icon: Icons.apple,
-                      label: 'Apple',
-                      onTap: _signInWithApple,
-                    ),
-                  ],
-                ),
-
                 const SizedBox(height: 32),
 
                 // Sign Up Link
@@ -359,7 +655,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed(AppRoutes.roleSelection);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.roleSelection);
                       },
                       child: Text(
                         'signup'.tr(),

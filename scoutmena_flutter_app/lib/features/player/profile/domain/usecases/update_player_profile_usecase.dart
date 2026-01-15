@@ -54,7 +54,7 @@ class UpdatePlayerProfileUseCase {
     if (country != null && country.trim().isEmpty) {
       return Left(ValidationFailure('Country cannot be empty'));
     }
-    
+
     // Validate position if provided
     if (primaryPosition != null) {
       const validPositions = [
@@ -70,12 +70,12 @@ class UpdatePlayerProfileUseCase {
         'striker',
         'second_striker'
       ];
-      
+
       if (!validPositions.contains(primaryPosition)) {
         return Left(ValidationFailure('Invalid primary position'));
       }
     }
-    
+
     // Validate preferred foot if provided
     if (preferredFoot != null) {
       const validFeet = ['left', 'right', 'both'];
@@ -83,7 +83,7 @@ class UpdatePlayerProfileUseCase {
         return Left(ValidationFailure('Invalid preferred foot'));
       }
     }
-    
+
     // Validate privacy level if provided
     if (privacyLevel != null) {
       const validPrivacyLevels = ['public', 'scouts_only', 'private'];
@@ -99,12 +99,12 @@ class UpdatePlayerProfileUseCase {
         return Left(ValidationFailure('Invalid gender'));
       }
     }
-    
+
     // Validate bio length if provided
     if (bio != null && bio.length > 500) {
       return Left(ValidationFailure('Bio must be 500 characters or less'));
     }
-    
+
     // Validate email format if provided
     if (contactEmail != null) {
       final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -112,28 +112,28 @@ class UpdatePlayerProfileUseCase {
         return Left(ValidationFailure('Invalid email format'));
       }
     }
-    
+
     if (agentEmail != null && agentEmail.isNotEmpty) {
       final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
       if (!emailRegex.hasMatch(agentEmail)) {
         return Left(ValidationFailure('Invalid agent email format'));
       }
     }
-    
+
     // Validate height and weight ranges if provided
     if (heightCm != null && (heightCm < 100 || heightCm > 250)) {
       return Left(ValidationFailure('Height must be between 100-250 cm'));
     }
-    
+
     if (weightKg != null && (weightKg < 30 || weightKg > 200)) {
       return Left(ValidationFailure('Weight must be between 30-200 kg'));
     }
-    
+
     // Validate jersey number if provided
     if (jerseyNumber != null && (jerseyNumber < 1 || jerseyNumber > 99)) {
       return Left(ValidationFailure('Jersey number must be between 1-99'));
     }
-    
+
     return await repository.updateProfile(
       profileId: profileId,
       firstName: firstName,

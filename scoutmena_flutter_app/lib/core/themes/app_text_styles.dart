@@ -106,7 +106,10 @@ class AppTextStyles {
   static TextStyle getH1(bool isArabic) => isArabic ? h1Arabic : h1English;
   static TextStyle getH2(bool isArabic) => isArabic ? h2Arabic : h2English;
   static TextStyle getH3(bool isArabic) => isArabic ? h3Arabic : h3English;
-  static TextStyle getBody(bool isArabic) => isArabic ? bodyArabic : bodyEnglish;
-  static TextStyle getCaption(bool isArabic) => isArabic ? captionArabic : captionEnglish;
-  static TextStyle getButton(bool isArabic) => isArabic ? buttonArabic : buttonEnglish;
+  static TextStyle getBody(bool isArabic) =>
+      isArabic ? bodyArabic : bodyEnglish;
+  static TextStyle getCaption(bool isArabic) =>
+      isArabic ? captionArabic : captionEnglish;
+  static TextStyle getButton(bool isArabic) =>
+      isArabic ? buttonArabic : buttonEnglish;
 }

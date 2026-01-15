@@ -31,14 +31,19 @@ class _ScoutProfileEditScreenState extends State<ScoutProfileEditScreen> {
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController(text: widget.profile.firstName);
+    _firstNameController =
+        TextEditingController(text: widget.profile.firstName);
     _lastNameController = TextEditingController(text: widget.profile.lastName);
     _bioController = TextEditingController(text: widget.profile.bio ?? '');
-    _clubController = TextEditingController(text: widget.profile.clubName ?? '');
-    _jobTitleController = TextEditingController(text: widget.profile.jobTitle ?? '');
+    _clubController =
+        TextEditingController(text: widget.profile.clubName ?? '');
+    _jobTitleController =
+        TextEditingController(text: widget.profile.jobTitle ?? '');
     _countryController = TextEditingController(text: widget.profile.country);
-    _emailController = TextEditingController(text: widget.profile.contactEmail ?? '');
-    _phoneController = TextEditingController(text: widget.profile.contactPhone ?? '');
+    _emailController =
+        TextEditingController(text: widget.profile.contactEmail ?? '');
+    _phoneController =
+        TextEditingController(text: widget.profile.contactPhone ?? '');
   }
 
   @override

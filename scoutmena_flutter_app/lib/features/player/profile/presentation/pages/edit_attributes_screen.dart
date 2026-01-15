@@ -11,26 +11,27 @@ class EditAttributesScreen extends StatefulWidget {
   final PlayerProfileEntity profile;
 
   const EditAttributesScreen({
-    Key? key,
+    super.key,
     required this.profile,
-  }) : super(key: key);
+  });
 
   @override
   State<EditAttributesScreen> createState() => _EditAttributesScreenState();
 }
 
-class _EditAttributesScreenState extends State<EditAttributesScreen> with SingleTickerProviderStateMixin {
+class _EditAttributesScreenState extends State<EditAttributesScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   // Technical Data Controllers
   final Map<String, double> _technicalData = {};
-  
+
   // Tactical Data Controllers
   final Map<String, double> _tacticalData = {};
-  
+
   // Physical Data Controllers
   final Map<String, double> _physicalData = {};
-  
+
   // Training Data Controllers
   final TextEditingController _weeklyHoursController = TextEditingController();
   final TextEditingController _sessionsController = TextEditingController();
@@ -46,28 +47,44 @@ class _EditAttributesScreenState extends State<EditAttributesScreen> with Single
   void _initializeData() {
     // Initialize Technical Data
     final tech = widget.profile.technicalData ?? {};
-    _technicalData['ball_control'] = double.tryParse(tech['ball_control']?.toString() ?? '50') ?? 50;
-    _technicalData['dribbling'] = double.tryParse(tech['dribbling']?.toString() ?? '50') ?? 50;
-    _technicalData['passing'] = double.tryParse(tech['passing']?.toString() ?? '50') ?? 50;
-    _technicalData['shooting'] = double.tryParse(tech['shooting']?.toString() ?? '50') ?? 50;
-    _technicalData['defending'] = double.tryParse(tech['defending']?.toString() ?? '50') ?? 50;
-    _technicalData['heading'] = double.tryParse(tech['heading']?.toString() ?? '50') ?? 50;
+    _technicalData['ball_control'] =
+        double.tryParse(tech['ball_control']?.toString() ?? '50') ?? 50;
+    _technicalData['dribbling'] =
+        double.tryParse(tech['dribbling']?.toString() ?? '50') ?? 50;
+    _technicalData['passing'] =
+        double.tryParse(tech['passing']?.toString() ?? '50') ?? 50;
+    _technicalData['shooting'] =
+        double.tryParse(tech['shooting']?.toString() ?? '50') ?? 50;
+    _technicalData['defending'] =
+        double.tryParse(tech['defending']?.toString() ?? '50') ?? 50;
+    _technicalData['heading'] =
+        double.tryParse(tech['heading']?.toString() ?? '50') ?? 50;
 
     // Initialize Tactical Data
     final tact = widget.profile.tacticalData ?? {};
-    _tacticalData['positioning'] = double.tryParse(tact['positioning']?.toString() ?? '50') ?? 50;
-    _tacticalData['vision'] = double.tryParse(tact['vision']?.toString() ?? '50') ?? 50;
-    _tacticalData['decision_making'] = double.tryParse(tact['decision_making']?.toString() ?? '50') ?? 50;
-    _tacticalData['work_rate'] = double.tryParse(tact['work_rate']?.toString() ?? '50') ?? 50;
+    _tacticalData['positioning'] =
+        double.tryParse(tact['positioning']?.toString() ?? '50') ?? 50;
+    _tacticalData['vision'] =
+        double.tryParse(tact['vision']?.toString() ?? '50') ?? 50;
+    _tacticalData['decision_making'] =
+        double.tryParse(tact['decision_making']?.toString() ?? '50') ?? 50;
+    _tacticalData['work_rate'] =
+        double.tryParse(tact['work_rate']?.toString() ?? '50') ?? 50;
 
     // Initialize Physical Data
     final phys = widget.profile.physicalData ?? {};
-    _physicalData['speed'] = double.tryParse(phys['speed']?.toString() ?? '50') ?? 50;
-    _physicalData['acceleration'] = double.tryParse(phys['acceleration']?.toString() ?? '50') ?? 50;
-    _physicalData['strength'] = double.tryParse(phys['strength']?.toString() ?? '50') ?? 50;
-    _physicalData['stamina'] = double.tryParse(phys['stamina']?.toString() ?? '50') ?? 50;
-    _physicalData['agility'] = double.tryParse(phys['agility']?.toString() ?? '50') ?? 50;
-    _physicalData['balance'] = double.tryParse(phys['balance']?.toString() ?? '50') ?? 50;
+    _physicalData['speed'] =
+        double.tryParse(phys['speed']?.toString() ?? '50') ?? 50;
+    _physicalData['acceleration'] =
+        double.tryParse(phys['acceleration']?.toString() ?? '50') ?? 50;
+    _physicalData['strength'] =
+        double.tryParse(phys['strength']?.toString() ?? '50') ?? 50;
+    _physicalData['stamina'] =
+        double.tryParse(phys['stamina']?.toString() ?? '50') ?? 50;
+    _physicalData['agility'] =
+        double.tryParse(phys['agility']?.toString() ?? '50') ?? 50;
+    _physicalData['balance'] =
+        double.tryParse(phys['balance']?.toString() ?? '50') ?? 50;
 
     // Initialize Training Data
     final train = widget.profile.trainingData ?? {};
@@ -93,19 +110,22 @@ class _EditAttributesScreenState extends State<EditAttributesScreen> with Single
     };
 
     // Convert doubles to ints for storage if needed, or keep as is
-    final technicalData = _technicalData.map((key, value) => MapEntry(key, value.round()));
-    final tacticalData = _tacticalData.map((key, value) => MapEntry(key, value.round()));
-    final physicalData = _physicalData.map((key, value) => MapEntry(key, value.round()));
+    final technicalData =
+        _technicalData.map((key, value) => MapEntry(key, value.round()));
+    final tacticalData =
+        _tacticalData.map((key, value) => MapEntry(key, value.round()));
+    final physicalData =
+        _physicalData.map((key, value) => MapEntry(key, value.round()));
 
     context.read<PlayerProfileBloc>().add(
-      UpdatePlayerProfile(
-        profileId: widget.profile.id ?? '',
-        technicalData: technicalData,
-        tacticalData: tacticalData,
-        physicalData: physicalData,
-        trainingData: trainingData,
-      ),
-    );
+          UpdatePlayerProfile(
+            profileId: widget.profile.id ?? '',
+            technicalData: technicalData,
+            tacticalData: tacticalData,
+            physicalData: physicalData,
+            trainingData: trainingData,
+          ),
+        );
   }
 
   @override
@@ -183,11 +203,15 @@ class _EditAttributesScreenState extends State<EditAttributesScreen> with Single
               children: [
                 Text(
                   'attributes.$key'.tr(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 Text(
                   data[key]!.round().toString(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryBlue),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryBlue),
                 ),
               ],
             ),

@@ -59,7 +59,8 @@ class UploadCoachVerificationDocuments {
       );
 
       if (!isValidExtension) {
-        errors.add('Invalid document format: ${document.path}. Allowed: PDF, JPG, PNG');
+        errors.add(
+            'Invalid document format: ${document.path}. Allowed: PDF, JPG, PNG');
       }
     }
 

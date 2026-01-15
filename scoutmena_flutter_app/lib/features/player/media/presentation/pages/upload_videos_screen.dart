@@ -8,7 +8,7 @@ import '../../../../../core/network/api_client.dart';
 import '../../../../../injection.dart';
 
 class UploadVideosScreen extends StatefulWidget {
-  const UploadVideosScreen({Key? key}) : super(key: key);
+  const UploadVideosScreen({super.key});
 
   @override
   State<UploadVideosScreen> createState() => _UploadVideosScreenState();
@@ -35,7 +35,7 @@ class _UploadVideosScreenState extends State<UploadVideosScreen> {
 
       if (result != null && result.files.isNotEmpty) {
         final file = result.files.first;
-        
+
         // Check file size (max 500MB)
         if (file.size > 500 * 1024 * 1024) {
           if (mounted) {
@@ -283,7 +283,8 @@ class _UploadVideosScreenState extends State<UploadVideosScreen> {
                   ),
                   child: Text(
                     'profile.upload_video'.tr(),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

@@ -56,35 +56,49 @@ class OtpService {
 
   /// Register with OTP (without Firebase)
   /// Backend endpoint: POST /api/v1/auth/register-with-otp
+  /// Note: phone, dateOfBirth, gender, country, and verificationId are now optional
+  /// to comply with App Store privacy guidelines
   Future<RegistrationResponse> registerWithOtp({
     required String firstName,
     required String lastName,
     required String email,
-    required String phone,
+    String? phone,
     required String password,
-    required String dateOfBirth,
-    required String gender,
+    String? dateOfBirth,
+    String? gender,
     required String accountType,
-    required String country,
-    required String verificationId,
+    String? country,
+    String? verificationId,
     String? parentName,
     String? parentEmail,
     String? parentPhone,
     String? parentRelationship,
   }) async {
     try {
-      final data = {
+      final data = <String, dynamic>{
         'first_name': firstName,
         'last_name': lastName,
         'email': email,
-        'phone': phone,
         'password': password,
-        'date_of_birth': dateOfBirth,
-        'gender': gender,
         'account_type': accountType,
-        'country': country,
-        'verification_id': verificationId,
       };
+
+      // Add optional fields if provided
+      if (phone != null) {
+        data['phone'] = phone;
+      }
+      if (dateOfBirth != null) {
+        data['date_of_birth'] = dateOfBirth;
+      }
+      if (gender != null) {
+        data['gender'] = gender;
+      }
+      if (country != null) {
+        data['country'] = country;
+      }
+      if (verificationId != null) {
+        data['verification_id'] = verificationId;
+      }
 
       // Add parental info if provided (for minors)
       if (parentName != null) {
@@ -153,6 +167,26 @@ class OtpService {
       return LoginResponse.fromJson(response.data['data']);
     } catch (e) {
       throw Exception('Failed to login: $e');
+    }
+  }
+
+  /// Login with Firebase (Social Sign-In)
+  /// Backend endpoint: POST /api/v1/auth/firebase-login
+  /// Used for Apple, Google, and Facebook sign-in
+  Future<LoginResponse> loginWithFirebase({
+    required String firebaseIdToken,
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        ApiConstants.firebaseLogin,
+        data: {
+          'firebase_id_token': firebaseIdToken,
+        },
+      );
+
+      return LoginResponse.fromJson(response.data['data']);
+    } catch (e) {
+      throw Exception('Failed to login with Firebase: $e');
     }
   }
 
@@ -295,10 +329,14 @@ class RegistrationResponse {
 
   factory RegistrationResponse.fromJson(Map<String, dynamic> json) {
     return RegistrationResponse(
-      user: json['user'] != null ? UserData.fromJson(json['user'] as Map<String, dynamic>) : null,
-      requiresParentalConsent: json['requires_parental_consent'] as bool? ?? false,
+      user: json['user'] != null
+          ? UserData.fromJson(json['user'] as Map<String, dynamic>)
+          : null,
+      requiresParentalConsent:
+          json['requires_parental_consent'] as bool? ?? false,
       parentalConsent: json['parental_consent'] != null
-          ? ParentalConsentData.fromJson(json['parental_consent'] as Map<String, dynamic>)
+          ? ParentalConsentData.fromJson(
+              json['parental_consent'] as Map<String, dynamic>)
           : null,
       token: json['token'] as String?,
       userId: json['user_id']?.toString(),
@@ -344,7 +382,8 @@ class UserData {
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      id: json['id'].toString(), // Backend returns int ID, convert to String for consistency
+      id: json['id']
+          .toString(), // Backend returns int ID, convert to String for consistency
       name: json['name'] as String,
       email: json['email'] as String,
       accountType: json['account_type'] as String,
@@ -372,7 +411,8 @@ class ParentalConsentData {
       id: json['id'].toString(), // Backend may return int, convert to String
       status: json['status'] as String,
       parentEmail: json['parent_email'] as String,
-      consentRequestedAt: DateTime.parse(json['consent_requested_at'] as String),
+      consentRequestedAt:
+          DateTime.parse(json['consent_requested_at'] as String),
     );
   }
 }

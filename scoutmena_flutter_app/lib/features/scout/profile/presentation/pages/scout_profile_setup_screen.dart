@@ -14,9 +14,9 @@ class ScoutProfileSetupScreen extends StatefulWidget {
   final Map<String, dynamic>? initialData;
 
   const ScoutProfileSetupScreen({
-    Key? key,
+    super.key,
     this.initialData,
-  }) : super(key: key);
+  });
 
   @override
   State<ScoutProfileSetupScreen> createState() =>
@@ -43,12 +43,17 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController(text: widget.initialData?['firstName'] ?? '');
-    _lastNameController = TextEditingController(text: widget.initialData?['lastName'] ?? '');
-    _contactEmailController = TextEditingController(text: widget.initialData?['email'] ?? '');
-    _contactPhoneController = TextEditingController(text: widget.initialData?['phone'] ?? '');
-    
-    if (widget.initialData?['country'] != null && _countries.contains(widget.initialData!['country'])) {
+    _firstNameController =
+        TextEditingController(text: widget.initialData?['firstName'] ?? '');
+    _lastNameController =
+        TextEditingController(text: widget.initialData?['lastName'] ?? '');
+    _contactEmailController =
+        TextEditingController(text: widget.initialData?['email'] ?? '');
+    _contactPhoneController =
+        TextEditingController(text: widget.initialData?['phone'] ?? '');
+
+    if (widget.initialData?['country'] != null &&
+        _countries.contains(widget.initialData!['country'])) {
       _selectedCountry = widget.initialData!['country'];
     }
   }
@@ -112,7 +117,6 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
     'Saudi Pro League',
     'UAE Pro League',
     'Qatari Stars League',
-    
   ];
 
   @override
@@ -248,7 +252,8 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
                   const SizedBox(height: 32),
 
                   // Social Links Section (optional)
-                  _buildSectionTitle('scout.social_links'.tr() + ' (${tr('common.optional')})'),
+                  _buildSectionTitle(
+                      '${'scout.social_links'.tr()} (${tr('common.optional')})'),
                   const SizedBox(height: 16),
                   _buildSocialLinksSection(),
                   const SizedBox(height: 32),
@@ -286,7 +291,8 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : Text(
@@ -341,20 +347,23 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
           borderSide: BorderSide(color: AppColors.primaryBlue, width: 2),
         ),
       ),
-      validator: validator ?? (required ? (value) {
-        if (value == null || value.trim().isEmpty) {
-          return '$label ${tr('common.required')}';
-        }
-        return null;
-      } : null),
+      validator: validator ??
+          (required
+              ? (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return '$label ${tr('common.required')}';
+                  }
+                  return null;
+                }
+              : null),
     );
   }
 
   Widget _buildCountryDropdown() {
     return DropdownButtonFormField<String>(
-      value: _selectedCountry,
+      initialValue: _selectedCountry,
       decoration: InputDecoration(
-        labelText: 'profile.country'.tr() + ' *',
+        labelText: '${'profile.country'.tr()} *',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -492,7 +501,7 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -552,13 +561,14 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
       case 'Instagram':
         return Icons.camera_alt;
       case 'X':
-        return Icons.close; // Using close icon as X, or alternate_email if preferred. 
-                            // FontAwesome usually has a specific X icon, but with standard Material Icons, 
-                            // 'close' or 'cancel' is the closest visual match to the X logo, 
-                            // or we can use a text icon. 
-                            // Let's use a generic icon or keep chat_bubble_outline but the user asked for X.
-                            // Icons.close is an X.
-        return Icons.close; 
+        return Icons
+            .close; // Using close icon as X, or alternate_email if preferred.
+        // FontAwesome usually has a specific X icon, but with standard Material Icons,
+        // 'close' or 'cancel' is the closest visual match to the X logo,
+        // or we can use a text icon.
+        // Let's use a generic icon or keep chat_bubble_outline but the user asked for X.
+        // Icons.close is an X.
+        return Icons.close;
       case 'Twitter': // Keep for safety if called with old value
         return Icons.chat_bubble_outline;
       case 'Facebook':
@@ -586,7 +596,7 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        
+
         // Display selected documents
         if (_verificationDocuments.isNotEmpty) ...[
           Text(
@@ -651,7 +661,7 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ],
     );
@@ -755,7 +765,7 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
     if (_formKey.currentState!.validate()) {
       // Convert country name to ISO code
       final countryCode = _countryCodeMap[_selectedCountry] ?? 'EG';
-      
+
       context.read<ScoutProfileBloc>().add(
             CreateScoutProfile(
               firstName: _firstNameController.text.trim(),
@@ -785,12 +795,12 @@ class _ScoutProfileSetupScreenState extends State<ScoutProfileSetupScreen> {
               socialLinks: _socialLinks.isEmpty ? null : _socialLinks,
             ),
           );
-      
+
       // Upload verification documents if any are selected
       if (_verificationDocuments.isNotEmpty) {
         context.read<ScoutProfileBloc>().add(
-          UploadVerificationDocuments(_verificationDocuments),
-        );
+              UploadVerificationDocuments(_verificationDocuments),
+            );
       }
     }
   }

@@ -27,17 +27,21 @@ class ScoutService {
   }) async {
     try {
       final queryParams = <String, dynamic>{};
-      
+
       if (query != null && query.isNotEmpty) queryParams['query'] = query;
-      if (position != null && position.isNotEmpty) queryParams['position'] = position;
+      if (position != null && position.isNotEmpty)
+        queryParams['position'] = position;
       if (ageMin != null) queryParams['age_min'] = ageMin;
       if (ageMax != null) queryParams['age_max'] = ageMax;
       if (gender != null && gender.isNotEmpty) queryParams['gender'] = gender;
-      if (country != null && country.isNotEmpty) queryParams['country'] = country;
+      if (country != null && country.isNotEmpty)
+        queryParams['country'] = country;
       if (heightMin != null) queryParams['height_min'] = heightMin;
       if (heightMax != null) queryParams['height_max'] = heightMax;
-      if (preferredFoot != null && preferredFoot.isNotEmpty) queryParams['preferred_foot'] = preferredFoot;
-      if (currentClub != null && currentClub.isNotEmpty) queryParams['current_club'] = currentClub;
+      if (preferredFoot != null && preferredFoot.isNotEmpty)
+        queryParams['preferred_foot'] = preferredFoot;
+      if (currentClub != null && currentClub.isNotEmpty)
+        queryParams['current_club'] = currentClub;
       if (page != null) queryParams['page'] = page;
       if (perPage != null) queryParams['per_page'] = perPage;
 
@@ -101,7 +105,7 @@ class ScoutService {
     try {
       // Note: The endpoint might be different, assuming standard REST
       // If it's not in ApiConstants, I'll use a string literal for now or add it.
-      // Based on search endpoint being /api/v1/scout/players/search, 
+      // Based on search endpoint being /api/v1/scout/players/search,
       // details is likely /api/v1/scout/players/{id}
       final response = await _apiClient.get('/profiles/$playerId');
       return PlayerProfile.fromJson(response.data['data']);
@@ -255,7 +259,7 @@ class PlayerProfile {
   final String? heroImageUrl;
   final bool isBookmarked;
   final String? gender;
-  
+
   // New fields
   final String? city;
   final String? country;
@@ -307,22 +311,27 @@ class PlayerProfile {
     final location = json['location'] as Map<String, dynamic>?;
     final physical = json['physical'] as Map<String, dynamic>?;
     final metrics = json['metrics'] as Map<String, dynamic>?;
-    final technical = (json['technical'] ?? json['technical_data']) as Map<String, dynamic>?;
-    final tactical = (json['tactical'] ?? json['tactical_data']) as Map<String, dynamic>?;
+    final technical =
+        (json['technical'] ?? json['technical_data']) as Map<String, dynamic>?;
+    final tactical =
+        (json['tactical'] ?? json['tactical_data']) as Map<String, dynamic>?;
     final training = json['training'] as Map<String, dynamic>?;
     final contact = json['contact'] as Map<String, dynamic>?;
-    
+
     // Parse photos
     List<String> photos = [];
-    String? primaryPhoto = json['profile_photo_url'] as String?; // Check top-level field first
-    String? heroImage = json['hero_image_url'] as String?; // Check top-level hero image field
+    String? primaryPhoto =
+        json['profile_photo_url'] as String?; // Check top-level field first
+    String? heroImage =
+        json['hero_image_url'] as String?; // Check top-level hero image field
     if (json['photos'] is List) {
       for (var p in (json['photos'] as List)) {
         if (p['urls'] != null) {
           final url = p['urls']['medium'] ?? p['urls']['original'];
           if (url != null) {
             photos.add(url);
-            if (primaryPhoto == null && p['is_primary'] == true) primaryPhoto = url;
+            if (primaryPhoto == null && p['is_primary'] == true)
+              primaryPhoto = url;
           }
         }
       }
@@ -334,7 +343,7 @@ class PlayerProfile {
     if (json['videos'] is List) {
       for (var v in (json['videos'] as List)) {
         if (v is Map<String, dynamic>) {
-           playerVideos.add(PlayerVideo.fromJson(v));
+          playerVideos.add(PlayerVideo.fromJson(v));
         }
       }
     }
@@ -342,23 +351,28 @@ class PlayerProfile {
     // Parse stats
     List<PlayerStat> playerStats = [];
     if (json['stats'] is List) {
-      playerStats = (json['stats'] as List)
-          .map((s) => PlayerStat.fromJson(s))
-          .toList();
+      playerStats =
+          (json['stats'] as List).map((s) => PlayerStat.fromJson(s)).toList();
     }
 
     // Parse secondary positions
     List<String> secPos = [];
     if (football?['secondary_positions'] is List) {
-      secPos = (football!['secondary_positions'] as List).map((e) => e.toString()).toList();
+      secPos = (football!['secondary_positions'] as List)
+          .map((e) => e.toString())
+          .toList();
     }
 
     // Parse career history
     List<Map<String, dynamic>>? career;
     if (football?['previous_clubs'] is List) {
-      career = (football!['previous_clubs'] as List).map((e) => e as Map<String, dynamic>).toList();
+      career = (football!['previous_clubs'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
     } else if (json['career_history'] is List) {
-      career = (json['career_history'] as List).map((e) => e as Map<String, dynamic>).toList();
+      career = (json['career_history'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
     }
 
     return PlayerProfile(
@@ -388,10 +402,12 @@ class PlayerProfile {
       tacticalData: tactical,
       trainingData: training,
       careerHistory: career,
-      achievements: (json['achievements'] as List?)?.map((e) => e.toString()).toList(),
+      achievements:
+          (json['achievements'] as List?)?.map((e) => e.toString()).toList(),
       contactEmail: contact?['email'] as String?,
       phoneNumber: contact?['phone'] as String?,
-      socialLinks: (contact?['social_links'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v.toString())),
+      socialLinks: (contact?['social_links'] as Map<String, dynamic>?)
+          ?.map((k, v) => MapEntry(k, v.toString())),
     );
   }
 }
@@ -440,9 +456,11 @@ class PlayerSearchResponse {
     if (json['data'] is List) {
       final playersData = json['data'] as List;
       final meta = json['meta'] as Map<String, dynamic>?;
-      
+
       return PlayerSearchResponse(
-        players: playersData.map((item) => PlayerSearchResult.fromJson(item)).toList(),
+        players: playersData
+            .map((item) => PlayerSearchResult.fromJson(item))
+            .toList(),
         total: meta?['total'] as int? ?? playersData.length,
         page: meta?['current_page'] as int? ?? 1,
         perPage: meta?['per_page'] as int? ?? 20,
@@ -451,9 +469,10 @@ class PlayerSearchResponse {
 
     final data = json['data'] as Map<String, dynamic>;
     final playersData = data['players'] as List;
-    
+
     return PlayerSearchResponse(
-      players: playersData.map((item) => PlayerSearchResult.fromJson(item)).toList(),
+      players:
+          playersData.map((item) => PlayerSearchResult.fromJson(item)).toList(),
       total: data['total'] as int,
       page: data['page'] as int,
       perPage: data['per_page'] as int,
@@ -502,7 +521,9 @@ class PlayerSearchResult {
 
     // Extract photo URL
     String? photoUrl = json['profile_photo_url'] as String?;
-    if (photoUrl == null && json['photos'] is List && (json['photos'] as List).isNotEmpty) {
+    if (photoUrl == null &&
+        json['photos'] is List &&
+        (json['photos'] as List).isNotEmpty) {
       final photos = json['photos'] as List;
       try {
         // Try to find primary photo
@@ -510,7 +531,7 @@ class PlayerSearchResult {
           (p) => p['is_primary'] == true,
           orElse: () => photos.first,
         );
-        
+
         if (primary != null && primary['urls'] != null) {
           final urls = primary['urls'];
           photoUrl = urls['medium'] ?? urls['thumb'] ?? urls['original'];
@@ -626,13 +647,14 @@ class PlayerVideo {
 
     if (json['urls'] is Map) {
       final urls = json['urls'];
-      vUrl = urls['playback'] ?? urls['720p'] ?? urls['480p'] ?? urls['original'];
+      vUrl =
+          urls['playback'] ?? urls['720p'] ?? urls['480p'] ?? urls['original'];
       tUrl = urls['thumbnail'];
     }
-    
+
     // Fallback if url is directly in the object (legacy or different format)
     if (vUrl == null && json['url'] is String) {
-        vUrl = json['url'];
+      vUrl = json['url'];
     }
 
     return PlayerVideo(

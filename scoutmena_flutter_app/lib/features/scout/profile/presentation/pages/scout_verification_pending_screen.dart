@@ -11,7 +11,7 @@ import '../../../../../injection.dart';
 /// Verification pending screen
 /// Shown after scout uploads documents and waits for admin approval
 class ScoutVerificationPendingScreen extends StatelessWidget {
-  const ScoutVerificationPendingScreen({Key? key}) : super(key: key);
+  const ScoutVerificationPendingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,8 @@ class ScoutVerificationPendingScreen extends StatelessWidget {
 
           // Status info card
           if (state is ScoutProfilePendingVerification)
-            _buildStatusCard(state.profile.verificationDocumentUrls?.length ?? 0),
+            _buildStatusCard(
+                state.profile.verificationDocumentUrls?.length ?? 0),
           const SizedBox(height: 32),
 
           // Refresh button
@@ -139,7 +140,7 @@ class ScoutVerificationPendingScreen extends StatelessWidget {
                 if (context.mounted) {
                   // Close loading dialog
                   Navigator.of(context).pop();
-                  
+
                   // Navigate to main auth screen
                   Navigator.pushNamedAndRemoveUntil(
                     context,
@@ -151,7 +152,7 @@ class ScoutVerificationPendingScreen extends StatelessWidget {
                 if (context.mounted) {
                   // Close loading dialog
                   Navigator.of(context).pop();
-                  
+
                   // Show error but still navigate to login
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -159,7 +160,7 @@ class ScoutVerificationPendingScreen extends StatelessWidget {
                       backgroundColor: Colors.red,
                     ),
                   );
-                  
+
                   // Navigate anyway
                   Navigator.pushNamedAndRemoveUntil(
                     context,
@@ -229,7 +230,8 @@ class ScoutVerificationPendingScreen extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isCompleted ? AppColors.primaryGreen : Colors.grey.shade400,
+              color:
+                  isCompleted ? AppColors.primaryGreen : Colors.grey.shade400,
               size: 24,
             ),
             if (!isLast)
@@ -301,7 +303,7 @@ class ScoutVerificationPendingScreen extends StatelessWidget {
           ),
           _buildDetailRow(
             'scout.estimated_time'.tr(),
-            '24-48 ' + 'common.hours'.tr(),
+            '24-48 ${'common.hours'.tr()}',
           ),
         ],
       ),

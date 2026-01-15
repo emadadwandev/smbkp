@@ -23,7 +23,7 @@ class CoachProfileSetupScreen extends StatefulWidget {
 
 class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Controllers
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
@@ -49,11 +49,15 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController(text: widget.initialData?['firstName'] ?? '');
-    _lastNameController = TextEditingController(text: widget.initialData?['lastName'] ?? '');
-    _emailController = TextEditingController(text: widget.initialData?['email'] ?? '');
-    _phoneController = TextEditingController(text: widget.initialData?['phone'] ?? '');
-    
+    _firstNameController =
+        TextEditingController(text: widget.initialData?['firstName'] ?? '');
+    _lastNameController =
+        TextEditingController(text: widget.initialData?['lastName'] ?? '');
+    _emailController =
+        TextEditingController(text: widget.initialData?['email'] ?? '');
+    _phoneController =
+        TextEditingController(text: widget.initialData?['phone'] ?? '');
+
     if (widget.initialData?['country'] != null) {
       // Check if country exists in list (defined in build method, but we can try to set it)
       // Since the list is local to build, we'll just set it and let the dropdown handle validation or default
@@ -300,7 +304,8 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.primaryBlue, width: 2),
+            borderSide:
+                const BorderSide(color: AppColors.primaryBlue, width: 2),
           ),
         ),
         keyboardType: keyboardType,
@@ -329,7 +334,7 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedCountry,
+        initialValue: _selectedCountry,
         decoration: InputDecoration(
           labelText: 'auth.country'.tr(),
           prefixIcon: const Icon(Icons.flag, color: AppColors.primaryBlue),
@@ -344,8 +349,7 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
                 ))
             .toList(),
         onChanged: (value) => setState(() => _selectedCountry = value),
-        validator: (value) =>
-            value == null ? 'common.required'.tr() : null,
+        validator: (value) => value == null ? 'common.required'.tr() : null,
       ),
     );
   }
@@ -363,7 +367,7 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedRole,
+        initialValue: _selectedRole,
         decoration: InputDecoration(
           labelText: 'coach.current_role'.tr(),
           prefixIcon: const Icon(Icons.work, color: AppColors.primaryBlue),
@@ -378,8 +382,7 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
                 ))
             .toList(),
         onChanged: (value) => setState(() => _selectedRole = value),
-        validator: (value) =>
-            value == null ? 'common.required'.tr() : null,
+        validator: (value) => value == null ? 'common.required'.tr() : null,
       ),
     );
   }
@@ -399,10 +402,11 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedLicense,
+        initialValue: _selectedLicense,
         decoration: InputDecoration(
           labelText: 'coach.coaching_license'.tr(),
-          prefixIcon: const Icon(Icons.card_membership, color: AppColors.primaryBlue),
+          prefixIcon:
+              const Icon(Icons.card_membership, color: AppColors.primaryBlue),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -414,8 +418,7 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
                 ))
             .toList(),
         onChanged: (value) => setState(() => _selectedLicense = value),
-        validator: (value) =>
-            value == null ? 'common.required'.tr() : null,
+        validator: (value) => value == null ? 'common.required'.tr() : null,
       ),
     );
   }
@@ -531,7 +534,9 @@ class _CoachProfileSetupScreenState extends State<CoachProfileSetupScreen> {
       return;
     }
 
-    if (_selectedCountry == null || _selectedRole == null || _selectedLicense == null) {
+    if (_selectedCountry == null ||
+        _selectedRole == null ||
+        _selectedLicense == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('coach.complete_all_required'.tr()),

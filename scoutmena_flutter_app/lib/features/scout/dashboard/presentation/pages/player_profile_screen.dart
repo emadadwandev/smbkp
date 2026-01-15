@@ -103,7 +103,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           const SizedBox(height: 16),
           Text(
             'errors.error_loading_profile'.tr(),
-            style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
           TextButton(
             onPressed: _loadProfile,
@@ -127,66 +128,66 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (profile.bio != null && profile.bio!.isNotEmpty) ...[
-                      _buildSectionTitle('profile.about'.tr()),
-                      const SizedBox(height: 8),
-                      Text(
-                        profile.bio!,
-                        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, height: 1.5),
-                      ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (profile.bio != null && profile.bio!.isNotEmpty) ...[
+                        _buildSectionTitle('profile.about'.tr()),
+                        const SizedBox(height: 8),
+                        Text(
+                          profile.bio!,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyMedium?.color,
+                              height: 1.5),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                      _buildSkillsChart(profile),
+                      const SizedBox(height: 24),
+                      _buildTechnicalSkills(profile),
+                      const SizedBox(height: 24),
+                      if (profile.tacticalData != null &&
+                          profile.tacticalData!.isNotEmpty) ...[
+                        _buildTacticalChart(profile),
+                        const SizedBox(height: 24),
+                      ],
+                      if (profile.stats.isNotEmpty) ...[
+                        _buildSectionTitle('profile.career_stats'.tr()),
+                        const SizedBox(height: 16),
+                        _buildCareerStats(profile),
+                        const SizedBox(height: 24),
+                      ],
+                      if (profile.achievements != null &&
+                          profile.achievements!.isNotEmpty) ...[
+                        _buildAchievementsSection(profile.achievements!),
+                        const SizedBox(height: 24),
+                      ],
+                      if (profile.careerHistory != null &&
+                          profile.careerHistory!.isNotEmpty) ...[
+                        _buildSectionTitle('profile.career_history'.tr()),
+                        const SizedBox(height: 16),
+                        _buildCareerHistory(profile.careerHistory!),
+                        const SizedBox(height: 24),
+                      ],
+                      if (profile.photoUrls.isNotEmpty) ...[
+                        _buildSectionTitle('profile.photos'.tr()),
+                        const SizedBox(height: 16),
+                        _buildPhotoGallery(profile),
+                        const SizedBox(height: 24),
+                      ],
+                      if (profile.videos.isNotEmpty) ...[
+                        _buildSectionTitle('profile.highlight_videos'.tr()),
+                        const SizedBox(height: 16),
+                        _buildVideoGallery(profile),
+                        const SizedBox(height: 24),
+                      ],
+                      _buildContactInfoSection(profile),
+                      const SizedBox(height: 24),
+                      _buildStatsDisclaimer(),
                       const SizedBox(height: 24),
                     ],
-                    _buildSkillsChart(profile),
-                    const SizedBox(height: 24),
-                    
-                    _buildTechnicalSkills(profile),
-                    const SizedBox(height: 24),
-
-                    if (profile.tacticalData != null && profile.tacticalData!.isNotEmpty) ...[
-                      _buildTacticalChart(profile),
-                      const SizedBox(height: 24),
-                    ],
-
-                    if (profile.stats.isNotEmpty) ...[
-                      _buildSectionTitle('profile.career_stats'.tr()),
-                      const SizedBox(height: 16),
-                      _buildCareerStats(profile),
-                      const SizedBox(height: 24),
-                    ],
-
-                    if (profile.achievements != null && profile.achievements!.isNotEmpty) ...[
-                      _buildAchievementsSection(profile.achievements!),
-                      const SizedBox(height: 24),
-                    ],
-
-                    if (profile.careerHistory != null && profile.careerHistory!.isNotEmpty) ...[
-                      _buildSectionTitle('profile.career_history'.tr()),
-                      const SizedBox(height: 16),
-                      _buildCareerHistory(profile.careerHistory!),
-                      const SizedBox(height: 24),
-                    ],
-
-                    if (profile.photoUrls.isNotEmpty) ...[
-                      _buildSectionTitle('profile.photos'.tr()),
-                      const SizedBox(height: 16),
-                      _buildPhotoGallery(profile),
-                      const SizedBox(height: 24),
-                    ],
-
-                    if (profile.videos.isNotEmpty) ...[
-                      _buildSectionTitle('profile.highlight_videos'.tr()),
-                      const SizedBox(height: 16),
-                      _buildVideoGallery(profile),
-                      const SizedBox(height: 24),
-                    ],
-
-                    _buildContactInfoSection(profile),
-                    const SizedBox(height: 24),
-                  ],
+                  ),
                 ),
-              ),
               ),
             ],
           ),
@@ -194,8 +195,6 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
       ],
     );
   }
-
-
 
   Widget _buildProfileHeader(PlayerProfile profile) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -209,14 +208,16 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
             fit: StackFit.expand,
             children: [
               CachedNetworkImage(
-                imageUrl: profile.heroImageUrl ?? "https://images.unsplash.com/photo-1522778119026-d647f0565c6a?auto=format&fit=crop&w=800&q=80",
+                imageUrl: profile.heroImageUrl ??
+                    "https://images.unsplash.com/photo-1522778119026-d647f0565c6a?auto=format&fit=crop&w=800&q=80",
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[900],
                 ),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey[900],
-                  child: const Icon(Icons.stadium, size: 50, color: Colors.white24),
+                  child: const Icon(Icons.stadium,
+                      size: 50, color: Colors.white24),
                 ),
               ),
               Container(
@@ -227,7 +228,9 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                     colors: [
                       Colors.black45,
                       Colors.transparent,
-                      Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
+                      Theme.of(context)
+                          .scaffoldBackgroundColor
+                          .withOpacity(0.0),
                       Theme.of(context).scaffoldBackgroundColor,
                     ],
                     stops: const [0.0, 0.2, 0.6, 1.0],
@@ -247,7 +250,9 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 4),
+                      border: Border.all(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          width: 4),
                     ),
                     child: CircleAvatar(
                       radius: 60,
@@ -256,7 +261,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                           ? CachedNetworkImageProvider(profile.profilePhotoUrl!)
                           : null,
                       child: profile.profilePhotoUrl == null
-                          ? const Icon(Icons.person, size: 60, color: Colors.white)
+                          ? const Icon(Icons.person,
+                              size: 60, color: Colors.white)
                           : null,
                     ),
                   ),
@@ -266,7 +272,10 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                     children: [
                       Text(
                         profile.name,
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -302,12 +311,36 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("profile.physical".tr(), style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyLarge?.color)),
+                            Text("profile.physical".tr(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color)),
                             const SizedBox(height: 8),
-                            _buildInfoRow(Icons.height, "profile.height".tr(), profile.heightCm != null ? "${profile.heightCm} cm" : "-"),
-                            _buildInfoRow(Icons.monitor_weight, "profile.weight".tr(), profile.weightKg != null ? "${profile.weightKg} kg" : "-"),
-                            _buildInfoRow(Icons.person, "profile.gender".tr(), profile.gender != null ? "profile.gender_${profile.gender}".tr() : "-"),
-                            _buildInfoRow(Icons.sports_soccer, "profile.preferred_foot".tr(), profile.preferredFoot ?? "-"),
+                            _buildInfoRow(
+                                Icons.height,
+                                "profile.height".tr(),
+                                profile.heightCm != null
+                                    ? "${profile.heightCm} cm"
+                                    : "-"),
+                            _buildInfoRow(
+                                Icons.monitor_weight,
+                                "profile.weight".tr(),
+                                profile.weightKg != null
+                                    ? "${profile.weightKg} kg"
+                                    : "-"),
+                            _buildInfoRow(
+                                Icons.person,
+                                "profile.gender".tr(),
+                                profile.gender != null
+                                    ? "profile.gender_${profile.gender}".tr()
+                                    : "-"),
+                            _buildInfoRow(
+                                Icons.sports_soccer,
+                                "profile.preferred_foot".tr(),
+                                profile.preferredFoot ?? "-"),
                           ],
                         ),
                       ),
@@ -315,11 +348,27 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Text("profile.age".tr(args: [profile.age.toString()]), style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyLarge?.color)),
-                             const SizedBox(height: 8),
-                             Text("profile.nationality_label".tr(args: [profile.nationality ?? "-"]), style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color)),
-                             const SizedBox(height: 4),
-                             const Icon(Icons.flag, size: 20),
+                            Text(
+                                "profile.age"
+                                    .tr(args: [profile.age.toString()]),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color)),
+                            const SizedBox(height: 8),
+                            Text(
+                                "profile.nationality_label"
+                                    .tr(args: [profile.nationality ?? "-"]),
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color)),
+                            const SizedBox(height: 4),
+                            const Icon(Icons.flag, size: 20),
                           ],
                         ),
                       ),
@@ -327,13 +376,21 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("profile.club".tr(), style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color)),
+                            Text("profile.club".tr(),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
                                 const Icon(Icons.shield, size: 20),
                                 const SizedBox(width: 4),
-                                Expanded(child: Text(profile.currentClub ?? "-", style: const TextStyle(fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    child: Text(profile.currentClub ?? "-",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold))),
                               ],
                             )
                           ],
@@ -374,15 +431,23 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
       padding: const EdgeInsets.only(bottom: 4.0),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: Theme.of(context).textTheme.bodySmall?.color),
+          Icon(icon,
+              size: 14, color: Theme.of(context).textTheme.bodySmall?.color),
           const SizedBox(width: 4),
           Expanded(
             child: RichText(
               text: TextSpan(
-                style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodyMedium?.color),
+                style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
                 children: [
-                  TextSpan(text: "$label: ", style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color)),
-                  TextSpan(text: value, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: "$label: ",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodySmall?.color)),
+                  TextSpan(
+                      text: value,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -425,7 +490,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
             icon: const Icon(Icons.share_outlined),
             color: Theme.of(context).iconTheme.color,
             onPressed: () {
-              final String shareLink = 'https://scoutmena.com/player/${profile.id}';
+              final String shareLink =
+                  'https://scoutmena.com/player/${profile.id}';
               Share.share('Check out ${profile.name} on ScoutMena! $shareLink');
             },
           ),
@@ -439,7 +505,9 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           child: IconButton(
             icon: Icon(
               profile.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-              color: profile.isBookmarked ? AppColors.primaryBlue : Theme.of(context).iconTheme.color,
+              color: profile.isBookmarked
+                  ? AppColors.primaryBlue
+                  : Theme.of(context).iconTheme.color,
             ),
             onPressed: () async {
               try {
@@ -449,15 +517,13 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                   await _scoutService.bookmarkPlayer(profile.id);
                 }
                 _loadProfile();
-                
+
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        profile.isBookmarked 
-                            ? 'scout.removed_bookmark'.tr() 
-                            : 'scout.added_bookmark'.tr()
-                      ),
+                      content: Text(profile.isBookmarked
+                          ? 'scout.removed_bookmark'.tr()
+                          : 'scout.added_bookmark'.tr()),
                     ),
                   );
                 }
@@ -486,28 +552,28 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
 
   Widget _buildCareerStats(PlayerProfile profile) {
     // Filter out any 'career' record to get actual seasons
-    final seasonStats = profile.stats.where((s) => s.season.toLowerCase() != 'career').toList();
+    final seasonStats =
+        profile.stats.where((s) => s.season.toLowerCase() != 'career').toList();
 
     // Calculate totals from actual seasons
     int apps = 0;
     int goals = 0;
     int assists = 0;
     int mins = 0;
-    
+
     for (var s in seasonStats) {
       apps += s.appearances;
       goals += s.goals;
       assists += s.assists;
       mins += s.minutesPlayed;
     }
-    
+
     final totals = PlayerStat(
-      season: 'career', 
-      appearances: apps, 
-      goals: goals, 
-      assists: assists, 
-      minutesPlayed: mins
-    );
+        season: 'career',
+        appearances: apps,
+        goals: goals,
+        assists: assists,
+        minutesPlayed: mins);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -544,10 +610,14 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildTotalItem(Icons.person, "profile.total_appearances".tr(), "${totals.appearances}"),
-              _buildTotalItem(Icons.sports_soccer, "profile.total_goals".tr(), "${totals.goals}"),
-              _buildTotalItem(Icons.hiking, "profile.total_assists".tr(), "${totals.assists}"),
-              _buildTotalItem(Icons.timer, "profile.minutes_played".tr(), "${totals.minutesPlayed}"),
+              _buildTotalItem(Icons.person, "profile.total_appearances".tr(),
+                  "${totals.appearances}"),
+              _buildTotalItem(Icons.sports_soccer, "profile.total_goals".tr(),
+                  "${totals.goals}"),
+              _buildTotalItem(Icons.hiking, "profile.total_assists".tr(),
+                  "${totals.assists}"),
+              _buildTotalItem(Icons.timer, "profile.minutes_played".tr(),
+                  "${totals.minutesPlayed}"),
             ],
           ),
         ],
@@ -564,12 +634,17 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 10, color: Theme.of(context).textTheme.bodySmall?.color),
+            style: TextStyle(
+                fontSize: 10,
+                color: Theme.of(context).textTheme.bodySmall?.color),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyLarge?.color),
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
         ],
       ),
@@ -578,22 +653,22 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
 
   Widget _buildPerformanceTrends(List<PlayerStat> stats) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     // Prepare spots
     final goalSpots = <FlSpot>[];
     final assistSpots = <FlSpot>[];
-    
+
     double maxY = 0;
-    
+
     for (int i = 0; i < stats.length; i++) {
       final s = stats[i];
       goalSpots.add(FlSpot(i.toDouble(), s.goals.toDouble()));
       assistSpots.add(FlSpot(i.toDouble(), s.assists.toDouble()));
-      
+
       if (s.goals > maxY) maxY = s.goals.toDouble();
       if (s.assists > maxY) maxY = s.assists.toDouble();
     }
-    
+
     // Add some buffer to maxY
     maxY = (maxY * 1.2).ceilToDouble();
     if (maxY < 10) maxY = 10;
@@ -647,8 +722,10 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 ),
                 titlesData: FlTitlesData(
                   show: true,
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -662,7 +739,10 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                             child: Text(
                               stats[index].season,
                               style: TextStyle(
-                                color: Theme.of(context).textTheme.bodySmall?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.color,
                                 fontSize: 10,
                               ),
                             ),
@@ -742,6 +822,44 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
     );
   }
 
+  Widget _buildStatsDisclaimer() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.grey[800]?.withOpacity(0.3) : Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDark ? Colors.grey[700]! : Colors.grey[400]!,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.info_outline,
+            size: 20,
+            color: isDark ? Colors.grey[400] : Colors.grey[700],
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'profile.player_reported_stats'.tr(),
+              style: TextStyle(
+                fontSize: 13,
+                color: isDark ? Colors.grey[300] : Colors.grey[800],
+                fontWeight: FontWeight.w500,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildCareerHistory(List<Map<String, dynamic>> history) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -754,19 +872,24 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           final index = entry.key;
           final item = entry.value;
           final isLast = index == history.length - 1;
-          
+
           final clubName = item['club_name'] ?? 'profile.unknown_club'.tr();
           final startDate = item['start_date'] as String?;
           final endDate = item['end_date'] as String?;
           final isCurrent = item['is_current'] == true;
-          
+
           String period = '';
           if (startDate != null) {
-            final startYear = DateTime.tryParse(startDate)?.year.toString() ?? startDate;
-            final endYear = isCurrent ? 'profile.present'.tr() : (endDate != null ? (DateTime.tryParse(endDate)?.year.toString() ?? endDate) : 'profile.unknown'.tr());
+            final startYear =
+                DateTime.tryParse(startDate)?.year.toString() ?? startDate;
+            final endYear = isCurrent
+                ? 'profile.present'.tr()
+                : (endDate != null
+                    ? (DateTime.tryParse(endDate)?.year.toString() ?? endDate)
+                    : 'profile.unknown'.tr());
             period = '$startYear - $endYear';
           }
-          
+
           return IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -779,7 +902,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.primaryBlue,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primaryBlue, width: 2),
+                        border:
+                            Border.all(color: AppColors.primaryBlue, width: 2),
                       ),
                     ),
                     if (!isLast)
@@ -810,7 +934,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                         Text(
                           clubName,
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 14,
                           ),
                         ),
@@ -838,7 +963,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PhotoViewer(imageUrl: profile.photoUrls[index]),
+                  builder: (context) =>
+                      PhotoViewer(imageUrl: profile.photoUrls[index]),
                 ),
               );
             },
@@ -875,22 +1001,24 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
         itemCount: profile.videos.length,
         itemBuilder: (context, index) {
           final video = profile.videos[index];
-          final isProcessing = video.status == 'pending' || video.status == 'processing';
+          final isProcessing =
+              video.status == 'pending' || video.status == 'processing';
           final hasUrl = video.videoUrl != null;
-          
+
           return GestureDetector(
             onTap: () {
               if (hasUrl) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SimpleVideoPlayer(videoUrl: video.videoUrl!),
+                    builder: (context) =>
+                        SimpleVideoPlayer(videoUrl: video.videoUrl!),
                   ),
                 );
               } else {
-                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('profile.video_processing'.tr())),
-                  );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('profile.video_processing'.tr())),
+                );
               }
             },
             child: Container(
@@ -908,15 +1036,17 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                   // Thumbnail
                   if (video.thumbnailUrl != null)
                     ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: CachedNetworkImage(
-                            imageUrl: video.thumbnailUrl!,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                            placeholder: (context, url) => Container(color: Colors.grey[900]),
-                            errorWidget: (context, url, error) => Container(color: Colors.grey[900]),
-                        ),
+                      borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: video.thumbnailUrl!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        placeholder: (context, url) =>
+                            Container(color: Colors.grey[900]),
+                        errorWidget: (context, url, error) =>
+                            Container(color: Colors.grey[900]),
+                      ),
                     )
                   else
                     Container(
@@ -925,19 +1055,22 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                         color: Colors.grey[900],
                       ),
                     ),
-                  
+
                   // Icon / Status
                   if (isProcessing)
-                     Column(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       children: [
-                         const CircularProgressIndicator(color: Colors.white),
-                         const SizedBox(height: 8),
-                         Text('profile.processing'.tr(), style: const TextStyle(color: Colors.white, fontSize: 10)),
-                       ],
-                     )
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircularProgressIndicator(color: Colors.white),
+                        const SizedBox(height: 8),
+                        Text('profile.processing'.tr(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 10)),
+                      ],
+                    )
                   else
-                     const Icon(Icons.play_circle_outline, color: Colors.white, size: 48),
+                    const Icon(Icons.play_circle_outline,
+                        color: Colors.white, size: 48),
 
                   // Title removed - video names are now hidden
                 ],
@@ -949,8 +1082,6 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
     );
   }
 
-
-
   Widget _buildAchievementsSection(List<String> achievements) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -960,7 +1091,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: achievements.map((a) => _buildAchievementCard(a)).toList(),
+            children:
+                achievements.map((a) => _buildAchievementCard(a)).toList(),
           ),
         ),
       ],
@@ -970,12 +1102,14 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
   Widget _buildAchievementCard(String achievement) {
     // Determine icon based on text
     IconData icon = Icons.emoji_events;
-    if (achievement.toLowerCase().contains('scorer')) icon = Icons.emoji_events;
-    else if (achievement.toLowerCase().contains('assist')) icon = Icons.hiking; 
+    if (achievement.toLowerCase().contains('scorer')) {
+      icon = Icons.emoji_events;
+    } else if (achievement.toLowerCase().contains('assist'))
+      icon = Icons.hiking;
     else if (achievement.toLowerCase().contains('month')) icon = Icons.star;
-    
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       width: 180,
       margin: const EdgeInsets.only(right: 12),
@@ -1019,27 +1153,37 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           ),
           child: Column(
             children: [
-              _buildContactRow(Icons.email, 'auth.email'.tr(), profile.contactEmail ?? 'profile.not_provided'.tr()),
+              _buildContactRow(Icons.email, 'auth.email'.tr(),
+                  profile.contactEmail ?? 'profile.not_provided'.tr()),
               Divider(color: Theme.of(context).dividerColor),
-              _buildContactRow(Icons.phone, 'auth.phone'.tr(), profile.phoneNumber ?? 'profile.not_provided'.tr()),
-              if (profile.socialLinks != null && profile.socialLinks!.isNotEmpty) ...[
+              _buildContactRow(Icons.phone, 'auth.phone'.tr(),
+                  profile.phoneNumber ?? 'profile.not_provided'.tr()),
+              if (profile.socialLinks != null &&
+                  profile.socialLinks!.isNotEmpty) ...[
                 Divider(color: Theme.of(context).dividerColor),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: profile.socialLinks!.entries.map((e) {
                     IconData icon = Icons.link;
-                    if (e.key.toLowerCase().contains('instagram')) icon = Icons.camera_alt;
-                    if (e.key.toLowerCase().contains('twitter') || e.key.toLowerCase().contains('x')) icon = Icons.alternate_email;
-                    if (e.key.toLowerCase().contains('facebook')) icon = Icons.facebook;
-                    
+                    if (e.key.toLowerCase().contains('instagram'))
+                      icon = Icons.camera_alt;
+                    if (e.key.toLowerCase().contains('twitter') ||
+                        e.key.toLowerCase().contains('x'))
+                      icon = Icons.alternate_email;
+                    if (e.key.toLowerCase().contains('facebook'))
+                      icon = Icons.facebook;
+
                     return Column(
                       children: [
                         Icon(icon, color: AppColors.primaryBlue),
                         const SizedBox(height: 4),
                         Text(
                           e.key,
-                          style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 10),
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                              fontSize: 10),
                         ),
                       ],
                     );
@@ -1058,7 +1202,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: Theme.of(context).textTheme.bodySmall?.color, size: 20),
+          Icon(icon,
+              color: Theme.of(context).textTheme.bodySmall?.color, size: 20),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1088,34 +1233,58 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
   Widget _buildTechnicalSkills(PlayerProfile profile) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skills = [
-      {'label': 'attributes.ball_control'.tr(), 'key': 'ball_control', 'icon': Icons.sports_soccer},
-      {'label': 'attributes.dribbling'.tr(), 'key': 'dribbling', 'icon': Icons.gesture},
-      {'label': 'attributes.passing'.tr(), 'key': 'passing', 'icon': Icons.compare_arrows},
-      {'label': 'attributes.shooting'.tr(), 'key': 'shooting', 'icon': Icons.gps_fixed},
-      {'label': 'attributes.defending'.tr(), 'key': 'defending', 'icon': Icons.shield},
-      {'label': 'attributes.heading'.tr(), 'key': 'heading', 'icon': Icons.arrow_upward},
+      {
+        'label': 'attributes.ball_control'.tr(),
+        'key': 'ball_control',
+        'icon': Icons.sports_soccer
+      },
+      {
+        'label': 'attributes.dribbling'.tr(),
+        'key': 'dribbling',
+        'icon': Icons.gesture
+      },
+      {
+        'label': 'attributes.passing'.tr(),
+        'key': 'passing',
+        'icon': Icons.compare_arrows
+      },
+      {
+        'label': 'attributes.shooting'.tr(),
+        'key': 'shooting',
+        'icon': Icons.gps_fixed
+      },
+      {
+        'label': 'attributes.defending'.tr(),
+        'key': 'defending',
+        'icon': Icons.shield
+      },
+      {
+        'label': 'attributes.heading'.tr(),
+        'key': 'heading',
+        'icon': Icons.arrow_upward
+      },
     ];
 
     double getSkillValue(String key) {
-       if (profile.technicalData == null) return 0;
-       
-       // Check nested 'data' map first
-       if (profile.technicalData!['data'] is Map) {
-          final dataMap = profile.technicalData!['data'] as Map;
-          for (var entry in dataMap.entries) {
-             if (entry.key.toString().toLowerCase() == key.toLowerCase()) {
-                return (entry.value as num?)?.toDouble() ?? 0;
-             }
-          }
-       }
-       
-       // Check direct keys
-       for (var entry in profile.technicalData!.entries) {
-         if (entry.key.toLowerCase().replaceAll(' ', '_') == key.toLowerCase()) {
+      if (profile.technicalData == null) return 0;
+
+      // Check nested 'data' map first
+      if (profile.technicalData!['data'] is Map) {
+        final dataMap = profile.technicalData!['data'] as Map;
+        for (var entry in dataMap.entries) {
+          if (entry.key.toString().toLowerCase() == key.toLowerCase()) {
             return (entry.value as num?)?.toDouble() ?? 0;
-         }
-       }
-       return 0;
+          }
+        }
+      }
+
+      // Check direct keys
+      for (var entry in profile.technicalData!.entries) {
+        if (entry.key.toLowerCase().replaceAll(' ', '_') == key.toLowerCase()) {
+          return (entry.value as num?)?.toDouble() ?? 0;
+        }
+      }
+      return 0;
     }
 
     return Container(
@@ -1149,12 +1318,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
             itemBuilder: (context, index) {
               final skill = skills[index];
               final value = getSkillValue(skill['key'] as String);
-              return _buildSkillItem(
-                skill['label'] as String,
-                value,
-                skill['icon'] as IconData,
-                isDark
-              );
+              return _buildSkillItem(skill['label'] as String, value,
+                  skill['icon'] as IconData, isDark);
             },
           ),
         ],
@@ -1162,47 +1327,53 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
     );
   }
 
-  Widget _buildSkillItem(String label, double value, IconData icon, bool isDark) {
-     final displayValue = (value / 10).clamp(0, 10);
-     
-     return Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-       mainAxisAlignment: MainAxisAlignment.center,
-       children: [
-         Row(
-           children: [
-             Icon(icon, size: 16, color: AppColors.primaryBlue),
-             const SizedBox(width: 8),
-             Text(label, style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontWeight: FontWeight.w500, fontSize: 12)),
-           ],
-         ),
-         const SizedBox(height: 8),
-         Row(
-           children: [
-             Expanded(
-               child: ClipRRect(
-                 borderRadius: BorderRadius.circular(4),
-                 child: LinearProgressIndicator(
-                   value: value / 100,
-                   backgroundColor: isDark ? Colors.grey[800] : Colors.grey[300],
-                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryBlue),
-                   minHeight: 6,
-                 ),
-               ),
-             ),
-             const SizedBox(width: 8),
-             Text(
-               "${displayValue.toStringAsFixed(0)}/10",
-               style: TextStyle(
-                 color: Theme.of(context).textTheme.bodySmall?.color,
-                 fontWeight: FontWeight.bold,
-                 fontSize: 12,
-               ),
-             ),
-           ],
-         ),
-       ],
-     );
+  Widget _buildSkillItem(
+      String label, double value, IconData icon, bool isDark) {
+    final displayValue = (value / 10).clamp(0, 10);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 16, color: AppColors.primaryBlue),
+            const SizedBox(width: 8),
+            Text(label,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: value / 100,
+                  backgroundColor: isDark ? Colors.grey[800] : Colors.grey[300],
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppColors.primaryBlue),
+                  minHeight: 6,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "${displayValue.toStringAsFixed(0)}/10",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Widget _buildSkillsChart(PlayerProfile profile) {
@@ -1218,7 +1389,7 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
 
     double getValue(String key) {
       if (profile.physicalData == null) return 0.0;
-      
+
       // Check if attributes are in a nested 'data' map (as per API response)
       final dataMap = profile.physicalData!['data'];
       if (dataMap is Map) {
@@ -1228,7 +1399,7 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
           }
         }
       }
-      
+
       // Fallback: check directly in physicalData
       for (var entry in profile.physicalData!.entries) {
         if (entry.key.toLowerCase() == key.toLowerCase()) {
@@ -1265,7 +1436,10 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                     fillColor: AppColors.primaryBlue.withOpacity(0.2),
                     borderColor: AppColors.primaryBlue,
                     entryRadius: 3,
-                    dataEntries: attributes.map((attr) => RadarEntry(value: getValue(attr['key']!))).toList(),
+                    dataEntries: attributes
+                        .map(
+                            (attr) => RadarEntry(value: getValue(attr['key']!)))
+                        .toList(),
                     borderWidth: 2,
                   ),
                 ],
@@ -1274,9 +1448,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 radarBorderData: const BorderSide(color: Colors.transparent),
                 titlePositionPercentageOffset: 0.1,
                 titleTextStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color, 
-                  fontSize: 12
-                ),
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    fontSize: 12),
                 getTitle: (index, angle) {
                   if (index < attributes.length) {
                     return RadarChartTitle(text: attributes[index]['label']!);
@@ -1287,9 +1460,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 ticksTextStyle: const TextStyle(color: Colors.transparent),
                 tickBorderData: const BorderSide(color: Colors.transparent),
                 gridBorderData: BorderSide(
-                  color: Theme.of(context).dividerColor.withOpacity(0.2), 
-                  width: 1
-                ),
+                    color: Theme.of(context).dividerColor.withOpacity(0.2),
+                    width: 1),
               ),
               swapAnimationDuration: const Duration(milliseconds: 400),
             ),
@@ -1310,10 +1482,10 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
 
     double getValue(String key) {
       if (profile.tacticalData == null) return 0.0;
-      
+
       // Normalize key for lookup (e.g. "Decision Making" -> "decision_making")
       final lookupKey = key.toLowerCase().replaceAll(' ', '_');
-      
+
       // Check nested 'data' map first if it exists (handling potential API structure)
       if (profile.tacticalData!['data'] is Map) {
         final dataMap = profile.tacticalData!['data'] as Map;
@@ -1360,7 +1532,10 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                     fillColor: AppColors.primaryBlue.withOpacity(0.2),
                     borderColor: AppColors.primaryBlue,
                     entryRadius: 3,
-                    dataEntries: attributes.map((attr) => RadarEntry(value: getValue(attr['key']!))).toList(),
+                    dataEntries: attributes
+                        .map(
+                            (attr) => RadarEntry(value: getValue(attr['key']!)))
+                        .toList(),
                     borderWidth: 2,
                   ),
                 ],
@@ -1369,9 +1544,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 radarBorderData: const BorderSide(color: Colors.transparent),
                 titlePositionPercentageOffset: 0.1,
                 titleTextStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color, 
-                  fontSize: 12
-                ),
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    fontSize: 12),
                 getTitle: (index, angle) {
                   if (index < attributes.length) {
                     return RadarChartTitle(text: attributes[index]['label']!);
@@ -1382,9 +1556,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 ticksTextStyle: const TextStyle(color: Colors.transparent),
                 tickBorderData: const BorderSide(color: Colors.transparent),
                 gridBorderData: BorderSide(
-                  color: Theme.of(context).dividerColor.withOpacity(0.2), 
-                  width: 1
-                ),
+                    color: Theme.of(context).dividerColor.withOpacity(0.2),
+                    width: 1),
               ),
               swapAnimationDuration: const Duration(milliseconds: 400),
             ),
@@ -1400,20 +1573,28 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).cardColor,
-        title: Text('scout.contact_player'.tr(args: [profile.name]), style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+        title: Text('scout.contact_player'.tr(args: [profile.name]),
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('scout.contact_message_hint'.tr(), style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color)),
+            Text('scout.contact_message_hint'.tr(),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodySmall?.color)),
             const SizedBox(height: 16),
             TextField(
               controller: messageController,
-              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color),
               decoration: InputDecoration(
                 hintText: 'scout.enter_message'.tr(),
-                hintStyle: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+                hintStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodySmall?.color),
                 border: const OutlineInputBorder(),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).dividerColor)),
               ),
               maxLines: 3,
             ),
@@ -1425,7 +1606,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
             child: Text('common.cancel'.tr()),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryGreen),
             onPressed: () async {
               Navigator.pop(context);
               try {
@@ -1446,7 +1628,8 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 }
               }
             },
-            child: Text('scout.send'.tr(), style: const TextStyle(color: Colors.white)),
+            child: Text('scout.send'.tr(),
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -1573,7 +1756,8 @@ class PhotoViewer extends StatelessWidget {
             imageUrl: imageUrl,
             fit: BoxFit.contain,
             placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white),
+            errorWidget: (context, url, error) =>
+                const Icon(Icons.error, color: Colors.white),
           ),
         ),
       ),

@@ -81,7 +81,8 @@ class AuthRepositoryImpl implements AuthRepository {
       // Split name into first and last name
       final nameParts = name.trim().split(' ');
       final firstName = nameParts.isNotEmpty ? nameParts.first : '';
-      final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+      final lastName =
+          nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
 
       final response = await _otpService.registerWithOtp(
         firstName: firstName,
@@ -138,10 +139,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       // Verify OTP first - get verification ID from secure storage
-      final verificationId = await _secureStorage.read(key: 'otp_verification_id');
-      
+      final verificationId =
+          await _secureStorage.read(key: 'otp_verification_id');
+
       if (verificationId == null) {
-        return Left(ValidationFailure('No verification ID found. Please request OTP first.'));
+        return Left(ValidationFailure(
+            'No verification ID found. Please request OTP first.'));
       }
 
       // First verify the OTP
@@ -217,19 +220,22 @@ class AuthRepositoryImpl implements AuthRepository {
         email: userData['email'] as String,
         accountType: userData['account_type'] as String,
         isMinor: userData['is_minor'] as bool? ?? false,
-        requiresParentalConsent: userData['requires_parental_consent'] as bool? ?? false,
+        requiresParentalConsent:
+            userData['requires_parental_consent'] as bool? ?? false,
         isActive: userData['is_active'] as bool? ?? true,
         isVerified: userData['is_verified'] as bool? ?? false,
       );
 
       // Store Firebase token
-      await _secureStorage.write(key: _firebaseTokenKey, value: firebaseIdToken);
-      
+      await _secureStorage.write(
+          key: _firebaseTokenKey, value: firebaseIdToken);
+
       // Store auth token if provided
       if (token != null) {
         await saveAuthToken(token);
         await _secureStorage.write(key: AppConstants.userIdKey, value: user.id);
-        await _secureStorage.write(key: AppConstants.userRoleKey, value: user.accountType);
+        await _secureStorage.write(
+            key: AppConstants.userRoleKey, value: user.accountType);
       }
 
       final authResult = AuthResult(
@@ -240,7 +246,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Right(authResult);
     } catch (e) {
-      return Left(ServerFailure('Firebase authentication failed: ${e.toString()}'));
+      return Left(
+          ServerFailure('Firebase authentication failed: ${e.toString()}'));
     }
   }
 
@@ -248,14 +255,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserEntity>> getCurrentUser() async {
     try {
       final token = await _secureStorage.read(key: AppConstants.accessTokenKey);
-      
+
       if (token == null) {
         return Left(AuthenticationFailure('No authentication token found'));
       }
 
       // Fetch current user from backend
       final response = await _authService.getCurrentUser();
-      
+
       final user = UserEntity(
         id: response.id,
         name: response.name,
@@ -308,7 +315,8 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> saveAuthToken(String token) async {
     try {
-      await _secureStorage.write(key: AppConstants.accessTokenKey, value: token);
+      await _secureStorage.write(
+          key: AppConstants.accessTokenKey, value: token);
     } catch (e) {
       // Log error
       rethrow;

@@ -37,15 +37,15 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
   final TextEditingController _searchController = TextEditingController();
   final _scoutService = getIt<ScoutService>();
   final ImagePicker _picker = ImagePicker();
-  
+
   // Player search state
   List<PlayerSearchResult> _players = [];
   bool _isLoadingPlayers = false;
-  
+
   // Bookmarks state
   List<PlayerSearchResult> _bookmarkedPlayers = [];
   bool _isLoadingBookmarks = false;
-  
+
   // Filter state
   String? _selectedPosition;
   int? _ageMin;
@@ -56,7 +56,7 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
 
   // Dashboard Stats
   ScoutDashboardStats? _dashboardStats;
-  
+
   // Recent Match Reports
   List<MatchReport> _recentMatchReports = [];
   bool _isLoadingReports = false;
@@ -224,7 +224,7 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
             photoUrl: profile?.profilePhotoUrl,
             onLogout: () async {
               // Drawer is already closed by SideMenu
-              
+
               // Show confirmation dialog
               final bool? confirm = await showDialog<bool>(
                 context: context,
@@ -264,7 +264,7 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                   if (mounted) {
                     // Close loading dialog
                     Navigator.of(context).pop();
-                    
+
                     // Navigate to main auth screen
                     Navigator.pushNamedAndRemoveUntil(
                       context,
@@ -276,7 +276,7 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                   if (mounted) {
                     // Close loading dialog
                     Navigator.of(context).pop();
-                    
+
                     // Show error but still navigate to login
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -284,7 +284,7 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                         backgroundColor: Colors.red,
                       ),
                     );
-                    
+
                     // Navigate anyway
                     Navigator.pushNamedAndRemoveUntil(
                       context,
@@ -321,8 +321,10 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
               SnackBar(content: Text('profile.uploading_photo'.tr())),
             );
           } else if (state is ScoutProfileUpdated) {
-             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('success.photo_uploaded'.tr()), backgroundColor: Colors.green),
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('success.photo_uploaded'.tr()),
+                  backgroundColor: Colors.green),
             );
           }
         },
@@ -421,7 +423,8 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                   // Navigate to search or show search modal
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const PlayerFilterScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const PlayerFilterScreen()),
                   );
                 },
               ),
@@ -441,7 +444,8 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                 glowColor: const Color(0xFF8AB4F8),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Messages feature coming soon!')),
+                    const SnackBar(
+                        content: Text('Messages feature coming soon!')),
                   );
                 },
               ),
@@ -470,9 +474,21 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                       if (_players.isEmpty) {
                         // Mock data if no players found
                         final mockPlayers = [
-                          {'name': 'Ahmed Hassan', 'pos': 'Midfielder', 'rating': 8.5},
-                          {'name': 'Fatima Ali', 'pos': 'Forward', 'rating': 9.1},
-                          {'name': 'Youseff Saber', 'pos': 'Defender', 'rating': 7.9},
+                          {
+                            'name': 'Ahmed Hassan',
+                            'pos': 'Midfielder',
+                            'rating': 8.5
+                          },
+                          {
+                            'name': 'Fatima Ali',
+                            'pos': 'Forward',
+                            'rating': 9.1
+                          },
+                          {
+                            'name': 'Youseff Saber',
+                            'pos': 'Defender',
+                            'rating': 7.9
+                          },
                         ];
                         final p = mockPlayers[index];
                         return RecommendedPlayerCard(
@@ -482,12 +498,13 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
                           isSelected: index == 0,
                         );
                       }
-                      
+
                       final player = _players[index];
                       return RecommendedPlayerCard(
                         name: player.name,
                         position: player.primaryPosition,
-                        rating: (player.profileCompletionScore / 10).clamp(0.0, 10.0), // Mock rating
+                        rating: (player.profileCompletionScore / 10)
+                            .clamp(0.0, 10.0), // Mock rating
                         imageUrl: player.profilePhotoUrl,
                         isSelected: index == 0,
                         onTap: () {
@@ -527,30 +544,37 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
               else if (_recentMatchReports.isEmpty)
                 Text(
                   'No match reports yet.',
-                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
+                  style: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7)),
                 )
               else
                 ..._recentMatchReports.map((report) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: MatchReportCard(
-                    tournament: report.tournamentName,
-                    date: DateFormat('MMM dd, yyyy').format(report.matchDate),
-                    teams: '${report.teamA} vs ${report.teamB}',
-                    goals: report.result,
-                    players: (report.playersToWatch?.length ?? 0).toString(),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MatchReportDetailsScreen(report: report),
-                        ),
-                      );
-                    },
-                  ),
-                )),
-              
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: MatchReportCard(
+                        tournament: report.tournamentName,
+                        date:
+                            DateFormat('MMM dd, yyyy').format(report.matchDate),
+                        teams: '${report.teamA} vs ${report.teamB}',
+                        goals: report.result,
+                        players:
+                            (report.playersToWatch?.length ?? 0).toString(),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MatchReportDetailsScreen(report: report),
+                            ),
+                          );
+                        },
+                      ),
+                    )),
+
               const SizedBox(height: 24),
-              
+
               // Top 5 Scouted Players
               Text(
                 'Top 5 Scouted Players',
@@ -655,7 +679,10 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.bookmark_border, size: 64, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
+            Icon(Icons.bookmark_border,
+                size: 64,
+                color:
+                    Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
             const SizedBox(height: 16),
             Text(
               'No Bookmarked Players',
@@ -668,7 +695,9 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
             const SizedBox(height: 8),
             Text(
               'Bookmark players you\'re interested in to view them here.',
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
+              style: TextStyle(
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -700,7 +729,8 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
     return Center(
       child: Text(
         'Messages',
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+        style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
       ),
     );
   }
@@ -719,7 +749,8 @@ class _ScoutDashboardScreenState extends State<ScoutDashboardScreen> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+        unselectedItemColor:
+            Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
         onTap: (index) {
           if (index == 1) {
             _loadBookmarks();

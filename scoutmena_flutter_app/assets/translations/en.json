@@ -283,6 +283,8 @@
     "skills_attributes": "SKILLS & ATTRIBUTES",
     "tactical_attributes": "TACTICAL ATTRIBUTES",
     "academy": "Academy",
+    "player_reported_stats": "Player-reported statistics",
+    "stats_verification_notice": "Statistics are provided by players and may be verified by coaches, academies, or ScoutMena.",
     "levels": {
       "youth": "Youth",
       "academy": "Academy",

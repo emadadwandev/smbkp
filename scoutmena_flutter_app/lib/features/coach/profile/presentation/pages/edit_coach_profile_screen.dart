@@ -17,7 +17,7 @@ class EditCoachProfileScreen extends StatefulWidget {
 
 class _EditCoachProfileScreenState extends State<EditCoachProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Controllers
   final _clubNameController = TextEditingController();
   final _yearsController = TextEditingController();
@@ -224,7 +224,8 @@ class _EditCoachProfileScreenState extends State<EditCoachProfileScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.primaryBlue, width: 2),
+            borderSide:
+                const BorderSide(color: AppColors.primaryBlue, width: 2),
           ),
         ),
         keyboardType: keyboardType,
@@ -246,7 +247,7 @@ class _EditCoachProfileScreenState extends State<EditCoachProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedRole,
+        initialValue: _selectedRole,
         decoration: InputDecoration(
           labelText: 'coach.current_role'.tr(),
           prefixIcon: const Icon(Icons.work, color: AppColors.primaryBlue),
@@ -280,10 +281,11 @@ class _EditCoachProfileScreenState extends State<EditCoachProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedLicense,
+        initialValue: _selectedLicense,
         decoration: InputDecoration(
           labelText: 'coach.coaching_license'.tr(),
-          prefixIcon: const Icon(Icons.card_membership, color: AppColors.primaryBlue),
+          prefixIcon:
+              const Icon(Icons.card_membership, color: AppColors.primaryBlue),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -380,7 +382,8 @@ class _EditCoachProfileScreenState extends State<EditCoachProfileScreen> {
       updates['coaching_license'] = _selectedLicense;
     }
     if (_yearsController.text.isNotEmpty) {
-      updates['years_of_experience'] = int.tryParse(_yearsController.text.trim());
+      updates['years_of_experience'] =
+          int.tryParse(_yearsController.text.trim());
     }
     if (_selectedSpecializations.isNotEmpty) {
       updates['specializations'] = _selectedSpecializations;

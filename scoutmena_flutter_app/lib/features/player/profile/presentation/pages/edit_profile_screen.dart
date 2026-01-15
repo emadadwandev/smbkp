@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../domain/entities/player_profile_entity.dart';
@@ -15,9 +14,9 @@ class EditProfileScreen extends StatefulWidget {
   final PlayerProfileEntity profile;
 
   const EditProfileScreen({
-    Key? key,
+    super.key,
     required this.profile,
-  }) : super(key: key);
+  });
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -27,19 +26,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   late PlayerProfileEntity _currentProfile;
   final ImagePicker _picker = ImagePicker();
-  
+
   // Basic Info
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _bioController;
-  
+
   // Physical & Football
   late TextEditingController _currentClubController;
   late TextEditingController _heightController;
   late TextEditingController _weightController;
   late TextEditingController _jerseyNumberController;
   late TextEditingController _achievementsController;
-  
+
   // Contact & Agent
   late TextEditingController _agentNameController;
   late TextEditingController _agentEmailController;
@@ -55,7 +54,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? _selectedGender;
   DateTime? _careerStartDate;
   List<String> _selectedSecondaryPositions = [];
-  
+
   String? _selectedNationality;
   String? _selectedCountry;
   String? _selectedCity;
@@ -81,9 +80,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   ];
 
   final List<String> _positions = [
-    'goalkeeper', 'center_back', 'right_back', 'left_back',
-    'defensive_midfielder', 'central_midfielder', 'attacking_midfielder',
-    'right_winger', 'left_winger', 'striker', 'second_striker'
+    'goalkeeper',
+    'center_back',
+    'right_back',
+    'left_back',
+    'defensive_midfielder',
+    'central_midfielder',
+    'attacking_midfielder',
+    'right_winger',
+    'left_winger',
+    'striker',
+    'second_striker'
   ];
 
   final List<String> _feet = ['right', 'left', 'both'];
@@ -92,23 +99,359 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   // Cities by country code
   final Map<String, List<String>> _citiesByCountry = {
-    'EG': ['Cairo', 'Alexandria', 'Giza', 'Shubra El Kheima', 'Port Said', 'Suez', 'Luxor', 'Mansoura', 'El-Mahalla El-Kubra', 'Tanta', 'Asyut', 'Ismailia', 'Fayyum', 'Zagazig', 'Aswan', 'Damietta', 'Damanhur', 'Minya', 'Beni Suef', 'Qena', 'Sohag', 'Hurghada', 'Shibin El Kom', 'Banha', 'Kafr el-Sheikh', 'Arish', 'Mallawi'],
-    'SA': ['Riyadh', 'Jeddah', 'Mecca', 'Medina', 'Dammam', 'Khobar', 'Dhahran', 'Tabuk', 'Buraidah', 'Khamis Mushait', 'Hail', 'Hofuf', 'Mubarraz', 'Ta\'if', 'Najran', 'Jubail', 'Abha', 'Yanbu', 'Al-Kharj', 'Qatif', 'Arar', 'Sakaka', 'Jizan', 'Al-Qunfudhah'],
-    'AE': ['Dubai', 'Abu Dhabi', 'Sharjah', 'Al Ain', 'Ajman', 'Ras Al Khaimah', 'Fujairah', 'Umm Al Quwain', 'Khor Fakkan', 'Dibba Al-Fujairah', 'Dibba Al-Hisn', 'Dhaid', 'Jebel Ali', 'Ruwais', 'Liwa Oasis', 'Ghayathi', 'Madinat Zayed'],
-    'QA': ['Doha', 'Al Rayyan', 'Umm Salal', 'Al Wakrah', 'Al Khor', 'Al Shamal', 'Dukhan', 'Mesaieed', 'Al Wukair', 'Al Ghuwariyah', 'Al Jumailiyah', 'Lusail'],
-    'KW': ['Kuwait City', 'Hawalli', 'Salimiya', 'Sabah Al-Salem', 'Farwaniya', 'Jahra', 'Ahmadi', 'Fahaheel', 'Mangaf', 'Fintas', 'Mahboula', 'Salmiya', 'Hawally', 'Jabriya', 'Rumaithiya', 'Bayan', 'Mishref', 'Surra', 'Andalus'],
-    'BH': ['Manama', 'Riffa', 'Muharraq', 'Hamad Town', 'A\'ali', 'Isa Town', 'Sitra', 'Budaiya', 'Jidhafs', 'Al-Malikiyah', 'Sanabis', 'Tubli', 'Dar Kulaib', 'Barbar', 'Bilad Al Qadeem'],
-    'OM': ['Muscat', 'Salalah', 'Sohar', 'Nizwa', 'Sur', 'Ibri', 'Barka', 'Rustaq', 'Buraimi', 'Khasab', 'Seeb', 'Saham', 'Bahla', 'Shinas', 'Izki', 'Badiyah', 'Mahout', 'Bidbid'],
-    'JO': ['Amman', 'Zarqa', 'Irbid', 'Russeifa', 'Wadi Al-Seer', 'Aqaba', 'Madaba', 'Salt', 'Mafraq', 'Jerash', 'Ma\'an', 'Karak', 'Tafilah', 'Ajloun', 'Ramtha', 'Sahab', 'Fuheis', 'Aidoun'],
-    'LB': ['Beirut', 'Tripoli', 'Sidon', 'Tyre', 'Nabatieh', 'Jounieh', 'Zahle', 'Baalbek', 'Byblos', 'Aley', 'Baabda', 'Bint Jbeil', 'Jezzine', 'Rashaya', 'Marjeyoun', 'Halba', 'Batroun'],
-    'IQ': ['Baghdad', 'Basra', 'Mosul', 'Erbil', 'Kirkuk', 'Najaf', 'Karbala', 'Nasiriyah', 'Amarah', 'Diwaniyah', 'Kut', 'Hillah', 'Ramadi', 'Fallujah', 'Samarra', 'Tikrit', 'Sulaymaniyah', 'Dohuk', 'Baqubah', 'Samawah'],
-    'MA': ['Casablanca', 'Rabat', 'Fez', 'Marrakesh', 'Tangier', 'Salé', 'Meknes', 'Oujda', 'Kenitra', 'Agadir', 'Tetouan', 'Temara', 'Safi', 'Mohammedia', 'Khouribga', 'El Jadida', 'Beni Mellal', 'Nador', 'Taza', 'Settat'],
-    'TN': ['Tunis', 'Sfax', 'Sousse', 'Kairouan', 'Bizerte', 'Gabès', 'Ariana', 'Gafsa', 'Monastir', 'Ben Arous', 'Kasserine', 'Medenine', 'Nabeul', 'Tataouine', 'Béja', 'Jendouba', 'Mahdia', 'Siliana', 'Kef', 'Tozeur'],
-    'DZ': ['Algiers', 'Oran', 'Constantine', 'Batna', 'Djelfa', 'Sétif', 'Annaba', 'Sidi Bel Abbès', 'Biskra', 'Tébessa', 'El Oued', 'Skikda', 'Tiaret', 'Béjaïa', 'Tlemcen', 'Béchar', 'Mostaganem', 'Bordj Bou Arréridj', 'Chlef', 'Blida'],
-    'LY': ['Tripoli', 'Benghazi', 'Misrata', 'Bayda', 'Zawiya', 'Zliten', 'Ajdabiya', 'Tobruk', 'Sabha', 'Gharyan', 'Khoms', 'Derna', 'Sabratha', 'Sirte', 'Marj', 'Bani Walid', 'Tarhuna', 'Zintan'],
-    'PS': ['Gaza', 'Hebron', 'Nablus', 'Ramallah', 'Khan Yunis', 'Rafah', 'Jenin', 'Tulkarm', 'Qalqilya', 'Bethlehem', 'Jericho', 'Salfit', 'Tubas', 'Deir al-Balah', 'Beit Lahia', 'Beit Hanoun', 'Jabalya'],
-    'SY': ['Damascus', 'Aleppo', 'Homs', 'Latakia', 'Hama', 'Deir ez-Zor', 'Raqqa', 'Idlib', 'Daraa', 'As-Suwayda', 'Tartus', 'Quneitra', 'Hasaka', 'Qamishli', 'Douma', 'Manbij', 'Palmyra', 'Baniyas'],
-    'YE': ['Sana\'a', 'Aden', 'Taiz', 'Hodeidah', 'Ibb', 'Dhamar', 'Mukalla', 'Zinjibar', 'Saada', 'Marib', 'Hajjah', 'Amran', 'Sayyan', 'Zabid', 'Lahij', 'Al Bayda', 'Ataq', 'Rida', 'Dhi as-Sufal'],
+    'EG': [
+      'Cairo',
+      'Alexandria',
+      'Giza',
+      'Shubra El Kheima',
+      'Port Said',
+      'Suez',
+      'Luxor',
+      'Mansoura',
+      'El-Mahalla El-Kubra',
+      'Tanta',
+      'Asyut',
+      'Ismailia',
+      'Fayyum',
+      'Zagazig',
+      'Aswan',
+      'Damietta',
+      'Damanhur',
+      'Minya',
+      'Beni Suef',
+      'Qena',
+      'Sohag',
+      'Hurghada',
+      'Shibin El Kom',
+      'Banha',
+      'Kafr el-Sheikh',
+      'Arish',
+      'Mallawi'
+    ],
+    'SA': [
+      'Riyadh',
+      'Jeddah',
+      'Mecca',
+      'Medina',
+      'Dammam',
+      'Khobar',
+      'Dhahran',
+      'Tabuk',
+      'Buraidah',
+      'Khamis Mushait',
+      'Hail',
+      'Hofuf',
+      'Mubarraz',
+      'Ta\'if',
+      'Najran',
+      'Jubail',
+      'Abha',
+      'Yanbu',
+      'Al-Kharj',
+      'Qatif',
+      'Arar',
+      'Sakaka',
+      'Jizan',
+      'Al-Qunfudhah'
+    ],
+    'AE': [
+      'Dubai',
+      'Abu Dhabi',
+      'Sharjah',
+      'Al Ain',
+      'Ajman',
+      'Ras Al Khaimah',
+      'Fujairah',
+      'Umm Al Quwain',
+      'Khor Fakkan',
+      'Dibba Al-Fujairah',
+      'Dibba Al-Hisn',
+      'Dhaid',
+      'Jebel Ali',
+      'Ruwais',
+      'Liwa Oasis',
+      'Ghayathi',
+      'Madinat Zayed'
+    ],
+    'QA': [
+      'Doha',
+      'Al Rayyan',
+      'Umm Salal',
+      'Al Wakrah',
+      'Al Khor',
+      'Al Shamal',
+      'Dukhan',
+      'Mesaieed',
+      'Al Wukair',
+      'Al Ghuwariyah',
+      'Al Jumailiyah',
+      'Lusail'
+    ],
+    'KW': [
+      'Kuwait City',
+      'Hawalli',
+      'Salimiya',
+      'Sabah Al-Salem',
+      'Farwaniya',
+      'Jahra',
+      'Ahmadi',
+      'Fahaheel',
+      'Mangaf',
+      'Fintas',
+      'Mahboula',
+      'Salmiya',
+      'Hawally',
+      'Jabriya',
+      'Rumaithiya',
+      'Bayan',
+      'Mishref',
+      'Surra',
+      'Andalus'
+    ],
+    'BH': [
+      'Manama',
+      'Riffa',
+      'Muharraq',
+      'Hamad Town',
+      'A\'ali',
+      'Isa Town',
+      'Sitra',
+      'Budaiya',
+      'Jidhafs',
+      'Al-Malikiyah',
+      'Sanabis',
+      'Tubli',
+      'Dar Kulaib',
+      'Barbar',
+      'Bilad Al Qadeem'
+    ],
+    'OM': [
+      'Muscat',
+      'Salalah',
+      'Sohar',
+      'Nizwa',
+      'Sur',
+      'Ibri',
+      'Barka',
+      'Rustaq',
+      'Buraimi',
+      'Khasab',
+      'Seeb',
+      'Saham',
+      'Bahla',
+      'Shinas',
+      'Izki',
+      'Badiyah',
+      'Mahout',
+      'Bidbid'
+    ],
+    'JO': [
+      'Amman',
+      'Zarqa',
+      'Irbid',
+      'Russeifa',
+      'Wadi Al-Seer',
+      'Aqaba',
+      'Madaba',
+      'Salt',
+      'Mafraq',
+      'Jerash',
+      'Ma\'an',
+      'Karak',
+      'Tafilah',
+      'Ajloun',
+      'Ramtha',
+      'Sahab',
+      'Fuheis',
+      'Aidoun'
+    ],
+    'LB': [
+      'Beirut',
+      'Tripoli',
+      'Sidon',
+      'Tyre',
+      'Nabatieh',
+      'Jounieh',
+      'Zahle',
+      'Baalbek',
+      'Byblos',
+      'Aley',
+      'Baabda',
+      'Bint Jbeil',
+      'Jezzine',
+      'Rashaya',
+      'Marjeyoun',
+      'Halba',
+      'Batroun'
+    ],
+    'IQ': [
+      'Baghdad',
+      'Basra',
+      'Mosul',
+      'Erbil',
+      'Kirkuk',
+      'Najaf',
+      'Karbala',
+      'Nasiriyah',
+      'Amarah',
+      'Diwaniyah',
+      'Kut',
+      'Hillah',
+      'Ramadi',
+      'Fallujah',
+      'Samarra',
+      'Tikrit',
+      'Sulaymaniyah',
+      'Dohuk',
+      'Baqubah',
+      'Samawah'
+    ],
+    'MA': [
+      'Casablanca',
+      'Rabat',
+      'Fez',
+      'Marrakesh',
+      'Tangier',
+      'Salé',
+      'Meknes',
+      'Oujda',
+      'Kenitra',
+      'Agadir',
+      'Tetouan',
+      'Temara',
+      'Safi',
+      'Mohammedia',
+      'Khouribga',
+      'El Jadida',
+      'Beni Mellal',
+      'Nador',
+      'Taza',
+      'Settat'
+    ],
+    'TN': [
+      'Tunis',
+      'Sfax',
+      'Sousse',
+      'Kairouan',
+      'Bizerte',
+      'Gabès',
+      'Ariana',
+      'Gafsa',
+      'Monastir',
+      'Ben Arous',
+      'Kasserine',
+      'Medenine',
+      'Nabeul',
+      'Tataouine',
+      'Béja',
+      'Jendouba',
+      'Mahdia',
+      'Siliana',
+      'Kef',
+      'Tozeur'
+    ],
+    'DZ': [
+      'Algiers',
+      'Oran',
+      'Constantine',
+      'Batna',
+      'Djelfa',
+      'Sétif',
+      'Annaba',
+      'Sidi Bel Abbès',
+      'Biskra',
+      'Tébessa',
+      'El Oued',
+      'Skikda',
+      'Tiaret',
+      'Béjaïa',
+      'Tlemcen',
+      'Béchar',
+      'Mostaganem',
+      'Bordj Bou Arréridj',
+      'Chlef',
+      'Blida'
+    ],
+    'LY': [
+      'Tripoli',
+      'Benghazi',
+      'Misrata',
+      'Bayda',
+      'Zawiya',
+      'Zliten',
+      'Ajdabiya',
+      'Tobruk',
+      'Sabha',
+      'Gharyan',
+      'Khoms',
+      'Derna',
+      'Sabratha',
+      'Sirte',
+      'Marj',
+      'Bani Walid',
+      'Tarhuna',
+      'Zintan'
+    ],
+    'PS': [
+      'Gaza',
+      'Hebron',
+      'Nablus',
+      'Ramallah',
+      'Khan Yunis',
+      'Rafah',
+      'Jenin',
+      'Tulkarm',
+      'Qalqilya',
+      'Bethlehem',
+      'Jericho',
+      'Salfit',
+      'Tubas',
+      'Deir al-Balah',
+      'Beit Lahia',
+      'Beit Hanoun',
+      'Jabalya'
+    ],
+    'SY': [
+      'Damascus',
+      'Aleppo',
+      'Homs',
+      'Latakia',
+      'Hama',
+      'Deir ez-Zor',
+      'Raqqa',
+      'Idlib',
+      'Daraa',
+      'As-Suwayda',
+      'Tartus',
+      'Quneitra',
+      'Hasaka',
+      'Qamishli',
+      'Douma',
+      'Manbij',
+      'Palmyra',
+      'Baniyas'
+    ],
+    'YE': [
+      'Sana\'a',
+      'Aden',
+      'Taiz',
+      'Hodeidah',
+      'Ibb',
+      'Dhamar',
+      'Mukalla',
+      'Zinjibar',
+      'Saada',
+      'Marib',
+      'Hajjah',
+      'Amran',
+      'Sayyan',
+      'Zabid',
+      'Lahij',
+      'Al Bayda',
+      'Ataq',
+      'Rida',
+      'Dhi as-Sufal'
+    ],
   };
 
   List<String> _getCitiesForCountry() {
@@ -121,25 +464,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
     _currentProfile = widget.profile;
     final p = widget.profile;
-    
+
     _firstNameController = TextEditingController(text: p.firstName);
     _lastNameController = TextEditingController(text: p.lastName);
     _bioController = TextEditingController(text: p.bio);
-    
+
     _currentClubController = TextEditingController(text: p.currentClub);
-    _heightController = TextEditingController(text: p.heightCm?.toString() ?? '');
-    _weightController = TextEditingController(text: p.weightKg?.toString() ?? '');
-    _jerseyNumberController = TextEditingController(text: p.jerseyNumber?.toString() ?? '');
-    _achievementsController = TextEditingController(text: p.achievements?.join('\n') ?? '');
-    
+    _heightController =
+        TextEditingController(text: p.heightCm?.toString() ?? '');
+    _weightController =
+        TextEditingController(text: p.weightKg?.toString() ?? '');
+    _jerseyNumberController =
+        TextEditingController(text: p.jerseyNumber?.toString() ?? '');
+    _achievementsController =
+        TextEditingController(text: p.achievements?.join('\n') ?? '');
+
     _agentNameController = TextEditingController(text: p.agentName);
     _agentEmailController = TextEditingController(text: p.agentEmail);
     _contactEmailController = TextEditingController(text: p.contactEmail);
     _phoneNumberController = TextEditingController(text: p.phoneNumber);
-    
-    _instagramController = TextEditingController(text: p.socialLinks?['instagram'] ?? '');
-    _twitterController = TextEditingController(text: p.socialLinks?['twitter'] ?? '');
-    _facebookController = TextEditingController(text: p.socialLinks?['facebook'] ?? '');
+
+    _instagramController =
+        TextEditingController(text: p.socialLinks?['instagram'] ?? '');
+    _twitterController =
+        TextEditingController(text: p.socialLinks?['twitter'] ?? '');
+    _facebookController =
+        TextEditingController(text: p.socialLinks?['facebook'] ?? '');
 
     _selectedPreferredFoot = p.preferredFoot;
     _selectedPrimaryPosition = p.primaryPosition;
@@ -204,46 +554,70 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           .toList();
 
       final socialLinks = <String, String>{};
-      if (_instagramController.text.isNotEmpty) socialLinks['instagram'] = _instagramController.text;
-      if (_twitterController.text.isNotEmpty) socialLinks['twitter'] = _twitterController.text;
-      if (_facebookController.text.isNotEmpty) socialLinks['facebook'] = _facebookController.text;
+      if (_instagramController.text.isNotEmpty)
+        socialLinks['instagram'] = _instagramController.text;
+      if (_twitterController.text.isNotEmpty)
+        socialLinks['twitter'] = _twitterController.text;
+      if (_facebookController.text.isNotEmpty)
+        socialLinks['facebook'] = _facebookController.text;
 
       context.read<PlayerProfileBloc>().add(
-        UpdatePlayerProfile(
-          profileId: widget.profile.id ?? '',
-          firstName: _firstNameController.text,
-          lastName: _lastNameController.text,
-          nationality: _selectedNationality,
-          city: _selectedCity,
-          country: _selectedCountry ?? '',
-          gender: _selectedGender,
-          bio: _bioController.text.isNotEmpty ? _bioController.text : null,
-          currentClub: _currentClubController.text.isNotEmpty ? _currentClubController.text : null,
-          heightCm: _heightController.text.isNotEmpty ? int.tryParse(_heightController.text) : null,
-          weightKg: _weightController.text.isNotEmpty ? int.tryParse(_weightController.text) : null,
-          jerseyNumber: _jerseyNumberController.text.isNotEmpty ? int.tryParse(_jerseyNumberController.text) : null,
-          achievements: achievements.isNotEmpty ? achievements : null,
-          preferredFoot: _selectedPreferredFoot,
-          primaryPosition: _selectedPrimaryPosition,
-          secondaryPositions: _selectedSecondaryPositions.isNotEmpty ? _selectedSecondaryPositions : null,
-          privacyLevel: _selectedPrivacyLevel,
-          careerStartDate: _careerStartDate,
-          agentName: _agentNameController.text.isNotEmpty ? _agentNameController.text : null,
-          agentEmail: _agentEmailController.text.isNotEmpty ? _agentEmailController.text : null,
-          contactEmail: _contactEmailController.text.isNotEmpty ? _contactEmailController.text : null,
-          phoneNumber: _phoneNumberController.text.isNotEmpty ? _phoneNumberController.text : null,
-          socialLinks: socialLinks.isNotEmpty ? socialLinks : null,
-        ),
-      );
+            UpdatePlayerProfile(
+              profileId: widget.profile.id ?? '',
+              firstName: _firstNameController.text,
+              lastName: _lastNameController.text,
+              nationality: _selectedNationality,
+              city: _selectedCity,
+              country: _selectedCountry ?? '',
+              gender: _selectedGender,
+              bio: _bioController.text.isNotEmpty ? _bioController.text : null,
+              currentClub: _currentClubController.text.isNotEmpty
+                  ? _currentClubController.text
+                  : null,
+              heightCm: _heightController.text.isNotEmpty
+                  ? int.tryParse(_heightController.text)
+                  : null,
+              weightKg: _weightController.text.isNotEmpty
+                  ? int.tryParse(_weightController.text)
+                  : null,
+              jerseyNumber: _jerseyNumberController.text.isNotEmpty
+                  ? int.tryParse(_jerseyNumberController.text)
+                  : null,
+              achievements: achievements.isNotEmpty ? achievements : null,
+              preferredFoot: _selectedPreferredFoot,
+              primaryPosition: _selectedPrimaryPosition,
+              secondaryPositions: _selectedSecondaryPositions.isNotEmpty
+                  ? _selectedSecondaryPositions
+                  : null,
+              privacyLevel: _selectedPrivacyLevel,
+              careerStartDate: _careerStartDate,
+              agentName: _agentNameController.text.isNotEmpty
+                  ? _agentNameController.text
+                  : null,
+              agentEmail: _agentEmailController.text.isNotEmpty
+                  ? _agentEmailController.text
+                  : null,
+              contactEmail: _contactEmailController.text.isNotEmpty
+                  ? _contactEmailController.text
+                  : null,
+              phoneNumber: _phoneNumberController.text.isNotEmpty
+                  ? _phoneNumberController.text
+                  : null,
+              socialLinks: socialLinks.isNotEmpty ? socialLinks : null,
+            ),
+          );
     }
   }
 
-  Future<void> _pickImage({required bool isHero, bool isGallery = false}) async {
+  Future<void> _pickImage(
+      {required bool isHero, bool isGallery = false}) async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       final file = File(image.path);
       if (isGallery) {
-        context.read<PlayerProfileBloc>().add(UploadGalleryPhoto(photo: file, isHero: isHero));
+        context
+            .read<PlayerProfileBloc>()
+            .add(UploadGalleryPhoto(photo: file, isHero: isHero));
       } else {
         context.read<PlayerProfileBloc>().add(UploadProfilePhoto(file));
       }
@@ -267,7 +641,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Navigator.pop(context);
               bloc.add(const DeleteProfilePhoto());
             },
-            child: Text('common.delete'.tr(), style: const TextStyle(color: Colors.red)),
+            child: Text('common.delete'.tr(),
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -291,7 +666,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Navigator.pop(context);
               bloc.add(DeleteGalleryPhoto(photoId));
             },
-            child: Text('common.delete'.tr(), style: const TextStyle(color: Colors.red)),
+            child: Text('common.delete'.tr(),
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -315,7 +691,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Navigator.pop(context);
               bloc.add(const DeleteHeroImage());
             },
-            child: Text('common.delete'.tr(), style: const TextStyle(color: Colors.red)),
+            child: Text('common.delete'.tr(),
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -339,7 +716,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Navigator.pop(context);
               bloc.add(DeleteVideo(videoId));
             },
-            child: Text('common.delete'.tr(), style: const TextStyle(color: Colors.red)),
+            child: Text('common.delete'.tr(),
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -374,12 +752,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             SnackBar(content: Text('profile.uploading_media'.tr())),
           );
         } else if (state is ProfilePhotoUploaded) {
-           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('success.photo_uploaded'.tr()), backgroundColor: Colors.green),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('success.photo_uploaded'.tr()),
+                backgroundColor: Colors.green),
           );
         } else if (state is GalleryPhotoUploaded) {
-           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('success.photo_uploaded'.tr()), backgroundColor: Colors.green),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('success.photo_uploaded'.tr()),
+                backgroundColor: Colors.green),
           );
         }
       },
@@ -414,16 +796,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _firstNameController,
-                      decoration: InputDecoration(labelText: 'profile.first_name'.tr(), border: const OutlineInputBorder()),
-                      validator: (v) => v?.isEmpty == true ? 'errors.required_field'.tr() : null,
+                      decoration: InputDecoration(
+                          labelText: 'profile.first_name'.tr(),
+                          border: const OutlineInputBorder()),
+                      validator: (v) => v?.isEmpty == true
+                          ? 'errors.required_field'.tr()
+                          : null,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: TextFormField(
                       controller: _lastNameController,
-                      decoration: InputDecoration(labelText: 'profile.last_name'.tr(), border: const OutlineInputBorder()),
-                      validator: (v) => v?.isEmpty == true ? 'errors.required_field'.tr() : null,
+                      decoration: InputDecoration(
+                          labelText: 'profile.last_name'.tr(),
+                          border: const OutlineInputBorder()),
+                      validator: (v) => v?.isEmpty == true
+                          ? 'errors.required_field'.tr()
+                          : null,
                     ),
                   ),
                 ],
@@ -444,85 +834,115 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: _selectedNationality,
+                      initialValue: _selectedNationality,
                       isExpanded: true,
-                      decoration: InputDecoration(labelText: 'profile.nationality'.tr(), border: const OutlineInputBorder()),
-                      items: _countries.map((c) => DropdownMenuItem(
-                        value: c['nationality'],
-                        child: Text(
-                          c['name']!,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )).toList(),
-                      onChanged: (v) => setState(() => _selectedNationality = v),
+                      decoration: InputDecoration(
+                          labelText: 'profile.nationality'.tr(),
+                          border: const OutlineInputBorder()),
+                      items: _countries
+                          .map((c) => DropdownMenuItem(
+                                value: c['nationality'],
+                                child: Text(
+                                  c['name']!,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (v) =>
+                          setState(() => _selectedNationality = v),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: _selectedCountry,
+                      initialValue: _selectedCountry,
                       isExpanded: true,
-                      decoration: InputDecoration(labelText: 'profile.country'.tr(), border: const OutlineInputBorder()),
-                      items: _countries.map((c) => DropdownMenuItem(
-                        value: c['code'],
-                        child: Text(
-                          c['name']!,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )).toList(),
+                      decoration: InputDecoration(
+                          labelText: 'profile.country'.tr(),
+                          border: const OutlineInputBorder()),
+                      items: _countries
+                          .map((c) => DropdownMenuItem(
+                                value: c['code'],
+                                child: Text(
+                                  c['name']!,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
+                          .toList(),
                       onChanged: (v) {
                         setState(() {
                           _selectedCountry = v;
                           // Reset city when country changes
                           final cities = _getCitiesForCountry();
-                          if (_selectedCity != null && !cities.contains(_selectedCity)) {
+                          if (_selectedCity != null &&
+                              !cities.contains(_selectedCity)) {
                             _selectedCity = null;
                           }
                         });
                       },
-                      validator: (v) => v == null || v.isEmpty ? 'errors.required_field'.tr() : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? 'errors.required_field'.tr()
+                          : null,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedGender,
-                decoration: InputDecoration(labelText: 'profile.gender'.tr(), border: const OutlineInputBorder()),
-                items: _genders.map((g) => DropdownMenuItem(value: g, child: Text('profile.gender_$g'.tr()))).toList(),
+                initialValue: _selectedGender,
+                decoration: InputDecoration(
+                    labelText: 'profile.gender'.tr(),
+                    border: const OutlineInputBorder()),
+                items: _genders
+                    .map((g) => DropdownMenuItem(
+                        value: g, child: Text('profile.gender_$g'.tr())))
+                    .toList(),
                 onChanged: (v) => setState(() => _selectedGender = v),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedCity,
+                initialValue: _selectedCity,
                 isExpanded: true,
                 decoration: InputDecoration(
                   labelText: 'profile.city'.tr(),
                   border: const OutlineInputBorder(),
-                  hintText: _selectedCountry == null ? 'Select country first' : 'Select city',
+                  hintText: _selectedCountry == null
+                      ? 'Select country first'
+                      : 'Select city',
                 ),
-                items: _getCitiesForCountry().map((city) => DropdownMenuItem(
-                  value: city,
-                  child: Text(city, overflow: TextOverflow.ellipsis),
-                )).toList(),
-                onChanged: _selectedCountry == null ? null : (v) => setState(() => _selectedCity = v),
+                items: _getCitiesForCountry()
+                    .map((city) => DropdownMenuItem(
+                          value: city,
+                          child: Text(city, overflow: TextOverflow.ellipsis),
+                        ))
+                    .toList(),
+                onChanged: _selectedCountry == null
+                    ? null
+                    : (v) => setState(() => _selectedCity = v),
               ),
-              
               const SizedBox(height: 24),
               _buildSectionTitle('profile.sport_data'.tr()),
-              
               DropdownButtonFormField<String>(
-                value: _selectedPrimaryPosition,
-                decoration: InputDecoration(labelText: 'profile.primary_position'.tr(), border: const OutlineInputBorder()),
-                items: _positions.map((p) => DropdownMenuItem(value: p, child: Text('positions.$p'.tr()))).toList(),
+                initialValue: _selectedPrimaryPosition,
+                decoration: InputDecoration(
+                    labelText: 'profile.primary_position'.tr(),
+                    border: const OutlineInputBorder()),
+                items: _positions
+                    .map((p) => DropdownMenuItem(
+                        value: p, child: Text('positions.$p'.tr())))
+                    .toList(),
                 onChanged: (v) => setState(() => _selectedPrimaryPosition = v),
               ),
               const SizedBox(height: 16),
-              Text('profile.secondary_positions'.tr(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              Text('profile.secondary_positions'.tr(),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8.0,
-                children: _positions.where((p) => p != _selectedPrimaryPosition).map((p) {
+                children: _positions
+                    .where((p) => p != _selectedPrimaryPosition)
+                    .map((p) {
                   final isSelected = _selectedSecondaryPositions.contains(p);
                   return FilterChip(
                     label: Text('positions.$p'.tr()),
@@ -531,9 +951,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() {
                         if (selected) {
                           if (_selectedSecondaryPositions.length < 3) {
-                             _selectedSecondaryPositions.add(p);
+                            _selectedSecondaryPositions.add(p);
                           } else {
-                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${'profile.secondary_positions'.tr()} (${'profile.max'.tr()} 3)')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    '${'profile.secondary_positions'.tr()} (${'profile.max'.tr()} 3)')));
                           }
                         } else {
                           _selectedSecondaryPositions.remove(p);
@@ -572,7 +994,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _currentClubController,
-                decoration: InputDecoration(labelText: 'profile.current_club'.tr(), border: const OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'profile.current_club'.tr(),
+                    border: const OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               Row(
@@ -580,7 +1004,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _heightController,
-                      decoration: InputDecoration(labelText: 'profile.height'.tr(), suffixText: 'cm', border: const OutlineInputBorder()),
+                      decoration: InputDecoration(
+                          labelText: 'profile.height'.tr(),
+                          suffixText: 'cm',
+                          border: const OutlineInputBorder()),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -588,7 +1015,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _weightController,
-                      decoration: InputDecoration(labelText: 'profile.weight'.tr(), suffixText: 'kg', border: const OutlineInputBorder()),
+                      decoration: InputDecoration(
+                          labelText: 'profile.weight'.tr(),
+                          suffixText: 'kg',
+                          border: const OutlineInputBorder()),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -599,17 +1029,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: _selectedPreferredFoot,
-                      decoration: InputDecoration(labelText: 'profile.preferred_foot'.tr(), border: const OutlineInputBorder()),
-                      items: _feet.map((f) => DropdownMenuItem(value: f, child: Text('profile.foot_$f'.tr()))).toList(),
-                      onChanged: (v) => setState(() => _selectedPreferredFoot = v),
+                      initialValue: _selectedPreferredFoot,
+                      decoration: InputDecoration(
+                          labelText: 'profile.preferred_foot'.tr(),
+                          border: const OutlineInputBorder()),
+                      items: _feet
+                          .map((f) => DropdownMenuItem(
+                              value: f, child: Text('profile.foot_$f'.tr())))
+                          .toList(),
+                      onChanged: (v) =>
+                          setState(() => _selectedPreferredFoot = v),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: TextFormField(
                       controller: _jerseyNumberController,
-                      decoration: InputDecoration(labelText: 'profile.jersey_number'.tr(), border: const OutlineInputBorder()),
+                      decoration: InputDecoration(
+                          labelText: 'profile.jersey_number'.tr(),
+                          border: const OutlineInputBorder()),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -625,55 +1063,72 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 maxLines: 3,
               ),
-
               const SizedBox(height: 24),
               _buildSectionTitle('profile.contact_info'.tr()),
               TextFormField(
                 controller: _contactEmailController,
-                decoration: InputDecoration(labelText: 'profile.email'.tr(), border: const OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'profile.email'.tr(),
+                    border: const OutlineInputBorder()),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _phoneNumberController,
-                decoration: InputDecoration(labelText: 'profile.phone'.tr(), border: const OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'profile.phone'.tr(),
+                    border: const OutlineInputBorder()),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _agentNameController,
-                decoration: InputDecoration(labelText: 'profile.agent_name'.tr(), border: const OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'profile.agent_name'.tr(),
+                    border: const OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _agentEmailController,
-                decoration: InputDecoration(labelText: 'profile.agent_email'.tr(), border: const OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'profile.agent_email'.tr(),
+                    border: const OutlineInputBorder()),
                 keyboardType: TextInputType.emailAddress,
               ),
-              
               const SizedBox(height: 24),
               _buildSectionTitle('profile.social_links'.tr()),
               TextFormField(
                 controller: _instagramController,
-                decoration: const InputDecoration(labelText: 'Instagram', prefixText: '@', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'Instagram',
+                    prefixText: '@',
+                    border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _twitterController,
-                decoration: const InputDecoration(labelText: 'X', prefixText: '@', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'X',
+                    prefixText: '@',
+                    border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _facebookController,
-                decoration: const InputDecoration(labelText: 'Facebook', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'Facebook', border: OutlineInputBorder()),
               ),
-
               const SizedBox(height: 24),
               _buildSectionTitle('profile.privacy_settings'.tr()),
               DropdownButtonFormField<String>(
-                value: _selectedPrivacyLevel,
-                decoration: InputDecoration(labelText: 'privacy.privacy_level'.tr(), border: const OutlineInputBorder()),
-                items: _privacyLevels.map((l) => DropdownMenuItem(value: l, child: Text('privacy.$l'.tr()))).toList(),
+                initialValue: _selectedPrivacyLevel,
+                decoration: InputDecoration(
+                    labelText: 'privacy.privacy_level'.tr(),
+                    border: const OutlineInputBorder()),
+                items: _privacyLevels
+                    .map((l) => DropdownMenuItem(
+                        value: l, child: Text('privacy.$l'.tr())))
+                    .toList(),
                 onChanged: (v) => setState(() => _selectedPrivacyLevel = v),
               ),
               const SizedBox(height: 32),
@@ -710,7 +1165,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Expanded(
               child: Column(
                 children: [
-                  Text('profile.profile_photo'.tr(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('profile.profile_photo'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Stack(
                     children: [
@@ -722,13 +1178,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: Colors.grey[200],
                           image: _currentProfile.profilePhotoUrl != null
                               ? DecorationImage(
-                                  image: CachedNetworkImageProvider(_currentProfile.profilePhotoUrl!),
+                                  image: CachedNetworkImageProvider(
+                                      _currentProfile.profilePhotoUrl!),
                                   fit: BoxFit.cover,
                                 )
                               : null,
                         ),
                         child: _currentProfile.profilePhotoUrl == null
-                            ? const Icon(Icons.person, size: 50, color: Colors.grey)
+                            ? const Icon(Icons.person,
+                                size: 50, color: Colors.grey)
                             : null,
                       ),
                       Positioned(
@@ -742,7 +1200,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               color: AppColors.primaryBlue,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                            child: const Icon(Icons.edit,
+                                color: Colors.white, size: 16),
                           ),
                         ),
                       ),
@@ -751,7 +1210,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_currentProfile.profilePhotoUrl != null)
                     TextButton(
                       onPressed: _deleteProfilePhoto,
-                      child: Text('common.delete'.tr(), style: const TextStyle(color: Colors.red, fontSize: 12)),
+                      child: Text('common.delete'.tr(),
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 12)),
                     ),
                 ],
               ),
@@ -761,7 +1222,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Expanded(
               child: Column(
                 children: [
-                  Text('profile.hero_image'.tr(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('profile.hero_image'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Stack(
                     children: [
@@ -773,27 +1235,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: Colors.grey[200],
                           image: _currentProfile.heroImageUrl != null
                               ? DecorationImage(
-                                  image: CachedNetworkImageProvider(_currentProfile.heroImageUrl!),
+                                  image: CachedNetworkImageProvider(
+                                      _currentProfile.heroImageUrl!),
                                   fit: BoxFit.cover,
                                 )
                               : null,
                         ),
                         child: _currentProfile.heroImageUrl == null
-                            ? const Icon(Icons.image, size: 50, color: Colors.grey)
+                            ? const Icon(Icons.image,
+                                size: 50, color: Colors.grey)
                             : null,
                       ),
                       Positioned(
                         bottom: 4,
                         right: 4,
                         child: GestureDetector(
-                          onTap: () => _pickImage(isHero: true, isGallery: true),
+                          onTap: () =>
+                              _pickImage(isHero: true, isGallery: true),
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: const BoxDecoration(
                               color: AppColors.primaryBlue,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                            child: const Icon(Icons.edit,
+                                color: Colors.white, size: 16),
                           ),
                         ),
                       ),
@@ -802,7 +1268,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_currentProfile.heroImageUrl != null)
                     TextButton(
                       onPressed: _deleteHeroImage,
-                      child: Text('common.delete'.tr(), style: const TextStyle(color: Colors.red, fontSize: 12)),
+                      child: Text('common.delete'.tr(),
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 12)),
                     ),
                 ],
               ),
@@ -814,8 +1282,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildGallerySection() {
-    final galleryPhotos = _currentProfile.photos?.where((p) => !p.isHero && !p.isMain).toList() ?? [];
-    
+    final galleryPhotos =
+        _currentProfile.photos?.where((p) => !p.isHero && !p.isMain).toList() ??
+            [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -824,13 +1294,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             _buildSectionTitle('profile.gallery'.tr()),
             IconButton(
-              icon: const Icon(Icons.add_photo_alternate, color: AppColors.primaryBlue),
+              icon: const Icon(Icons.add_photo_alternate,
+                  color: AppColors.primaryBlue),
               onPressed: () => _pickImage(isHero: false, isGallery: true),
             ),
           ],
         ),
         if (galleryPhotos.isEmpty)
-          Text('profile.no_photos'.tr(), style: const TextStyle(color: Colors.grey))
+          Text('profile.no_photos'.tr(),
+              style: const TextStyle(color: Colors.grey))
         else
           GridView.builder(
             shrinkWrap: true,
@@ -864,7 +1336,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.close, color: Colors.white, size: 12),
+                        child: const Icon(Icons.close,
+                            color: Colors.white, size: 12),
                       ),
                     ),
                   ),
@@ -878,13 +1351,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _buildVideoGallerySection() {
     final videos = _currentProfile.videos ?? [];
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionTitle('profile.videos'.tr()),
         if (videos.isEmpty)
-          Text('profile.no_videos'.tr(), style: const TextStyle(color: Colors.grey))
+          Text('profile.no_videos'.tr(),
+              style: const TextStyle(color: Colors.grey))
         else
           SizedBox(
             height: 120,
@@ -893,8 +1367,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               itemCount: videos.length,
               itemBuilder: (context, index) {
                 final video = videos[index];
-                final isProcessing = video.status == 'pending' || video.status == 'processing';
-                
+                final isProcessing =
+                    video.status == 'pending' || video.status == 'processing';
+
                 return Container(
                   width: 160,
                   margin: const EdgeInsets.only(right: 12),
@@ -910,15 +1385,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       // Thumbnail
                       if (video.thumbnailUrl != null)
                         ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: CachedNetworkImage(
-                                imageUrl: video.thumbnailUrl!,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                                placeholder: (context, url) => Container(color: Colors.grey[900]),
-                                errorWidget: (context, url, error) => Container(color: Colors.grey[900]),
-                            ),
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: video.thumbnailUrl!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                            placeholder: (context, url) =>
+                                Container(color: Colors.grey[900]),
+                            errorWidget: (context, url, error) =>
+                                Container(color: Colors.grey[900]),
+                          ),
                         )
                       else
                         Container(
@@ -927,40 +1404,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             color: Colors.grey[900],
                           ),
                         ),
-                      
+
                       // Icon / Status
                       if (isProcessing)
-                         Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
-                             const CircularProgressIndicator(color: Colors.white),
-                             const SizedBox(height: 8),
-                             Text('profile.processing'.tr(), style: const TextStyle(color: Colors.white, fontSize: 10)),
-                           ],
-                         )
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CircularProgressIndicator(
+                                color: Colors.white),
+                            const SizedBox(height: 8),
+                            Text('profile.processing'.tr(),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 10)),
+                          ],
+                        )
                       else
-                         const Icon(Icons.play_circle_outline, color: Colors.white, size: 48),
+                        const Icon(Icons.play_circle_outline,
+                            color: Colors.white, size: 48),
 
                       // Title
                       if (video.title != null)
-                      Positioned(
-                        bottom: 8,
-                        left: 8,
-                        right: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.black54,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            video.title!,
-                            style: const TextStyle(color: Colors.white, fontSize: 10),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        Positioned(
+                          bottom: 8,
+                          left: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              video.title!,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 10),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
-                      ),
 
                       // Delete Button
                       Positioned(
@@ -974,7 +1457,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.close, color: Colors.white, size: 12),
+                            child: const Icon(Icons.close,
+                                color: Colors.white, size: 12),
                           ),
                         ),
                       ),

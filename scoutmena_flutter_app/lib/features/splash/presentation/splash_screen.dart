@@ -15,7 +15,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -55,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(const Duration(milliseconds: 2500));
 
     if (!mounted) return;
-    
+
     try {
       final storage = const FlutterSecureStorage();
       final prefs = await SharedPreferences.getInstance();
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         try {
           final authService = getIt<AuthService>();
           final currentUser = await authService.getCurrentUser();
-          
+
           // Register device for notifications
           try {
             final notificationService = getIt<NotificationService>();
@@ -77,19 +78,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           } catch (e) {
             debugPrint('Failed to register device: $e');
           }
-          
+
           if (!mounted) return;
 
           // Check parental consent status for minors
           if (currentUser.requiresParentalConsent == true) {
             final consentStatus = currentUser.parentalConsentStatus?.status;
-            
+
             if (consentStatus == 'pending') {
               // Waiting for parental approval
               Navigator.of(context).pushReplacementNamed(
                 AppRoutes.awaitingApproval,
                 arguments: {
-                  'parentEmail': currentUser.parentalConsentStatus?.parentEmail ?? '',
+                  'parentEmail':
+                      currentUser.parentalConsentStatus?.parentEmail ?? '',
                 },
               );
               return;
@@ -99,7 +101,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Parental consent was rejected. Please contact support.'),
+                    content: Text(
+                        'Parental consent was rejected. Please contact support.'),
                     backgroundColor: Colors.red,
                     duration: Duration(seconds: 5),
                   ),
@@ -128,15 +131,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 break;
               case 'coach':
                 if (currentUser.isVerified == false) {
-                   profileRoute = '/verification-pending';
+                  profileRoute = '/verification-pending';
                 } else {
-                   profileRoute = AppRoutes.coachProfileSetup;
+                  profileRoute = AppRoutes.coachProfileSetup;
                 }
                 break;
               default:
                 profileRoute = AppRoutes.playerProfileSetup;
             }
-            
+
             if (mounted) {
               Navigator.of(context).pushReplacementNamed(profileRoute);
             }
@@ -156,7 +159,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               default:
                 dashboardRoute = AppRoutes.playerDashboard;
             }
-            
+
             if (mounted) {
               Navigator.of(context).pushReplacementNamed(dashboardRoute);
             }

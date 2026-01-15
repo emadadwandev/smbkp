@@ -80,7 +80,7 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
         if (state is CoachProfileNotFound) {
           Navigator.pushReplacementNamed(context, '/coach/profile-setup');
         }
-        
+
         // Handle verification states - redirect accordingly
         if (state is CoachProfilePendingVerification) {
           Navigator.pushReplacementNamed(
@@ -114,7 +114,8 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
           appBar: AppBar(
             title: Text(
               _getAppBarTitle(),
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white),
             ),
             backgroundColor: AppColors.primaryBlue,
             iconTheme: const IconThemeData(color: Colors.white),
@@ -127,14 +128,15 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
           ),
           drawer: BlocBuilder<CoachProfileBloc, CoachProfileState>(
             builder: (blocContext, state) {
-              final profile = state is CoachProfileLoaded ? state.profile : null;
+              final profile =
+                  state is CoachProfileLoaded ? state.profile : null;
               return SideMenu(
                 userName: profile?.fullName ?? 'Coach',
                 userRole: 'Coach',
                 photoUrl: profile?.profilePhotoUrl,
                 onLogout: () async {
                   // Drawer is already closed by SideMenu
-                  
+
                   // Show confirmation dialog
                   final bool? confirm = await showDialog<bool>(
                     context: context,
@@ -174,7 +176,7 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                       if (mounted) {
                         // Close loading dialog
                         Navigator.of(context).pop();
-                        
+
                         // Navigate to main auth screen
                         Navigator.pushNamedAndRemoveUntil(
                           context,
@@ -186,7 +188,7 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                       if (mounted) {
                         // Close loading dialog
                         Navigator.of(context).pop();
-                        
+
                         // Show error but still navigate to login
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -194,7 +196,7 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                             backgroundColor: Colors.red,
                           ),
                         );
-                        
+
                         // Navigate anyway
                         Navigator.pushNamedAndRemoveUntil(
                           context,
@@ -306,7 +308,7 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
 
         // Players List
         Expanded(
-          child: _isLoading 
+          child: _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _buildPlayersList(),
         ),
@@ -456,14 +458,15 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                
+
                 // Location (if available)
                 if (profile.fullLocation.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.location_on, size: 16, color: Colors.grey[500]),
+                      Icon(Icons.location_on,
+                          size: 16, color: Colors.grey[500]),
                       const SizedBox(width: 4),
                       Text(
                         profile.fullLocation,
@@ -504,10 +507,13 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                       _buildVerticalDivider(),
                       _buildStatItem(
                         'License',
-                        profile.coachingLicense.isEmpty ? 'N/A' : profile.coachingLicense,
+                        profile.coachingLicense.isEmpty
+                            ? 'N/A'
+                            : profile.coachingLicense,
                         Icons.card_membership,
                       ),
-                      if (profile.academies != null && profile.academies!.isNotEmpty) ...[
+                      if (profile.academies != null &&
+                          profile.academies!.isNotEmpty) ...[
                         _buildVerticalDivider(),
                         _buildStatItem(
                           'Academies',
@@ -553,7 +559,8 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(30)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.05),
@@ -576,30 +583,34 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                           color: Colors.grey[700],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 24),
 
                       // Specializations Section
                       _buildSectionTitle('coach.specializations'.tr()),
                       const SizedBox(height: 12),
-                      if (profile.specializations != null && profile.specializations!.isNotEmpty)
+                      if (profile.specializations != null &&
+                          profile.specializations!.isNotEmpty)
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: profile.specializations!.map((spec) => Chip(
-                            label: Text(
-                              spec,
-                              style: const TextStyle(
-                                color: AppColors.primaryBlue,
-                                fontSize: 13,
-                              ),
-                            ),
-                            backgroundColor: AppColors.primaryBlue.withOpacity(0.1),
-                            side: BorderSide.none,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          )).toList(),
+                          children: profile.specializations!
+                              .map((spec) => Chip(
+                                    label: Text(
+                                      spec,
+                                      style: const TextStyle(
+                                        color: AppColors.primaryBlue,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    backgroundColor:
+                                        AppColors.primaryBlue.withOpacity(0.1),
+                                    side: BorderSide.none,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ))
+                              .toList(),
                         )
                       else
                         Text(
@@ -614,54 +625,58 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                       const SizedBox(height: 24),
 
                       // Academies Section
-                      if (profile.academies != null && profile.academies!.isNotEmpty) ...[
+                      if (profile.academies != null &&
+                          profile.academies!.isNotEmpty) ...[
                         _buildSectionTitle('Academies'),
                         const SizedBox(height: 12),
                         ...profile.academies!.map((academy) => Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[50],
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey[200]!),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.grey[200]!),
-                                ),
-                                child: const Icon(Icons.school, size: 20, color: AppColors.primaryBlue),
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[50],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[200]!),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      academy['name'] ?? 'Unknown Academy',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border:
+                                          Border.all(color: Colors.grey[200]!),
                                     ),
-                                    if (academy['role'] != null)
-                                      Text(
-                                        academy['role'],
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 13,
+                                    child: const Icon(Icons.school,
+                                        size: 20, color: AppColors.primaryBlue),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          academy['name'] ?? 'Unknown Academy',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
                                         ),
-                                      ),
-                                  ],
-                                ),
+                                        if (academy['role'] != null)
+                                          Text(
+                                            academy['role'],
+                                            style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        )),
+                            )),
                         const SizedBox(height: 24),
                       ],
 
@@ -674,15 +689,18 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                             final bool? confirm = await showDialog<bool>(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
-                                title: Text('settings.logout_confirmation'.tr()),
+                                title:
+                                    Text('settings.logout_confirmation'.tr()),
                                 content: Text('settings.logout_message'.tr()),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext, false),
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext, false),
                                     child: Text('common.cancel'.tr()),
                                   ),
                                   TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext, true),
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext, true),
                                     child: Text(
                                       'common.logout'.tr(),
                                       style: const TextStyle(color: Colors.red),
@@ -709,7 +727,7 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                                 if (mounted) {
                                   // Close loading dialog
                                   Navigator.of(context).pop();
-                                  
+
                                   // Navigate to main auth screen
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
@@ -721,15 +739,16 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                                 if (mounted) {
                                   // Close loading dialog
                                   Navigator.of(context).pop();
-                                  
+
                                   // Show error but still navigate to login
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Logout failed: ${e.toString()}'),
+                                      content: Text(
+                                          'Logout failed: ${e.toString()}'),
                                       backgroundColor: Colors.red,
                                     ),
                                   );
-                                  
+
                                   // Navigate anyway
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
@@ -740,7 +759,8 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
                               }
                             }
                           },
-                          icon: const Icon(Icons.logout, color: AppColors.error),
+                          icon:
+                              const Icon(Icons.logout, color: AppColors.error),
                           label: Text(
                             'common.logout'.tr(),
                             style: const TextStyle(
@@ -772,7 +792,9 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () {
-                  context.read<CoachProfileBloc>().add(const LoadCoachProfile());
+                  context
+                      .read<CoachProfileBloc>()
+                      .add(const LoadCoachProfile());
                 },
                 child: const Text('Retry'),
               ),
@@ -829,7 +851,6 @@ class _CoachDashboardScreenState extends State<CoachDashboardScreen> {
 
   // Removed old helper methods as they are no longer used
   // _buildInfoCard, _buildChipsCard, _buildAcademiesCard replaced by inline widgets
-
 
   String _getInitials(String name) {
     final parts = name.split(' ');

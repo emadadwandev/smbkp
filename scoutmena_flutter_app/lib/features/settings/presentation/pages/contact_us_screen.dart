@@ -235,7 +235,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
                     // Category Dropdown
                     DropdownButtonFormField<String>(
-                      value: _selectedCategory,
+                      initialValue: _selectedCategory,
                       decoration: InputDecoration(
                         labelText: 'settings.category'.tr(),
                         prefixIcon: const Icon(Icons.category_outlined),

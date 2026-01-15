@@ -16,13 +16,15 @@ class PlayerMatchRepositoryImpl implements PlayerMatchRepository {
   Future<Either<Failure, List<PlayerMatchStat>>> getMatchStats() async {
     try {
       final response = await apiClient.get('/player/profile/matches');
-      
+
       if (response.data['success'] == true) {
         final List<dynamic> data = response.data['data'];
-        final stats = data.map((e) => PlayerMatchStatModel.fromJson(e)).toList();
+        final stats =
+            data.map((e) => PlayerMatchStatModel.fromJson(e)).toList();
         return Right(stats);
       } else {
-        return Left(ServerFailure(response.data['message'] ?? 'Failed to get match stats'));
+        return Left(ServerFailure(
+            response.data['message'] ?? 'Failed to get match stats'));
       }
     } catch (e) {
       return Left(ServerFailure('Unexpected error: $e'));
@@ -30,16 +32,19 @@ class PlayerMatchRepositoryImpl implements PlayerMatchRepository {
   }
 
   @override
-  Future<Either<Failure, PlayerMatchStat>> addMatchStat(PlayerMatchStat stat) async {
+  Future<Either<Failure, PlayerMatchStat>> addMatchStat(
+      PlayerMatchStat stat) async {
     try {
       final model = PlayerMatchStatModel.fromEntity(stat);
-      final response = await apiClient.post('/player/profile/matches', data: model.toJson());
-      
+      final response =
+          await apiClient.post('/player/profile/matches', data: model.toJson());
+
       if (response.data['success'] == true) {
         final newStat = PlayerMatchStatModel.fromJson(response.data['data']);
         return Right(newStat);
       } else {
-        return Left(ServerFailure(response.data['message'] ?? 'Failed to add match stat'));
+        return Left(ServerFailure(
+            response.data['message'] ?? 'Failed to add match stat'));
       }
     } catch (e) {
       return Left(ServerFailure('Unexpected error: $e'));
@@ -47,16 +52,20 @@ class PlayerMatchRepositoryImpl implements PlayerMatchRepository {
   }
 
   @override
-  Future<Either<Failure, PlayerMatchStat>> updateMatchStat(PlayerMatchStat stat) async {
+  Future<Either<Failure, PlayerMatchStat>> updateMatchStat(
+      PlayerMatchStat stat) async {
     try {
       final model = PlayerMatchStatModel.fromEntity(stat);
-      final response = await apiClient.put('/player/profile/matches/${stat.id}', data: model.toJson());
-      
+      final response = await apiClient.put('/player/profile/matches/${stat.id}',
+          data: model.toJson());
+
       if (response.data['success'] == true) {
-        final updatedStat = PlayerMatchStatModel.fromJson(response.data['data']);
+        final updatedStat =
+            PlayerMatchStatModel.fromJson(response.data['data']);
         return Right(updatedStat);
       } else {
-        return Left(ServerFailure(response.data['message'] ?? 'Failed to update match stat'));
+        return Left(ServerFailure(
+            response.data['message'] ?? 'Failed to update match stat'));
       }
     } catch (e) {
       return Left(ServerFailure('Unexpected error: $e'));
@@ -67,11 +76,12 @@ class PlayerMatchRepositoryImpl implements PlayerMatchRepository {
   Future<Either<Failure, void>> deleteMatchStat(String id) async {
     try {
       final response = await apiClient.delete('/player/profile/matches/$id');
-      
+
       if (response.data['success'] == true) {
         return const Right(null);
       } else {
-        return Left(ServerFailure(response.data['message'] ?? 'Failed to delete match stat'));
+        return Left(ServerFailure(
+            response.data['message'] ?? 'Failed to delete match stat'));
       }
     } catch (e) {
       return Left(ServerFailure('Unexpected error: $e'));

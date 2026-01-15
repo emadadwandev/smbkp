@@ -301,8 +301,7 @@ class CoachVerificationPendingScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(
-                  context, '/coach/document-upload');
+              Navigator.pushReplacementNamed(context, '/coach/document-upload');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryBlue,

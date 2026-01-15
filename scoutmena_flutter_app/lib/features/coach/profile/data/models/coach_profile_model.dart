@@ -63,7 +63,7 @@ class CoachProfileModel {
     if (specializationsRaw is List && specializationsRaw.isNotEmpty) {
       specializations = specializationsRaw.map((e) => e.toString()).toList();
     }
-    
+
     // Parse social links safely
     Map<String, String>? socialLinks;
     final socialLinksRaw = json['social_links'];
@@ -86,10 +86,11 @@ class CoachProfileModel {
         }
       });
     }
-    
+
     // Parse verification documents safely
     List<String>? verificationDocumentUrls;
-    final docsRaw = json['verification_document_urls'] ?? json['verification_documents'];
+    final docsRaw =
+        json['verification_document_urls'] ?? json['verification_documents'];
     if (docsRaw is List && docsRaw.isNotEmpty) {
       verificationDocumentUrls = docsRaw.map((e) => e.toString()).toList();
     }
@@ -97,9 +98,11 @@ class CoachProfileModel {
     // Parse academies
     List<Map<String, dynamic>>? academies;
     if (json['academies'] is List) {
-      academies = (json['academies'] as List).map((e) => e as Map<String, dynamic>).toList();
+      academies = (json['academies'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
     }
-    
+
     return CoachProfileModel(
       id: json['id']?.toString(),
       userId: json['user_id']?.toString(),
@@ -120,7 +123,8 @@ class CoachProfileModel {
       socialLinks: socialLinks,
       profilePhotoUrl: json['profile_photo_url']?.toString(),
       isVerified: json['is_verified'] == true,
-      isActive: json['is_active'] != false, // Default true unless explicitly false
+      isActive:
+          json['is_active'] != false, // Default true unless explicitly false
       verificationStatus: json['verification_status']?.toString(),
       verificationDocumentUrls: verificationDocumentUrls,
       verifiedAt: json['verified_at'] != null
@@ -158,7 +162,8 @@ class CoachProfileModel {
       'is_verified': isVerified,
       'is_active': isActive,
       if (verificationStatus != null) 'verification_status': verificationStatus,
-      if (verificationDocumentUrls != null) 'verification_document_urls': verificationDocumentUrls,
+      if (verificationDocumentUrls != null)
+        'verification_document_urls': verificationDocumentUrls,
       if (verifiedAt != null) 'verified_at': verifiedAt!.toIso8601String(),
       if (createdAt != null) 'created_at': createdAt!.toIso8601String(),
       if (updatedAt != null) 'updated_at': updatedAt!.toIso8601String(),
@@ -273,7 +278,8 @@ class CoachProfileModel {
       isVerified: isVerified ?? this.isVerified,
       isActive: isActive ?? this.isActive,
       verificationStatus: verificationStatus ?? this.verificationStatus,
-      verificationDocumentUrls: verificationDocumentUrls ?? this.verificationDocumentUrls,
+      verificationDocumentUrls:
+          verificationDocumentUrls ?? this.verificationDocumentUrls,
       verifiedAt: verifiedAt ?? this.verifiedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

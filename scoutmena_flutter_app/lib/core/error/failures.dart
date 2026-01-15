@@ -37,9 +37,9 @@ class UnauthorizedFailure extends Failure {
 
 class ParentalConsentRequiredFailure extends Failure {
   final String parentEmail;
-  
+
   const ParentalConsentRequiredFailure(super.message, this.parentEmail);
-  
+
   @override
   List<Object> get props => [message, parentEmail];
 }

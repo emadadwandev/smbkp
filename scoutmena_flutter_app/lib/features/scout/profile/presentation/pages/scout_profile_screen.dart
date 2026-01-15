@@ -33,7 +33,8 @@ class ScoutProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileView(BuildContext context, ScoutProfileEntity profile, {bool isPending = false}) {
+  Widget _buildProfileView(BuildContext context, ScoutProfileEntity profile,
+      {bool isPending = false}) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -53,8 +54,11 @@ class ScoutProfileScreen extends StatelessWidget {
                           : null,
                       child: profile.profilePhotoUrl == null
                           ? Text(
-                              profile.firstName.isNotEmpty ? profile.firstName[0].toUpperCase() : 'S',
-                              style: const TextStyle(fontSize: 40, color: Colors.white),
+                              profile.firstName.isNotEmpty
+                                  ? profile.firstName[0].toUpperCase()
+                                  : 'S',
+                              style: const TextStyle(
+                                  fontSize: 40, color: Colors.white),
                             )
                           : null,
                     ),
@@ -68,7 +72,8 @@ class ScoutProfileScreen extends StatelessWidget {
                             color: AppColors.primaryBlue,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.check, color: Colors.white, size: 20),
+                          child: const Icon(Icons.check,
+                              color: Colors.white, size: 20),
                         ),
                       ),
                   ],
@@ -104,7 +109,8 @@ class ScoutProfileScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 if (isPending)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.orange.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
@@ -132,44 +138,55 @@ class ScoutProfileScreen extends StatelessWidget {
           // Details Section
           _buildSectionTitle('Details'),
           const SizedBox(height: 16),
-          _buildDetailRow(Icons.location_on_outlined, 'Location', profile.country),
+          _buildDetailRow(
+              Icons.location_on_outlined, 'Location', profile.country),
           if (profile.contactEmail != null)
-            _buildDetailRow(Icons.email_outlined, 'Email', profile.contactEmail!),
+            _buildDetailRow(
+                Icons.email_outlined, 'Email', profile.contactEmail!),
           if (profile.contactPhone != null)
-            _buildDetailRow(Icons.phone_outlined, 'Phone', profile.contactPhone!),
-          
+            _buildDetailRow(
+                Icons.phone_outlined, 'Phone', profile.contactPhone!),
+
           const SizedBox(height: 24),
 
           // Specializations
-          if (profile.specializations != null && profile.specializations!.isNotEmpty) ...[
+          if (profile.specializations != null &&
+              profile.specializations!.isNotEmpty) ...[
             _buildSectionTitle('Specializations'),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: profile.specializations!.map((spec) => Chip(
-                label: Text(spec),
-                backgroundColor: AppColors.cardBackground,
-                labelStyle: const TextStyle(color: AppColors.textPrimary),
-                side: BorderSide(color: Colors.grey[800]!),
-              )).toList(),
+              children: profile.specializations!
+                  .map((spec) => Chip(
+                        label: Text(spec),
+                        backgroundColor: AppColors.cardBackground,
+                        labelStyle:
+                            const TextStyle(color: AppColors.textPrimary),
+                        side: BorderSide(color: Colors.grey[800]!),
+                      ))
+                  .toList(),
             ),
             const SizedBox(height: 24),
           ],
 
           // Leagues of Interest
-          if (profile.leaguesOfInterest != null && profile.leaguesOfInterest!.isNotEmpty) ...[
+          if (profile.leaguesOfInterest != null &&
+              profile.leaguesOfInterest!.isNotEmpty) ...[
             _buildSectionTitle('Leagues of Interest'),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: profile.leaguesOfInterest!.map((league) => Chip(
-                label: Text(league),
-                backgroundColor: AppColors.cardBackground,
-                labelStyle: const TextStyle(color: AppColors.textPrimary),
-                side: BorderSide(color: Colors.grey[800]!),
-              )).toList(),
+              children: profile.leaguesOfInterest!
+                  .map((league) => Chip(
+                        label: Text(league),
+                        backgroundColor: AppColors.cardBackground,
+                        labelStyle:
+                            const TextStyle(color: AppColors.textPrimary),
+                        side: BorderSide(color: Colors.grey[800]!),
+                      ))
+                  .toList(),
             ),
             const SizedBox(height: 24),
           ],

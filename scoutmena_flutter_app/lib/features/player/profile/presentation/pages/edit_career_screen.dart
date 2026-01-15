@@ -13,9 +13,9 @@ class EditCareerScreen extends StatefulWidget {
   final PlayerProfileEntity profile;
 
   const EditCareerScreen({
-    Key? key,
+    super.key,
     required this.profile,
-  }) : super(key: key);
+  });
 
   @override
   State<EditCareerScreen> createState() => _EditCareerScreenState();
@@ -145,10 +145,9 @@ class _CareerEntryDialog extends StatefulWidget {
   final Function(CareerEntry) onSave;
 
   const _CareerEntryDialog({
-    Key? key,
     this.entry,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
   State<_CareerEntryDialog> createState() => _CareerEntryDialogState();
@@ -164,7 +163,8 @@ class _CareerEntryDialogState extends State<_CareerEntryDialog> {
   @override
   void initState() {
     super.initState();
-    _clubNameController = TextEditingController(text: widget.entry?.clubName ?? '');
+    _clubNameController =
+        TextEditingController(text: widget.entry?.clubName ?? '');
     _startDate = widget.entry?.startDate;
     _endDate = widget.entry?.endDate;
     _isCurrent = widget.entry?.isCurrent ?? false;
@@ -177,9 +177,8 @@ class _CareerEntryDialogState extends State<_CareerEntryDialog> {
   }
 
   Future<void> _selectDate(BuildContext context, bool isStart) async {
-    final initialDate = isStart
-        ? (_startDate ?? DateTime.now())
-        : (_endDate ?? DateTime.now());
+    final initialDate =
+        isStart ? (_startDate ?? DateTime.now()) : (_endDate ?? DateTime.now());
     final picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -202,7 +201,8 @@ class _CareerEntryDialogState extends State<_CareerEntryDialog> {
     final dateFormat = DateFormat('MMM yyyy');
 
     return AlertDialog(
-      title: Text(widget.entry == null ? 'Add Career Entry' : 'Edit Career Entry'),
+      title:
+          Text(widget.entry == null ? 'Add Career Entry' : 'Edit Career Entry'),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(

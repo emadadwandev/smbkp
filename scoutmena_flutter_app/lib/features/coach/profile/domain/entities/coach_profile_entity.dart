@@ -118,9 +118,9 @@ class CoachProfileEntity extends Equatable {
 
   /// Check if verification is pending
   bool get isPendingVerification {
-    return !isVerified && 
-           verificationStatus == 'pending' && 
-           hasUploadedDocuments;
+    return !isVerified &&
+        verificationStatus == 'pending' &&
+        hasUploadedDocuments;
   }
 
   /// Check if verification was rejected
@@ -130,8 +130,8 @@ class CoachProfileEntity extends Equatable {
 
   /// Check if has uploaded verification documents
   bool get hasUploadedDocuments {
-    return verificationDocumentUrls != null && 
-           verificationDocumentUrls!.isNotEmpty;
+    return verificationDocumentUrls != null &&
+        verificationDocumentUrls!.isNotEmpty;
   }
 
   /// Check if can search players (must be verified and active)

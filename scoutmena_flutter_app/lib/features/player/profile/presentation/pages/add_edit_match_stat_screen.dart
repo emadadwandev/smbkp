@@ -9,7 +9,7 @@ import '../bloc/player_match_stats_state.dart';
 class AddEditMatchStatScreen extends StatefulWidget {
   final PlayerMatchStat? stat;
 
-  const AddEditMatchStatScreen({Key? key, this.stat}) : super(key: key);
+  const AddEditMatchStatScreen({super.key, this.stat});
 
   @override
   State<AddEditMatchStatScreen> createState() => _AddEditMatchStatScreenState();
@@ -36,15 +36,24 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
     final stat = widget.stat;
     _opponentController = TextEditingController(text: stat?.opponent ?? '');
     _resultController = TextEditingController(text: stat?.result ?? '');
-    _goalsController = TextEditingController(text: stat?.goals.toString() ?? '0');
-    _assistsController = TextEditingController(text: stat?.assists.toString() ?? '0');
-    _savesController = TextEditingController(text: stat?.saves.toString() ?? '0');
-    _interceptionsController = TextEditingController(text: stat?.interceptions.toString() ?? '0');
-    _ratingController = TextEditingController(text: stat?.rating?.toString() ?? '');
-    _minutesPlayedController = TextEditingController(text: stat?.minutesPlayed.toString() ?? '0');
-    _yellowCardsController = TextEditingController(text: stat?.yellowCards.toString() ?? '0');
-    _redCardsController = TextEditingController(text: stat?.redCards.toString() ?? '0');
-    _foulsController = TextEditingController(text: stat?.fouls.toString() ?? '0');
+    _goalsController =
+        TextEditingController(text: stat?.goals.toString() ?? '0');
+    _assistsController =
+        TextEditingController(text: stat?.assists.toString() ?? '0');
+    _savesController =
+        TextEditingController(text: stat?.saves.toString() ?? '0');
+    _interceptionsController =
+        TextEditingController(text: stat?.interceptions.toString() ?? '0');
+    _ratingController =
+        TextEditingController(text: stat?.rating?.toString() ?? '');
+    _minutesPlayedController =
+        TextEditingController(text: stat?.minutesPlayed.toString() ?? '0');
+    _yellowCardsController =
+        TextEditingController(text: stat?.yellowCards.toString() ?? '0');
+    _redCardsController =
+        TextEditingController(text: stat?.redCards.toString() ?? '0');
+    _foulsController =
+        TextEditingController(text: stat?.fouls.toString() ?? '0');
     if (stat != null) {
       _matchDate = stat.matchDate;
     }
@@ -112,7 +121,8 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
       listener: (context, state) {
         if (state is MatchStatOperationSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+            SnackBar(
+                content: Text(state.message), backgroundColor: Colors.green),
           );
           Navigator.pop(context);
         } else if (state is MatchStatsError) {
@@ -123,7 +133,8 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.stat == null ? 'Add Match Report' : 'Edit Match Report'),
+          title: Text(
+              widget.stat == null ? 'Add Match Report' : 'Edit Match Report'),
           actions: [
             IconButton(
               icon: const Icon(Icons.save),
@@ -152,7 +163,8 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _resultController,
-                decoration: const InputDecoration(labelText: 'Result (e.g. 2-1)'),
+                decoration:
+                    const InputDecoration(labelText: 'Result (e.g. 2-1)'),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Required' : null,
               ),
@@ -190,7 +202,8 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _interceptionsController,
-                      decoration: const InputDecoration(labelText: 'Interceptions'),
+                      decoration:
+                          const InputDecoration(labelText: 'Interceptions'),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -202,15 +215,18 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _ratingController,
-                      decoration: const InputDecoration(labelText: 'Rating (0-10)'),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration:
+                          const InputDecoration(labelText: 'Rating (0-10)'),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: TextFormField(
                       controller: _minutesPlayedController,
-                      decoration: const InputDecoration(labelText: 'Minutes Played'),
+                      decoration:
+                          const InputDecoration(labelText: 'Minutes Played'),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -222,7 +238,8 @@ class _AddEditMatchStatScreenState extends State<AddEditMatchStatScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _yellowCardsController,
-                      decoration: const InputDecoration(labelText: 'Yellow Cards'),
+                      decoration:
+                          const InputDecoration(labelText: 'Yellow Cards'),
                       keyboardType: TextInputType.number,
                     ),
                   ),

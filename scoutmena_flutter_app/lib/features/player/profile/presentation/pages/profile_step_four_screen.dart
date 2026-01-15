@@ -24,11 +24,11 @@ class ProfileStepFourScreen extends StatefulWidget {
 
 class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
   final ImagePicker _imagePicker = ImagePicker();
-  
+
   File? _profilePhoto;
   File? _heroImage;
-  List<File> _galleryPhotos = [];
-  
+  final List<File> _galleryPhotos = [];
+
   final int _maxGalleryPhotos = 5;
 
   @override
@@ -44,7 +44,7 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
       maxHeight: 1080,
       imageQuality: 85,
     );
-    
+
     if (pickedFile != null) {
       setState(() {
         _profilePhoto = File(pickedFile.path);
@@ -59,7 +59,7 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
       maxHeight: 1080,
       imageQuality: 85,
     );
-    
+
     if (pickedFile != null) {
       setState(() {
         _heroImage = File(pickedFile.path);
@@ -71,20 +71,21 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
     if (_galleryPhotos.length >= _maxGalleryPhotos) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('profile.max_gallery_photos'.tr(args: [_maxGalleryPhotos.toString()])),
+          content: Text('profile.max_gallery_photos'
+              .tr(args: [_maxGalleryPhotos.toString()])),
           backgroundColor: Colors.orange,
         ),
       );
       return;
     }
-    
+
     final pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
       maxWidth: 1920,
       maxHeight: 1080,
       imageQuality: 85,
     );
-    
+
     if (pickedFile != null) {
       setState(() {
         _galleryPhotos.add(File(pickedFile.path));
@@ -109,7 +110,7 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
       );
       return;
     }
-    
+
     if (_heroImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -119,14 +120,75 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
       );
       return;
     }
-    
+
+    // Show stats verification notice dialog before submission
+    _showStatsVerificationDialog();
+  }
+
+  void _showStatsVerificationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.info_outline, color: AppColors.primaryBlue),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'profile.player_reported_stats'.tr(),
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'profile.stats_verification_notice'.tr(),
+            style: const TextStyle(fontSize: 15),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'common.cancel'.tr(),
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _submitProfile();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryGreen,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                'common.continue'.tr(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _submitProfile() {
     final data = {
       ...widget.initialData,
       'profilePhoto': _profilePhoto,
       'heroImage': _heroImage,
       'galleryPhotos': _galleryPhotos,
     };
-    
+
     widget.onComplete(data);
   }
 
@@ -148,7 +210,7 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
           children: [
             _buildProgressIndicator(4),
             const SizedBox(height: 24),
-            
+
             Text(
               'profile.media_upload'.tr(),
               style: const TextStyle(
@@ -165,7 +227,7 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            
+
             // Profile Photo (Required)
             _buildSectionTitle('profile.profile_photo'.tr(), required: true),
             const SizedBox(height: 8),
@@ -177,10 +239,10 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             _buildProfilePhotoCard(),
             const SizedBox(height: 32),
-            
+
             // Hero Image (Required)
             _buildSectionTitle('profile.hero_image'.tr(), required: true),
             const SizedBox(height: 8),
@@ -192,10 +254,10 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             _buildHeroImageCard(),
             const SizedBox(height: 32),
-            
+
             // Gallery Photos (Optional)
             _buildSectionTitle(
               'profile.gallery_photos'.tr(),
@@ -210,14 +272,14 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             _buildGallerySection(),
             const SizedBox(height: 32),
-            
+
             // Info Card
             _buildInfoCard(),
             const SizedBox(height: 32),
-            
+
             // Navigation buttons
             Row(
               children: [
@@ -290,7 +352,8 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
     );
   }
 
-  Widget _buildSectionTitle(String title, {String? subtitle, bool required = false}) {
+  Widget _buildSectionTitle(String title,
+      {String? subtitle, bool required = false}) {
     return Row(
       children: [
         Text(
@@ -322,7 +385,9 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(
-            color: _profilePhoto != null ? AppColors.primaryBlue : Colors.grey[300]!,
+            color: _profilePhoto != null
+                ? AppColors.primaryBlue
+                : Colors.grey[300]!,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -382,7 +447,8 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(
-            color: _heroImage != null ? AppColors.primaryBlue : Colors.grey[300]!,
+            color:
+                _heroImage != null ? AppColors.primaryBlue : Colors.grey[300]!,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -445,7 +511,7 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
-          itemCount: _galleryPhotos.length + 
+          itemCount: _galleryPhotos.length +
               (_galleryPhotos.length < _maxGalleryPhotos ? 1 : 0),
           itemBuilder: (context, index) {
             if (index < _galleryPhotos.length) {
@@ -511,7 +577,8 @@ class _ProfileStepFourScreenState extends State<ProfileStepFourScreen> {
       onTap: _pickGalleryPhoto,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[300]!, width: 2, style: BorderStyle.solid),
+          border: Border.all(
+              color: Colors.grey[300]!, width: 2, style: BorderStyle.solid),
           borderRadius: BorderRadius.circular(8),
           color: Colors.grey[50],
         ),

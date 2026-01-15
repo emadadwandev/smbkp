@@ -20,8 +20,9 @@ class NotificationService {
   Future<void> registerDevice({String? authToken}) async {
     try {
       // Check if we have a token (either passed or in storage)
-      final tokenToUse = authToken ?? await _secureStorage.read(key: AppConstants.accessTokenKey);
-      
+      final tokenToUse = authToken ??
+          await _secureStorage.read(key: AppConstants.accessTokenKey);
+
       if (tokenToUse == null) {
         print('⚠️ Skipping device registration: No auth token available');
         return;
@@ -58,7 +59,8 @@ class NotificationService {
       final packageInfo = await PackageInfo.fromPlatform();
       final appVersion = packageInfo.version;
 
-      print('DEBUG: Registering device with authToken: ${authToken != null ? "PROVIDED" : "FROM STORAGE"}');
+      print(
+          'DEBUG: Registering device with authToken: ${authToken != null ? "PROVIDED" : "FROM STORAGE"}');
 
       // 4. Register with Backend
       await _apiClient.post(
@@ -78,9 +80,9 @@ class NotificationService {
       print('⚠️ Failed to register device: $e');
     }
   }
-  
+
   Future<void> unregisterDevice() async {
-     try {
+    try {
       final token = await _messaging.getToken();
       if (token == null) return;
 

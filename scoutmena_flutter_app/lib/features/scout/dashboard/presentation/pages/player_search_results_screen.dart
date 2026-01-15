@@ -10,7 +10,8 @@ class PlayerSearchResultsScreen extends StatefulWidget {
   const PlayerSearchResultsScreen({super.key, required this.filters});
 
   @override
-  State<PlayerSearchResultsScreen> createState() => _PlayerSearchResultsScreenState();
+  State<PlayerSearchResultsScreen> createState() =>
+      _PlayerSearchResultsScreenState();
 }
 
 class _PlayerSearchResultsScreenState extends State<PlayerSearchResultsScreen> {
@@ -73,13 +74,15 @@ class _PlayerSearchResultsScreenState extends State<PlayerSearchResultsScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primaryBlue))
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primaryBlue))
           : _error != null
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                      const Icon(Icons.error_outline,
+                          size: 48, color: Colors.red),
                       const SizedBox(height: 16),
                       Text(
                         'Error: $_error',
@@ -102,7 +105,8 @@ class _PlayerSearchResultsScreenState extends State<PlayerSearchResultsScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.search_off, size: 64, color: AppColors.textSecondary),
+                          const Icon(Icons.search_off,
+                              size: 64, color: AppColors.textSecondary),
                           const SizedBox(height: 16),
                           const Text(
                             'No players found matching your criteria',
@@ -116,12 +120,14 @@ class _PlayerSearchResultsScreenState extends State<PlayerSearchResultsScreen> {
                             onPressed: () => Navigator.pop(context),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryBlue,
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text('Adjust Filters', style: TextStyle(color: Colors.white)),
+                            child: const Text('Adjust Filters',
+                                style: TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),

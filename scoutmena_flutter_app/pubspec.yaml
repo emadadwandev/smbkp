@@ -60,6 +60,7 @@ dependencies:
   url_launcher: ^6.3.1
   package_info_plus: ^8.0.3
   device_info_plus: ^10.1.0
+  app_tracking_transparency: ^2.0.6
   
   # Validation
   email_validator: ^3.0.0

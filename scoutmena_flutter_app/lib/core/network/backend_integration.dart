@@ -12,8 +12,10 @@ class BackendIntegration {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.apiBaseUrl,
-        connectTimeout: const Duration(milliseconds: ApiConstants.connectTimeout),
-        receiveTimeout: const Duration(milliseconds: ApiConstants.receiveTimeout),
+        connectTimeout:
+            const Duration(milliseconds: ApiConstants.connectTimeout),
+        receiveTimeout:
+            const Duration(milliseconds: ApiConstants.receiveTimeout),
         sendTimeout: const Duration(milliseconds: ApiConstants.sendTimeout),
         headers: {
           'Content-Type': 'application/json',
@@ -33,10 +35,10 @@ class BackendIntegration {
     } on DioException catch (e) {
       // If we get 404, server is reachable
       if (e.response?.statusCode == 404) return true;
-    //  print('Backend connection failed: $e');
+      //  print('Backend connection failed: $e');
       return false;
     } catch (e) {
-    //  print('Backend connection failed: $e');
+      //  print('Backend connection failed: $e');
       return false;
     }
   }
@@ -113,15 +115,18 @@ class BackendIntegration {
 
     // Test authentication endpoints
     results['auth'] = await _testEndpoint('POST', ApiConstants.sendOtp);
-    
+
     // Test player endpoints
-    results['player_profile'] = await _testEndpoint('GET', ApiConstants.playerProfile);
-    
+    results['player_profile'] =
+        await _testEndpoint('GET', ApiConstants.playerProfile);
+
     // Test scout endpoints
-    results['scout_profile'] = await _testEndpoint('GET', ApiConstants.scoutProfile);
-    
+    results['scout_profile'] =
+        await _testEndpoint('GET', ApiConstants.scoutProfile);
+
     // Test coach endpoints
-    results['coach_profile'] = await _testEndpoint('GET', ApiConstants.coachProfile);
+    results['coach_profile'] =
+        await _testEndpoint('GET', ApiConstants.coachProfile);
 
     return results;
   }
@@ -139,7 +144,7 @@ class BackendIntegration {
         default:
           return {'error': 'Unsupported method'};
       }
-      
+
       return {
         'available': true,
         'status_code': response.statusCode,
@@ -150,12 +155,12 @@ class BackendIntegration {
     } catch (e) {
       if (e is DioException) {
         final statusCode = e.response?.statusCode;
-        
+
         // Endpoint exists but requires authentication or valid data
         final isAvailable = statusCode == 401 || // Unauthorized (needs auth)
-                           statusCode == 400 || // Bad Request (needs valid data)
-                           statusCode == 422;   // Unprocessable Entity (validation error)
-        
+            statusCode == 400 || // Bad Request (needs valid data)
+            statusCode == 422; // Unprocessable Entity (validation error)
+
         return {
           'available': isAvailable,
           'status_code': statusCode,
@@ -173,17 +178,25 @@ class BackendIntegration {
       };
     }
   }
-  
+
   String _getStatusMessage(int? statusCode) {
     switch (statusCode) {
-      case 200: return 'OK';
-      case 201: return 'Created';
-      case 400: return 'Endpoint exists (needs valid data)';
-      case 401: return 'Endpoint exists (needs authentication)';
-      case 404: return 'Endpoint not found';
-      case 422: return 'Endpoint exists (validation error)';
-      case 500: return 'Server error';
-      default: return 'Status: $statusCode';
+      case 200:
+        return 'OK';
+      case 201:
+        return 'Created';
+      case 400:
+        return 'Endpoint exists (needs valid data)';
+      case 401:
+        return 'Endpoint exists (needs authentication)';
+      case 404:
+        return 'Endpoint not found';
+      case 422:
+        return 'Endpoint exists (validation error)';
+      case 500:
+        return 'Server error';
+      default:
+        return 'Status: $statusCode';
     }
   }
 }

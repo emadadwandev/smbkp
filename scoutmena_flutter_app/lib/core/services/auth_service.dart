@@ -30,7 +30,7 @@ class AuthService {
     try {
       // Call backend logout endpoint
       await _apiClient.post(ApiConstants.logout);
-      
+
       // Clear all local auth data
       await _clearLocalAuthData();
     } catch (e) {

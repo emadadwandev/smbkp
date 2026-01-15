@@ -33,7 +33,8 @@ class PlayerProfileEntity extends Equatable {
   final String? agentEmail;
   final String contactEmail;
   final String? phoneNumber;
-  final Map<String, String>? socialLinks; // {instagram: '@user', twitter: '@user'}
+  final Map<String, String>?
+      socialLinks; // {instagram: '@user', twitter: '@user'}
   final String privacyLevel; // 'public', 'scouts_only', 'private'
   final String? profilePhotoUrl;
   final String? heroImageUrl;

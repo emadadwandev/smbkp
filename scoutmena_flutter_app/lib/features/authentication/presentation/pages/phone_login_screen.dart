@@ -17,7 +17,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _otpService = getIt<OtpService>();
-  PhoneNumber _initialNumber = PhoneNumber(isoCode: 'JO'); // Default Jordan
+  final PhoneNumber _initialNumber =
+      PhoneNumber(isoCode: 'JO'); // Default Jordan
   String _fullPhoneNumber = '';
   String _selectedAccountType = 'player';
   bool _isLoading = false;
@@ -36,7 +37,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
     // Ensure we have a valid phone number
     if (_fullPhoneNumber.isEmpty) {
-       setState(() {
+      setState(() {
         _errorMessage = 'errors.invalid_phone'.tr();
       });
       return;
@@ -49,7 +50,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
     try {
       final phoneNumber = _fullPhoneNumber;
-      
+
       // Send OTP via Infobip backend
       final otpResponse = await _otpService.sendOtp(
         phoneNumber: phoneNumber,
@@ -58,7 +59,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
       if (mounted) {
         setState(() => _isLoading = false);
-        
+
         // Navigate to OTP verification screen
         Navigator.of(context).pushNamed(
           AppRoutes.otp,
@@ -77,7 +78,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           _isLoading = false;
           _errorMessage = e.toString().replaceAll('Exception: ', '');
         });
-        
+
         // Show error snackbar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -136,12 +137,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _selectedAccountType,
+                  initialValue: _selectedAccountType,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
                   ),
                   items: _accountTypes.map((type) {
                     return DropdownMenuItem(
@@ -165,7 +167,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       ),
                 ),
                 const SizedBox(height: 8),
-                
+
                 InternationalPhoneNumberInput(
                   onInputChanged: (PhoneNumber number) {
                     _fullPhoneNumber = number.phoneNumber ?? '';
@@ -185,13 +187,15 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                   initialValue: _initialNumber,
                   textFieldController: _phoneController,
                   formatInput: false,
-                  keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
                   inputDecoration: InputDecoration(
                     hintText: '1234567890',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
                   ),
                   onSaved: (PhoneNumber number) {
                     _fullPhoneNumber = number.phoneNumber ?? '';
@@ -210,7 +214,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.error_outline, color: Colors.red.shade700, size: 20),
+                        Icon(Icons.error_outline,
+                            color: Colors.red.shade700, size: 20),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(

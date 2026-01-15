@@ -71,7 +71,7 @@ class _BackendTestScreenState extends State<BackendTestScreen> {
 
   Widget _buildStatusCard() {
     final isReachable = _statusData?['reachable'] ?? false;
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -99,7 +99,8 @@ class _BackendTestScreenState extends State<BackendTestScreen> {
             if (_statusData?['error'] != null) ...[
               const Text(
                 'Error:',
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
               ),
               const SizedBox(height: 4),
               Text(
@@ -132,8 +133,10 @@ class _BackendTestScreenState extends State<BackendTestScreen> {
             _buildConfigRow('Base URL', ApiConstants.baseUrl),
             _buildConfigRow('API Version', ApiConstants.apiVersion),
             _buildConfigRow('Full URL', ApiConstants.apiBaseUrl),
-            _buildConfigRow('Connect Timeout', '${ApiConstants.connectTimeout}ms'),
-            _buildConfigRow('Receive Timeout', '${ApiConstants.receiveTimeout}ms'),
+            _buildConfigRow(
+                'Connect Timeout', '${ApiConstants.connectTimeout}ms'),
+            _buildConfigRow(
+                'Receive Timeout', '${ApiConstants.receiveTimeout}ms'),
           ],
         ),
       ),
@@ -203,7 +206,9 @@ class _BackendTestScreenState extends State<BackendTestScreen> {
           Row(
             children: [
               Icon(
-                isAvailable ? Icons.check_circle_outline : Icons.cancel_outlined,
+                isAvailable
+                    ? Icons.check_circle_outline
+                    : Icons.cancel_outlined,
                 color: isAvailable ? Colors.green : Colors.orange,
                 size: 20,
               ),
@@ -216,7 +221,8 @@ class _BackendTestScreenState extends State<BackendTestScreen> {
               ),
               if (statusCode != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: _getStatusColor(statusCode),
                     borderRadius: BorderRadius.circular(4),

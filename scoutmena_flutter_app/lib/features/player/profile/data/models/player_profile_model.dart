@@ -95,56 +95,64 @@ class PlayerProfileModel extends Equatable {
   factory PlayerProfileModel.fromJson(Map<String, dynamic> json) {
     // Handle nested location object
     final location = json['location'] as Map<String, dynamic>?;
-    
+
     // Handle nested physical object
     final physical = json['physical'] as Map<String, dynamic>?;
-    
+
     // Handle nested football object
     final football = json['football'] as Map<String, dynamic>?;
-    
+
     // Handle nested contact object
     final contact = json['contact'] as Map<String, dynamic>?;
     final agent = contact?['agent'] as Map<String, dynamic>?;
-    
+
     // Handle nested metrics object
     final metrics = json['metrics'] as Map<String, dynamic>?;
-    
+
     // Extract photos URLs from photos array
     final photosRaw = json['photos'] as List<dynamic>?;
     String? profilePhotoUrl = json['profile_photo_url'] as String?;
     String? heroImageUrl = json['hero_image_url'] as String?;
     List<String>? galleryPhotoUrls;
     List<PhotoEntity>? photos;
-    
+
     if (photosRaw != null && photosRaw.isNotEmpty) {
-      photos = photosRaw.map((p) => PhotoModel.fromJson(p as Map<String, dynamic>)).toList();
+      photos = photosRaw
+          .map((p) => PhotoModel.fromJson(p as Map<String, dynamic>))
+          .toList();
 
       // Find primary/hero photo
       final primaryPhoto = photosRaw.firstWhere(
         (p) => (p as Map<String, dynamic>)['is_primary'] == true,
         orElse: () => photosRaw.first,
       ) as Map<String, dynamic>?;
-      
+
       if (primaryPhoto != null && profilePhotoUrl == null) {
         final urls = primaryPhoto['urls'] as Map<String, dynamic>?;
-        profilePhotoUrl = urls?['medium'] as String? ?? urls?['original'] as String?;
+        profilePhotoUrl =
+            urls?['medium'] as String? ?? urls?['original'] as String?;
       }
-      
+
       // Collect all photo URLs for gallery
-      galleryPhotoUrls = photosRaw.map((p) {
-        final photoMap = p as Map<String, dynamic>;
-        final urls = photoMap['urls'] as Map<String, dynamic>?;
-        return urls?['medium'] as String? ?? urls?['original'] as String?;
-      }).whereType<String>().toList();
+      galleryPhotoUrls = photosRaw
+          .map((p) {
+            final photoMap = p as Map<String, dynamic>;
+            final urls = photoMap['urls'] as Map<String, dynamic>?;
+            return urls?['medium'] as String? ?? urls?['original'] as String?;
+          })
+          .whereType<String>()
+          .toList();
     }
 
     // Extract videos
     final videosRaw = json['videos'] as List<dynamic>?;
     List<VideoEntity>? videos;
     if (videosRaw != null && videosRaw.isNotEmpty) {
-      videos = videosRaw.map((v) => VideoModel.fromJson(v as Map<String, dynamic>)).toList();
+      videos = videosRaw
+          .map((v) => VideoModel.fromJson(v as Map<String, dynamic>))
+          .toList();
     }
-    
+
     // Parse social links safely
     final socialLinksRaw = json['social_links'];
     Map<String, String>? socialLinks;
@@ -162,7 +170,7 @@ class PlayerProfileModel extends Equatable {
     } else if (socialLinksRaw is Map) {
       socialLinks = Map<String, String>.from(socialLinksRaw);
     }
-    
+
     // Parse achievements safely
     final achievementsRaw = json['achievements'];
     List<String>? achievements;
@@ -178,7 +186,7 @@ class PlayerProfileModel extends Equatable {
           .map((e) => CareerEntry.fromJson(e as Map<String, dynamic>))
           .toList();
     }
-    
+
     return PlayerProfileModel(
       id: json['id'] as String?,
       userId: json['user_id'] as String?,
@@ -249,7 +257,8 @@ class PlayerProfileModel extends Equatable {
       'primary_position': primaryPosition,
       if (secondaryPositions != null) 'secondary_positions': secondaryPositions,
       if (currentClub != null) 'current_club': currentClub,
-      if (careerHistory != null) 'previous_clubs': careerHistory!.map((e) => e.toJson()).toList(),
+      if (careerHistory != null)
+        'previous_clubs': careerHistory!.map((e) => e.toJson()).toList(),
       if (jerseyNumber != null) 'jersey_number': jerseyNumber,
       if (careerStartDate != null)
         'career_start_date': careerStartDate!.toIso8601String(),
@@ -268,7 +277,8 @@ class PlayerProfileModel extends Equatable {
       if (profilePhotoUrl != null) 'profile_photo_url': profilePhotoUrl,
       if (heroImageUrl != null) 'hero_image_url': heroImageUrl,
       if (galleryPhotoUrls != null) 'gallery_photo_urls': galleryPhotoUrls,
-      if (videos != null) 'videos': videos!.map((v) => (v as VideoModel).toJson()).toList(),
+      if (videos != null)
+        'videos': videos!.map((v) => (v as VideoModel).toJson()).toList(),
       if (profileCompletionScore != null)
         'profile_completion_score': profileCompletionScore,
       if (isPublished != null) 'is_published': isPublished,

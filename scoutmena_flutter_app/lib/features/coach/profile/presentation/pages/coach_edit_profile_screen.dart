@@ -21,7 +21,7 @@ class CoachEditProfileScreen extends StatefulWidget {
 class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _academyService = getIt<AcademyService>();
-  
+
   // Controllers
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
@@ -80,7 +80,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
     _emailController.text = profile.contactEmail ?? '';
     _phoneController.text = profile.contactPhone ?? '';
     _cityController.text = profile.city ?? '';
-    
+
     _selectedCountry = profile.country;
     _selectedRole = profile.currentRole;
     _selectedLicense = profile.coachingLicense;
@@ -349,7 +349,8 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.primaryBlue, width: 2),
+            borderSide:
+                const BorderSide(color: AppColors.primaryBlue, width: 2),
           ),
         ),
         keyboardType: keyboardType,
@@ -370,7 +371,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<int>(
-        value: _selectedAcademyId,
+        initialValue: _selectedAcademyId,
         decoration: InputDecoration(
           labelText: 'Academy',
           prefixIcon: const Icon(Icons.school, color: AppColors.primaryBlue),
@@ -413,7 +414,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedCountry,
+        initialValue: _selectedCountry,
         decoration: InputDecoration(
           labelText: 'auth.country'.tr(),
           prefixIcon: const Icon(Icons.flag, color: AppColors.primaryBlue),
@@ -428,8 +429,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
                 ))
             .toList(),
         onChanged: (value) => setState(() => _selectedCountry = value),
-        validator: (value) =>
-            value == null ? 'common.required'.tr() : null,
+        validator: (value) => value == null ? 'common.required'.tr() : null,
       ),
     );
   }
@@ -447,7 +447,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedRole,
+        initialValue: _selectedRole,
         decoration: InputDecoration(
           labelText: 'coach.current_role'.tr(),
           prefixIcon: const Icon(Icons.work, color: AppColors.primaryBlue),
@@ -462,8 +462,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
                 ))
             .toList(),
         onChanged: (value) => setState(() => _selectedRole = value),
-        validator: (value) =>
-            value == null ? 'common.required'.tr() : null,
+        validator: (value) => value == null ? 'common.required'.tr() : null,
       ),
     );
   }
@@ -483,10 +482,11 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
-        value: _selectedLicense,
+        initialValue: _selectedLicense,
         decoration: InputDecoration(
           labelText: 'coach.coaching_license'.tr(),
-          prefixIcon: const Icon(Icons.card_membership, color: AppColors.primaryBlue),
+          prefixIcon:
+              const Icon(Icons.card_membership, color: AppColors.primaryBlue),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -498,8 +498,7 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
                 ))
             .toList(),
         onChanged: (value) => setState(() => _selectedLicense = value),
-        validator: (value) =>
-            value == null ? 'common.required'.tr() : null,
+        validator: (value) => value == null ? 'common.required'.tr() : null,
       ),
     );
   }
@@ -615,7 +614,9 @@ class _CoachEditProfileScreenState extends State<CoachEditProfileScreen> {
       return;
     }
 
-    if (_selectedCountry == null || _selectedRole == null || _selectedLicense == null) {
+    if (_selectedCountry == null ||
+        _selectedRole == null ||
+        _selectedLicense == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('coach.complete_all_required'.tr()),

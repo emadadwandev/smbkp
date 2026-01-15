@@ -21,11 +21,11 @@ class ProfileStepThreeScreen extends StatefulWidget {
 
 class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   late TextEditingController _emailController;
   Map<String, String> _socialLinks = {};
   String _privacyLevel = 'scouts_only';
-  
+
   final List<String> _socialPlatforms = [
     'instagram',
     'twitter',
@@ -33,7 +33,7 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
     'tiktok',
     'youtube',
   ];
-  
+
   final List<String> _privacyOptions = [
     'public',
     'scouts_only',
@@ -43,11 +43,12 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     _emailController = TextEditingController(
       text: widget.initialData['email'] ?? '',
     );
-    _socialLinks = Map<String, String>.from(widget.initialData['socialLinks'] ?? {});
+    _socialLinks =
+        Map<String, String>.from(widget.initialData['socialLinks'] ?? {});
     _privacyLevel = widget.initialData['privacyLevel'] ?? 'scouts_only';
   }
 
@@ -75,7 +76,7 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
         'socialLinks': _socialLinks,
         'privacyLevel': _privacyLevel,
       };
-      
+
       widget.onNext(data);
     }
   }
@@ -114,7 +115,7 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
             children: [
               _buildProgressIndicator(3),
               const SizedBox(height: 24),
-              
+
               Text(
                 'profile.contact_privacy'.tr(),
                 style: const TextStyle(
@@ -131,11 +132,11 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Contact Information
               _buildSectionTitle('profile.contact_info'.tr()),
               const SizedBox(height: 16),
-              
+
               TextFormField(
                 controller: _emailController,
                 enabled: true,
@@ -147,7 +148,8 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: AppColors.primaryBlue, width: 2),
+                    borderSide:
+                        BorderSide(color: AppColors.primaryBlue, width: 2),
                   ),
                 ),
                 validator: (value) {
@@ -166,7 +168,7 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Social Links
               _buildSectionTitle('profile.social_links'.tr()),
               const SizedBox(height: 8),
@@ -178,17 +180,17 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               _buildSocialLinksList(),
               const SizedBox(height: 32),
-              
+
               // Privacy Settings
               _buildSectionTitle('profile.privacy_settings'.tr()),
               const SizedBox(height: 16),
-              
+
               _buildPrivacySelector(),
               const SizedBox(height: 32),
-              
+
               // Navigation buttons
               Row(
                 children: [
@@ -281,7 +283,9 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
               leading: Icon(_getSocialIcon(platform)),
-              title: Text(platform == 'twitter' ? 'X' : 'profile.social_$platform'.tr()),
+              title: Text(platform == 'twitter'
+                  ? 'X'
+                  : 'profile.social_$platform'.tr()),
               subtitle: hasLink
                   ? Text(_socialLinks[platform]!)
                   : Text('profile.add_username'.tr()),
@@ -365,7 +369,7 @@ class _ProfileStepThreeScreenState extends State<ProfileStepThreeScreen> {
     final controller = TextEditingController(
       text: _socialLinks[platform] ?? '',
     );
-    
+
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(

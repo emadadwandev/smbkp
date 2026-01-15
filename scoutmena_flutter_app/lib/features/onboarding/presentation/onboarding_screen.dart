@@ -84,19 +84,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           children: [
             // Header with Logo and Skip
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Empty container to balance the Skip button if we want logo centered
                   // Or we can just put the logo in the center of the screen width using a Stack or expanded
-                  const SizedBox(width: 48), 
-                  
+                  const SizedBox(width: 48),
+
                   // Logo
                   Image.asset(
                     'assets/images/Main logo.png',
                     height: 40,
-                    errorBuilder: (c, o, s) => const Icon(Icons.sports_soccer, size: 40, color: Colors.blue),
+                    errorBuilder: (c, o, s) => const Icon(Icons.sports_soccer,
+                        size: 40, color: Colors.blue),
                   ),
 
                   // Skip Button
@@ -126,7 +128,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemBuilder: (context, index) {
                   // Calculate scale for the current item to give a nice effect
                   // But for now, simple cards as per design
-                  return _buildPage(_pages[index], index == _currentPage, textColor, subtitleColor!);
+                  return _buildPage(_pages[index], index == _currentPage,
+                      textColor, subtitleColor!);
                 },
               ),
             ),
@@ -177,7 +180,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildPage(OnboardingPage page, bool isActive, Color titleColor, Color subtitleColor) {
+  Widget _buildPage(OnboardingPage page, bool isActive, Color titleColor,
+      Color subtitleColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -198,7 +202,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           const SizedBox(height: 32),
-          
+
           // Text Content
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),

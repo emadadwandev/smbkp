@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../../../core/themes/app_colors.dart';
 
 class NotificationsScreen extends StatelessWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,7 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   Future<CoachProfileEntity?> getProfile() async {
     try {
       final response = await apiClient.get('/coach/profile');
-      
+
       if (response.data['success'] == true) {
         final profileData = response.data['data'];
         return _mapToEntity(profileData);
@@ -32,10 +32,12 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   }
 
   @override
-  Future<CoachProfileEntity> createProfile(Map<String, dynamic> profileData) async {
+  Future<CoachProfileEntity> createProfile(
+      Map<String, dynamic> profileData) async {
     try {
-      final response = await apiClient.post('/coach/profile', data: profileData);
-      
+      final response =
+          await apiClient.post('/coach/profile', data: profileData);
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -48,10 +50,11 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   }
 
   @override
-  Future<CoachProfileEntity> updateProfile(Map<String, dynamic> profileData) async {
+  Future<CoachProfileEntity> updateProfile(
+      Map<String, dynamic> profileData) async {
     try {
       final response = await apiClient.put('/coach/profile', data: profileData);
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -74,7 +77,7 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
       });
 
       final response = await apiClient.upload('/coach/profile/photo', formData);
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -90,7 +93,7 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   Future<CoachProfileEntity> deleteProfilePhoto() async {
     try {
       final response = await apiClient.delete('/coach/profile/photo');
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -106,12 +109,13 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   Future<CoachProfileEntity> refreshProfile() async {
     try {
       final response = await apiClient.get('/coach/profile');
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to refresh profile');
+        throw Exception(
+            response.data['message'] ?? 'Failed to refresh profile');
       }
     } catch (e) {
       throw Exception('Failed to refresh coach profile: $e');
@@ -122,7 +126,7 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   Future<List<String>> uploadVerificationDocuments(List<File> documents) async {
     try {
       final formData = FormData();
-      
+
       for (var i = 0; i < documents.length; i++) {
         formData.files.add(MapEntry(
           'verification_documents[$i]',
@@ -137,14 +141,15 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
         '/coach/profile/verification-documents',
         formData,
       );
-      
+
       if (response.data['success'] == true) {
         final urls = (response.data['data']['document_urls'] as List<dynamic>)
             .map((e) => e as String)
             .toList();
         return urls;
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to upload documents');
+        throw Exception(
+            response.data['message'] ?? 'Failed to upload documents');
       }
     } catch (e) {
       throw Exception('Failed to upload verification documents: $e');
@@ -154,12 +159,14 @@ class CoachProfileRepositoryImpl implements CoachProfileRepository {
   @override
   Future<Map<String, dynamic>> getVerificationStatus() async {
     try {
-      final response = await apiClient.get('/coach/profile/verification-status');
-      
+      final response =
+          await apiClient.get('/coach/profile/verification-status');
+
       if (response.data['success'] == true) {
         return response.data['data'] as Map<String, dynamic>;
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to get verification status');
+        throw Exception(
+            response.data['message'] ?? 'Failed to get verification status');
       }
     } catch (e) {
       throw Exception('Failed to get verification status: $e');

@@ -24,12 +24,11 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   Future<Either<Failure, List<AcademyEntity>>> getAcademies() async {
     try {
       final response = await apiClient.get('/academies');
-      
+
       if (response.data['success'] == true) {
         final academiesData = response.data['data'] as List<dynamic>;
-        final academies = academiesData
-            .map((json) => AcademyModel.fromJson(json))
-            .toList();
+        final academies =
+            academiesData.map((json) => AcademyModel.fromJson(json)).toList();
         return Right(academies);
       } else {
         return Left(ServerFailure(
@@ -49,7 +48,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   Future<Either<Failure, PlayerProfileEntity>> getProfile() async {
     try {
       final response = await apiClient.get('/player/profile');
-      
+
       if (response.data['success'] == true) {
         final profileData = response.data['data'];
         final model = PlayerProfileModel.fromJson(profileData);
@@ -111,12 +110,14 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
         if (weightKg != null) 'weight_kg': weightKg,
         if (preferredFoot != null) 'preferred_foot': preferredFoot,
         'primary_position': primaryPosition,
-        if (secondaryPositions != null) 'secondary_positions': secondaryPositions,
+        if (secondaryPositions != null)
+          'secondary_positions': secondaryPositions,
         if (currentClub != null) 'current_club': currentClub,
         if (academyId != null) 'academy_id': academyId,
         if (academyName != null) 'academy_name': academyName,
         if (jerseyNumber != null) 'jersey_number': jerseyNumber,
-        if (careerStartDate != null) 'career_start_date': careerStartDate.toIso8601String(),
+        if (careerStartDate != null)
+          'career_start_date': careerStartDate.toIso8601String(),
         if (bio != null) 'bio': bio,
         if (achievements != null) 'achievements': achievements,
         if (agentName != null) 'agent_name': agentName,
@@ -128,7 +129,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
       };
 
       final response = await apiClient.post('/player/profile', data: data);
-      
+
       if (response.data['success'] == true) {
         final profileData = response.data['data'];
         final model = PlayerProfileModel.fromJson(profileData);
@@ -186,7 +187,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   }) async {
     try {
       final data = <String, dynamic>{};
-      
+
       if (firstName != null) data['first_name'] = firstName;
       if (lastName != null) data['last_name'] = lastName;
       if (nationality != null) data['nationality'] = nationality;
@@ -197,13 +198,16 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
       if (weightKg != null) data['weight_kg'] = weightKg;
       if (preferredFoot != null) data['preferred_foot'] = preferredFoot;
       if (primaryPosition != null) data['primary_position'] = primaryPosition;
-      if (secondaryPositions != null) data['secondary_positions'] = secondaryPositions;
+      if (secondaryPositions != null)
+        data['secondary_positions'] = secondaryPositions;
       if (currentClub != null) data['current_club'] = currentClub;
       if (academyId != null) data['academy_id'] = academyId;
       if (academyName != null) data['academy_name'] = academyName;
-      if (careerHistory != null) data['previous_clubs'] = careerHistory.map((e) => e.toJson()).toList();
+      if (careerHistory != null)
+        data['previous_clubs'] = careerHistory.map((e) => e.toJson()).toList();
       if (jerseyNumber != null) data['jersey_number'] = jerseyNumber;
-      if (careerStartDate != null) data['career_start_date'] = careerStartDate.toIso8601String();
+      if (careerStartDate != null)
+        data['career_start_date'] = careerStartDate.toIso8601String();
       if (bio != null) data['bio'] = bio;
       if (achievements != null) data['achievements'] = achievements;
       if (trainingData != null) data['training_data'] = trainingData;
@@ -218,7 +222,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
       if (privacyLevel != null) data['privacy_level'] = privacyLevel;
 
       final response = await apiClient.put('/player/profile', data: data);
-      
+
       if (response.data['success'] == true) {
         final profileData = response.data['data'];
         final model = PlayerProfileModel.fromJson(profileData);
@@ -251,23 +255,26 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
         ),
       });
 
-      final response = await apiClient.upload('/player/profile/photo', formData);
-      
-      if (response.data['success'] == true || response.statusCode == 200 || response.statusCode == 201) {
+      final response =
+          await apiClient.upload('/player/profile/photo', formData);
+
+      if (response.data['success'] == true ||
+          response.statusCode == 200 ||
+          response.statusCode == 201) {
         // Handle both response structures (with or without 'data' wrapper if needed)
         final data = response.data['data'] ?? response.data;
         final photoUrl = data['photo_url'] as String? ?? data['url'] as String?;
-        
+
         if (photoUrl != null) {
           return Right(photoUrl);
         } else {
-           // Fallback if we can't find the URL, but upload was successful. 
-           // Ideally we should return the URL. If not found, maybe return empty string or fetch profile?
-           // For now, let's try to find it in the resource structure
-           if (data['urls'] != null && data['urls']['original'] != null) {
-             return Right(data['urls']['original']);
-           }
-           return Left(ServerFailure('Photo URL not found in response'));
+          // Fallback if we can't find the URL, but upload was successful.
+          // Ideally we should return the URL. If not found, maybe return empty string or fetch profile?
+          // For now, let's try to find it in the resource structure
+          if (data['urls'] != null && data['urls']['original'] != null) {
+            return Right(data['urls']['original']);
+          }
+          return Left(ServerFailure('Photo URL not found in response'));
         }
       } else {
         return Left(ServerFailure(
@@ -291,7 +298,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   Future<Either<Failure, void>> deleteProfilePhoto() async {
     try {
       final response = await apiClient.delete('/player/profile/photo');
-      
+
       if (response.data['success'] == true || response.statusCode == 200) {
         return const Right(null);
       } else {
@@ -326,18 +333,21 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
       });
 
       // Use different endpoint for Hero Image
-      final endpoint = isHero ? '/player/profile/hero-image' : '/player/profile/photos';
+      final endpoint =
+          isHero ? '/player/profile/hero-image' : '/player/profile/photos';
 
       final response = await apiClient.upload(endpoint, formData);
-      
-      if (response.data['success'] == true || response.statusCode == 200 || response.statusCode == 201) {
+
+      if (response.data['success'] == true ||
+          response.statusCode == 200 ||
+          response.statusCode == 201) {
         final data = response.data['data'] ?? response.data;
         String? photoUrl = data['photo_url'] as String?;
-        
+
         if (photoUrl == null && data['urls'] != null) {
-           photoUrl = data['urls']['original'] as String?;
+          photoUrl = data['urls']['original'] as String?;
         }
-        
+
         if (photoUrl != null) {
           return Right(photoUrl);
         }
@@ -364,7 +374,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   Future<Either<Failure, void>> deleteHeroImage() async {
     try {
       final response = await apiClient.delete('/player/profile/hero-image');
-      
+
       if (response.data['success'] == true || response.statusCode == 200) {
         return const Right(null);
       } else {
@@ -387,15 +397,19 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   Future<Either<Failure, List<String>>> getGalleryPhotos() async {
     try {
       final response = await apiClient.get('/player/profile/photos');
-      
+
       if (response.data['success'] == true || response.statusCode == 200) {
         final data = response.data['data'] as List<dynamic>;
-        final photos = data.map((e) {
-          if (e is String) return e;
-          if (e is Map && e['urls'] != null) return e['urls']['original'] as String;
-          if (e is Map && e['url'] != null) return e['url'] as String;
-          return '';
-        }).where((e) => e.isNotEmpty).toList();
+        final photos = data
+            .map((e) {
+              if (e is String) return e;
+              if (e is Map && e['urls'] != null)
+                return e['urls']['original'] as String;
+              if (e is Map && e['url'] != null) return e['url'] as String;
+              return '';
+            })
+            .where((e) => e.isNotEmpty)
+            .toList();
         return Right(photos);
       } else {
         return Left(ServerFailure(
@@ -416,8 +430,9 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   @override
   Future<Either<Failure, void>> deleteGalleryPhoto(String photoId) async {
     try {
-      final response = await apiClient.delete('/player/profile/photos/$photoId');
-      
+      final response =
+          await apiClient.delete('/player/profile/photos/$photoId');
+
       if (response.data['success'] == true || response.statusCode == 200) {
         return const Right(null);
       } else {
@@ -439,8 +454,9 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   @override
   Future<Either<Failure, void>> deleteVideo(String videoId) async {
     try {
-      final response = await apiClient.delete('/player/profile/videos/$videoId');
-      
+      final response =
+          await apiClient.delete('/player/profile/videos/$videoId');
+
       if (response.data['success'] == true || response.statusCode == 200) {
         return const Right(null);
       } else {
@@ -468,7 +484,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
         '/player/profile/privacy',
         data: {'privacy_level': privacyLevel},
       );
-      
+
       if (response.data['success'] == true) {
         return const Right(null);
       } else {
@@ -491,7 +507,7 @@ class PlayerProfileRepositoryImpl implements PlayerProfileRepository {
   Future<Either<Failure, Map<String, dynamic>>> getAnalytics() async {
     try {
       final response = await apiClient.get('/player/profile/analytics');
-      
+
       if (response.data['success'] == true) {
         return Right(response.data['data']);
       } else {

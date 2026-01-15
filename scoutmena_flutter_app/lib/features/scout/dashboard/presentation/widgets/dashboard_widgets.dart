@@ -24,7 +24,8 @@ class QuickStatCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           child: Column(
             children: [
-              Icon(icon, color: Theme.of(context).colorScheme.onSurface, size: 20),
+              Icon(icon,
+                  color: Theme.of(context).colorScheme.onSurface, size: 20),
               const SizedBox(height: 4),
               Text(
                 number,
@@ -38,7 +39,8 @@ class QuickStatCard extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 10,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 ),
                 textAlign: TextAlign.center,
                 maxLines: 2,
@@ -91,7 +93,8 @@ class QuickActionButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(
                 children: [
-                  Icon(icon, color: Theme.of(context).colorScheme.onSurface, size: 24),
+                  Icon(icon,
+                      color: Theme.of(context).colorScheme.onSurface, size: 24),
                   const SizedBox(height: 8),
                   Text(
                     label,
@@ -161,7 +164,10 @@ class MatchReportCard extends StatelessWidget {
                   date,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.7),
                   ),
                 ),
               ],
@@ -287,7 +293,10 @@ class RankedPlayerCard extends StatelessWidget {
                     position,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7),
                     ),
                   ),
                 ],

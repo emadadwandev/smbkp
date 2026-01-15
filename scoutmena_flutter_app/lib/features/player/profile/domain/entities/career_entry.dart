@@ -17,7 +17,9 @@ class CareerEntry extends Equatable {
     return CareerEntry(
       clubName: json['club_name'] as String,
       startDate: DateTime.parse(json['start_date'] as String),
-      endDate: json['end_date'] != null ? DateTime.parse(json['end_date'] as String) : null,
+      endDate: json['end_date'] != null
+          ? DateTime.parse(json['end_date'] as String)
+          : null,
       isCurrent: json['is_current'] as bool? ?? false,
     );
   }

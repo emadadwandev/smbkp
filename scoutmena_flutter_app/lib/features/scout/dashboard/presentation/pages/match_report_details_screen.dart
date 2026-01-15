@@ -17,7 +17,8 @@ class MatchReportDetailsScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           'Match Report Details',
-          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.textPrimary, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
@@ -31,20 +32,26 @@ class MatchReportDetailsScreen extends StatelessWidget {
           children: [
             _buildSectionTitle('Match Details'),
             const SizedBox(height: 16),
-            _buildDetailRow(Icons.emoji_events_outlined, 'Tournament', report.tournamentName),
+            _buildDetailRow(Icons.emoji_events_outlined, 'Tournament',
+                report.tournamentName),
             const SizedBox(height: 12),
-            _buildDetailRow(Icons.location_on_outlined, 'Location', report.location),
+            _buildDetailRow(
+                Icons.location_on_outlined, 'Location', report.location),
             const SizedBox(height: 12),
-            _buildDetailRow(Icons.calendar_today, 'Date', DateFormat('MMM dd, yyyy').format(report.matchDate)),
-            
+            _buildDetailRow(Icons.calendar_today, 'Date',
+                DateFormat('MMM dd, yyyy').format(report.matchDate)),
             const SizedBox(height: 24),
             _buildSectionTitle('Teams & Result'),
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(child: _buildDetailRow(Icons.shield_outlined, 'Team A', report.teamA)),
+                Expanded(
+                    child: _buildDetailRow(
+                        Icons.shield_outlined, 'Team A', report.teamA)),
                 const SizedBox(width: 16),
-                Expanded(child: _buildDetailRow(Icons.shield_outlined, 'Team B', report.teamB)),
+                Expanded(
+                    child: _buildDetailRow(
+                        Icons.shield_outlined, 'Team B', report.teamB)),
               ],
             ),
             const SizedBox(height: 12),
@@ -53,53 +60,54 @@ class MatchReportDetailsScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _buildDetailRow(Icons.star_outline, 'MVP', report.mvp!),
             ],
-
-            if (report.playersToWatch != null && report.playersToWatch!.isNotEmpty) ...[
+            if (report.playersToWatch != null &&
+                report.playersToWatch!.isNotEmpty) ...[
               const SizedBox(height: 24),
               _buildSectionTitle('Players to Watch'),
               const SizedBox(height: 16),
               ...report.playersToWatch!.map((player) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.cardBackground,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey[800]!),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.person_outline, color: AppColors.textSecondary),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              player['name'] ?? 'Unknown',
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            if (player['jersey'] != null && player['jersey'].isNotEmpty)
-                              Text(
-                                'Jersey #${player['jersey']}',
-                                style: const TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                          ],
-                        ),
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBackground,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[800]!),
                       ),
-                    ],
-                  ),
-                ),
-              )),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.person_outline,
+                              color: AppColors.textSecondary),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  player['name'] ?? 'Unknown',
+                                  style: const TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                if (player['jersey'] != null &&
+                                    player['jersey'].isNotEmpty)
+                                  Text(
+                                    'Jersey #${player['jersey']}',
+                                    style: const TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
             ],
-            
             if (report.notes != null && report.notes!.isNotEmpty) ...[
               const SizedBox(height: 24),
               _buildSectionTitle('Notes'),
@@ -118,7 +126,6 @@ class MatchReportDetailsScreen extends StatelessWidget {
                 ),
               ),
             ],
-
             const SizedBox(height: 32),
           ],
         ),

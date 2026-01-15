@@ -36,7 +36,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
   void initState() {
     super.initState();
     _formData = Map<String, dynamic>.from(widget.initialData);
-    
+
     // If initial data is empty, fetch current user data
     if (_formData.isEmpty) {
       _fetchUserData();
@@ -51,7 +51,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
     try {
       final getCurrentUserUseCase = getIt<GetCurrentUserUseCase>();
       final result = await getCurrentUserUseCase();
-      
+
       result.fold(
         (failure) {
           print('Failed to fetch user data: ${failure.message}');
@@ -61,13 +61,13 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
           // Split name into first and last name if possible
           String firstName = user.name;
           String lastName = '';
-          
+
           if (user.name.contains(' ')) {
             final parts = user.name.split(' ');
             firstName = parts.first;
             lastName = parts.sublist(1).join(' ');
           }
-          
+
           setState(() {
             _isMinor = user.isMinor;
             _formData = {
@@ -76,8 +76,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
               'email': user.email,
               'phone': user.phone ?? '',
               'country': user.country ?? '',
-              'dateOfBirth': user.dateOfBirth != null 
-                  ? DateTime.tryParse(user.dateOfBirth!) 
+              'dateOfBirth': user.dateOfBirth != null
+                  ? DateTime.tryParse(user.dateOfBirth!)
                   : null,
               'accountType': user.accountType,
             };
@@ -114,7 +114,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
 
   void _completeProfile(Map<String, dynamic> data) {
     _formData = {..._formData, ...data};
-    
+
     // Handle minor restrictions
     String privacyLevel = _formData['privacyLevel'] ?? 'scouts_only';
     String contactEmail = _formData['contactEmail'] ?? '';
@@ -130,31 +130,33 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
 
     // Dispatch create profile event to BLoC
     context.read<PlayerProfileBloc>().add(
-      CreatePlayerProfile(
-        firstName: _formData['firstName'] ?? '',
-        lastName: _formData['lastName'] ?? '',
-        nationality: _formData['nationality'] ?? '',
-        city: _formData['city'] ?? '',
-        country: _formData['country'] ?? '',
-        heightCm: _formData['heightCm'],
-        weightKg: _formData['weightKg'],
-        preferredFoot: _formData['preferredFoot'],
-        primaryPosition: _formData['primaryPosition'] ?? '',
-        secondaryPositions: List<String>.from(_formData['secondaryPositions'] ?? []),
-        currentClub: _formData['currentClub'],
-        academyId: _formData['academyId'],
-        academyName: _formData['academyName'],
-        jerseyNumber: _formData['jerseyNumber'],
-        careerStartDate: _formData['careerStartDate'],
-        bio: _formData['bio'],
-        achievements: List<String>.from(_formData['achievements'] ?? []),
-        agentName: _formData['agentName'],
-        agentEmail: _formData['agentEmail'],
-        contactEmail: contactEmail,
-        socialLinks: Map<String, String>.from(_formData['socialLinks'] ?? {}),
-        privacyLevel: privacyLevel,
-      ),
-    );
+          CreatePlayerProfile(
+            firstName: _formData['firstName'] ?? '',
+            lastName: _formData['lastName'] ?? '',
+            nationality: _formData['nationality'] ?? '',
+            city: _formData['city'] ?? '',
+            country: _formData['country'] ?? '',
+            heightCm: _formData['heightCm'],
+            weightKg: _formData['weightKg'],
+            preferredFoot: _formData['preferredFoot'],
+            primaryPosition: _formData['primaryPosition'] ?? '',
+            secondaryPositions:
+                List<String>.from(_formData['secondaryPositions'] ?? []),
+            currentClub: _formData['currentClub'],
+            academyId: _formData['academyId'],
+            academyName: _formData['academyName'],
+            jerseyNumber: _formData['jerseyNumber'],
+            careerStartDate: _formData['careerStartDate'],
+            bio: _formData['bio'],
+            achievements: List<String>.from(_formData['achievements'] ?? []),
+            agentName: _formData['agentName'],
+            agentEmail: _formData['agentEmail'],
+            contactEmail: contactEmail,
+            socialLinks:
+                Map<String, String>.from(_formData['socialLinks'] ?? {}),
+            privacyLevel: privacyLevel,
+          ),
+        );
   }
 
   @override
@@ -169,7 +171,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
               backgroundColor: AppColors.primaryGreen,
             ),
           );
-          
+
           // Navigate to dashboard
           Navigator.of(context).pushReplacementNamed(AppRoutes.playerDashboard);
         } else if (state is PlayerProfileError) {
@@ -191,8 +193,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                   CircularProgressIndicator(color: AppColors.primaryBlue),
                   const SizedBox(height: 24),
                   Text(
-                    _isLoadingUserData 
-                        ? 'Loading user data...' 
+                    _isLoadingUserData
+                        ? 'Loading user data...'
                         : 'profile.creating_profile'.tr(),
                     style: const TextStyle(fontSize: 16),
                   ),
@@ -201,7 +203,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
             ),
           );
         }
-        
+
         return _buildStepScreen();
       },
     );

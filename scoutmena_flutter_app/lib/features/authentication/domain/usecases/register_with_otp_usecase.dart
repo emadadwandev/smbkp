@@ -45,13 +45,16 @@ class RegisterWithOtpUseCase {
     // If minor, validate parental information
     if (isMinor) {
       if (parentName == null || parentName.isEmpty) {
-        return const Left(ValidationFailure('Parent/Guardian name is required for minors'));
+        return const Left(
+            ValidationFailure('Parent/Guardian name is required for minors'));
       }
       if (parentEmail == null || parentEmail.isEmpty) {
-        return const Left(ValidationFailure('Parent/Guardian email is required for minors'));
+        return const Left(
+            ValidationFailure('Parent/Guardian email is required for minors'));
       }
       if (!_isValidEmail(parentEmail)) {
-        return const Left(ValidationFailure('Invalid parent/guardian email format'));
+        return const Left(
+            ValidationFailure('Invalid parent/guardian email format'));
       }
     }
 

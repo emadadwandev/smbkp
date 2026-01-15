@@ -8,9 +8,9 @@ class AwaitingConsentScreen extends StatelessWidget {
   final String parentEmail;
 
   const AwaitingConsentScreen({
-    Key? key,
+    super.key,
     required this.parentEmail,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +155,7 @@ class AwaitingConsentScreen extends StatelessWidget {
                     if (context.mounted) {
                       // Close loading dialog
                       Navigator.of(context).pop();
-                      
+
                       // Navigate to main auth screen
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         '/main',
@@ -166,7 +166,7 @@ class AwaitingConsentScreen extends StatelessWidget {
                     if (context.mounted) {
                       // Close loading dialog
                       Navigator.of(context).pop();
-                      
+
                       // Show error but still navigate to login
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -174,7 +174,7 @@ class AwaitingConsentScreen extends StatelessWidget {
                           backgroundColor: Colors.red,
                         ),
                       );
-                      
+
                       // Navigate anyway
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         '/main',
@@ -217,5 +217,3 @@ class AwaitingConsentScreen extends StatelessWidget {
     );
   }
 }
-
-

@@ -18,8 +18,7 @@ class CoachDocumentUploadScreen extends StatefulWidget {
       _CoachDocumentUploadScreenState();
 }
 
-class _CoachDocumentUploadScreenState
-    extends State<CoachDocumentUploadScreen> {
+class _CoachDocumentUploadScreenState extends State<CoachDocumentUploadScreen> {
   final List<File> _selectedDocuments = [];
   bool _isUploading = false;
 
@@ -39,7 +38,8 @@ class _CoachDocumentUploadScreenState
                 backgroundColor: AppColors.primaryGreen,
               ),
             );
-            Navigator.pushReplacementNamed(context, '/coach/verification-pending');
+            Navigator.pushReplacementNamed(
+                context, '/coach/verification-pending');
           } else if (state is CoachProfileError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -104,7 +104,8 @@ class _CoachDocumentUploadScreenState
                         const SizedBox(height: 12),
                         _buildDocumentType('coach.coaching_license'.tr()),
                         _buildDocumentType('coach.professional_id'.tr()),
-                        _buildDocumentType('coach.club_affiliation_letter'.tr()),
+                        _buildDocumentType(
+                            'coach.club_affiliation_letter'.tr()),
                         _buildDocumentType('coach.certificates'.tr()),
                         const SizedBox(height: 12),
                         Row(

@@ -6,9 +6,9 @@ class CareerTimelineWidget extends StatelessWidget {
   final List<CareerEntry> careerHistory;
 
   const CareerTimelineWidget({
-    Key? key,
+    super.key,
     required this.careerHistory,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +31,21 @@ class CareerTimelineWidget extends StatelessWidget {
       itemCount: sortedHistory.length,
       itemBuilder: (context, index) {
         final entry = sortedHistory[index];
-        return _buildTimelineItem(context, entry, index == sortedHistory.length - 1);
+        return _buildTimelineItem(
+            context, entry, index == sortedHistory.length - 1);
       },
     );
   }
 
-  Widget _buildTimelineItem(BuildContext context, CareerEntry entry, bool isLast) {
+  Widget _buildTimelineItem(
+      BuildContext context, CareerEntry entry, bool isLast) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDateStr = dateFormat.format(entry.startDate);
     final endDateStr = entry.isCurrent
         ? 'Present'
-        : (entry.endDate != null ? dateFormat.format(entry.endDate!) : 'Unknown');
+        : (entry.endDate != null
+            ? dateFormat.format(entry.endDate!)
+            : 'Unknown');
 
     return IntrinsicHeight(
       child: Row(

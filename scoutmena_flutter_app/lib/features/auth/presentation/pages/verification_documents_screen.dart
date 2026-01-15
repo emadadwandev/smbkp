@@ -13,11 +13,11 @@ class VerificationDocumentsScreen extends StatefulWidget {
   final VoidCallback onComplete;
 
   const VerificationDocumentsScreen({
-    Key? key,
+    super.key,
     required this.userId,
     required this.accountType,
     required this.onComplete,
-  }) : super(key: key);
+  });
 
   @override
   State<VerificationDocumentsScreen> createState() =>
@@ -299,8 +299,8 @@ class _VerificationDocumentsScreenState
                     return Card(
                       margin: const EdgeInsets.only(bottom: 8),
                       child: ListTile(
-                        leading:
-                            Icon(Icons.file_present, color: AppColors.primaryBlue),
+                        leading: Icon(Icons.file_present,
+                            color: AppColors.primaryBlue),
                         title: Text(
                           file.path.split('/').last,
                           maxLines: 1,
@@ -312,7 +312,7 @@ class _VerificationDocumentsScreenState
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
 
                   // Add Certificate Button
                   if (_professionalCertificates.length < 5)
@@ -369,12 +369,14 @@ class _VerificationDocumentsScreenState
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : const Text(
                               'Upload Documents',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                     ),
                   ),
@@ -414,7 +416,8 @@ class _VerificationDocumentsScreenState
               ),
               child: Column(
                 children: [
-                  Icon(Icons.cloud_upload, size: 48, color: AppColors.primaryBlue),
+                  Icon(Icons.cloud_upload,
+                      size: 48, color: AppColors.primaryBlue),
                   const SizedBox(height: 8),
                   Text(
                     'Tap to upload',

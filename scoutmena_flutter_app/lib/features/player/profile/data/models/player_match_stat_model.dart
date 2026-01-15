@@ -2,34 +2,20 @@ import '../../domain/entities/player_match_stat.dart';
 
 class PlayerMatchStatModel extends PlayerMatchStat {
   const PlayerMatchStatModel({
-    String? id,
-    required DateTime matchDate,
-    required String opponent,
-    required String result,
-    int goals = 0,
-    int assists = 0,
-    int saves = 0,
-    int interceptions = 0,
-    double? rating,
-    int minutesPlayed = 0,
-    int yellowCards = 0,
-    int redCards = 0,
-    int fouls = 0,
-  }) : super(
-          id: id,
-          matchDate: matchDate,
-          opponent: opponent,
-          result: result,
-          goals: goals,
-          assists: assists,
-          saves: saves,
-          interceptions: interceptions,
-          rating: rating,
-          minutesPlayed: minutesPlayed,
-          yellowCards: yellowCards,
-          redCards: redCards,
-          fouls: fouls,
-        );
+    super.id,
+    required super.matchDate,
+    required super.opponent,
+    required super.result,
+    super.goals,
+    super.assists,
+    super.saves,
+    super.interceptions,
+    super.rating,
+    super.minutesPlayed,
+    super.yellowCards,
+    super.redCards,
+    super.fouls,
+  });
 
   factory PlayerMatchStatModel.fromJson(Map<String, dynamic> json) {
     return PlayerMatchStatModel(
@@ -41,7 +27,9 @@ class PlayerMatchStatModel extends PlayerMatchStat {
       assists: json['assists'] as int? ?? 0,
       saves: json['saves'] as int? ?? 0,
       interceptions: json['interceptions'] as int? ?? 0,
-      rating: json['rating'] != null ? double.tryParse(json['rating'].toString()) : null,
+      rating: json['rating'] != null
+          ? double.tryParse(json['rating'].toString())
+          : null,
       minutesPlayed: json['minutes_played'] as int? ?? 0,
       yellowCards: json['yellow_cards'] as int? ?? 0,
       redCards: json['red_cards'] as int? ?? 0,

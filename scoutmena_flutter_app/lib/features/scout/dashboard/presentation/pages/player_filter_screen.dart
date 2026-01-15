@@ -67,10 +67,10 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
     super.initState();
     _selectedPosition = widget.selectedPosition;
     _ageRange = RangeValues(
-      widget.ageMin?.toDouble() ?? 13,
-      widget.ageMax?.toDouble() ?? 25,
+      widget.ageMin?.toDouble() ?? 8,
+      widget.ageMax?.toDouble() ?? 24,
     );
-    
+
     // Handle initial country selection (could be name or code)
     _selectedCountry = widget.selectedCountry;
     if (_selectedCountry != null) {
@@ -94,9 +94,11 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Text('Filter Players', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        title: Text('Filter Players',
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         leading: IconButton(
-          icon: Icon(Icons.close, color: Theme.of(context).colorScheme.onSurface),
+          icon:
+              Icon(Icons.close, color: Theme.of(context).colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -104,13 +106,14 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
             onPressed: () {
               setState(() {
                 _selectedPosition = null;
-                _ageRange = const RangeValues(13, 25);
+                _ageRange = const RangeValues(8, 24);
                 _selectedCountry = null;
                 _selectedFoot = null;
                 _selectedGender = null;
               });
             },
-            child: Text('Reset', style: TextStyle(color: Theme.of(context).primaryColor)),
+            child: Text('Reset',
+                style: TextStyle(color: Theme.of(context).primaryColor)),
           ),
         ],
       ),
@@ -124,7 +127,8 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
               spacing: 8,
               runSpacing: 8,
               children: _positions.map((pos) {
-                final isSelected = _selectedPosition?.toLowerCase() == pos.toLowerCase();
+                final isSelected =
+                    _selectedPosition?.toLowerCase() == pos.toLowerCase();
                 return FilterChip(
                   label: Text(pos),
                   selected: isSelected,
@@ -136,25 +140,33 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
                   backgroundColor: Theme.of(context).cardColor,
                   selectedColor: Theme.of(context).primaryColor,
                   labelStyle: TextStyle(
-                    color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.7),
                   ),
                   checkmarkColor: Theme.of(context).colorScheme.onPrimary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
-                      color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
+                      color: isSelected
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).dividerColor,
                     ),
                   ),
                 );
               }).toList(),
             ),
             const SizedBox(height: 24),
-            _buildSectionTitle('Age Range: ${_ageRange.start.round()} - ${_ageRange.end.round()}'),
+            _buildSectionTitle(
+                'Age Range: ${_ageRange.start.round()} - ${_ageRange.end.round()}'),
             RangeSlider(
               values: _ageRange,
-              min: 13,
-              max: 30,
-              divisions: 17,
+              min: 8,
+              max: 24,
+              divisions: 16,
               activeColor: Theme.of(context).primaryColor,
               inactiveColor: Theme.of(context).dividerColor,
               labels: RangeLabels(
@@ -171,7 +183,8 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
             _buildSectionTitle('Gender'),
             Row(
               children: _genders.map((gender) {
-                final isSelected = _selectedGender?.toLowerCase() == gender.toLowerCase();
+                final isSelected =
+                    _selectedGender?.toLowerCase() == gender.toLowerCase();
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ChoiceChip(
@@ -179,18 +192,26 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
                     selected: isSelected,
                     onSelected: (selected) {
                       setState(() {
-                        _selectedGender = selected ? gender.toLowerCase() : null;
+                        _selectedGender =
+                            selected ? gender.toLowerCase() : null;
                       });
                     },
                     backgroundColor: Theme.of(context).cardColor,
                     selectedColor: Theme.of(context).primaryColor,
                     labelStyle: TextStyle(
-                      color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.7),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).dividerColor,
                       ),
                     ),
                   ),
@@ -200,7 +221,7 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
             const SizedBox(height: 24),
             _buildSectionTitle('Country'),
             DropdownButtonFormField<String>(
-              value: _selectedCountry,
+              initialValue: _selectedCountry,
               dropdownColor: Theme.of(context).cardColor,
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
               decoration: InputDecoration(
@@ -222,13 +243,15 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
                   _selectedCountry = value;
                 });
               },
-              hint: Text('Select Country', style: TextStyle(color: Theme.of(context).hintColor)),
+              hint: Text('Select Country',
+                  style: TextStyle(color: Theme.of(context).hintColor)),
             ),
             const SizedBox(height: 24),
             _buildSectionTitle('Preferred Foot'),
             Row(
               children: _feet.map((foot) {
-                final isSelected = _selectedFoot?.toLowerCase() == foot.toLowerCase();
+                final isSelected =
+                    _selectedFoot?.toLowerCase() == foot.toLowerCase();
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ChoiceChip(
@@ -242,12 +265,19 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
                     backgroundColor: Theme.of(context).cardColor,
                     selectedColor: Theme.of(context).primaryColor,
                     labelStyle: TextStyle(
-                      color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.7),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).dividerColor,
                       ),
                     ),
                   ),
@@ -269,11 +299,12 @@ class _PlayerFilterScreenState extends State<PlayerFilterScreen> {
               'foot': _selectedFoot,
               'gender': _selectedGender,
             };
-            
+
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlayerSearchResultsScreen(filters: filters),
+                builder: (context) =>
+                    PlayerSearchResultsScreen(filters: filters),
               ),
             );
           },

@@ -4,12 +4,13 @@ import 'app_text_styles.dart';
 
 class AppThemes {
   // Dark Theme (Primary theme for the app)
-  static ThemeData darkTheme({String fontFamily = AppTextStyles.fontFamilyEnglish}) {
+  static ThemeData darkTheme(
+      {String fontFamily = AppTextStyles.fontFamilyEnglish}) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       fontFamily: fontFamily,
-      
+
       // Color Scheme
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primaryBlue,
@@ -118,7 +119,8 @@ class AppThemes {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.error, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         hintStyle: const TextStyle(color: AppColors.textSecondary),
         labelStyle: const TextStyle(color: AppColors.textSecondary),
       ),
@@ -169,12 +171,13 @@ class AppThemes {
   }
 
   // Light Theme
-  static ThemeData lightTheme({String fontFamily = AppTextStyles.fontFamilyEnglish}) {
+  static ThemeData lightTheme(
+      {String fontFamily = AppTextStyles.fontFamilyEnglish}) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       fontFamily: fontFamily,
-      
+
       // Color Scheme
       colorScheme: const ColorScheme.light(
         primary: AppColors.primaryBlue,
@@ -283,7 +286,8 @@ class AppThemes {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.error, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         hintStyle: const TextStyle(color: AppColors.lightTextSecondary),
         labelStyle: const TextStyle(color: AppColors.lightTextSecondary),
       ),

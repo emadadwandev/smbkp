@@ -7,7 +7,7 @@ import '../../../../../injection.dart';
 class SaveStatsScreen extends StatefulWidget {
   final PlayerStatsResponse? stats;
 
-  const SaveStatsScreen({Key? key, this.stats}) : super(key: key);
+  const SaveStatsScreen({super.key, this.stats});
 
   @override
   State<SaveStatsScreen> createState() => _SaveStatsScreenState();
@@ -78,12 +78,23 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
             season: _seasonController.text,
             level: _selectedLevel!,
             goals: int.parse(_goalsController.text),
-            assists: int.parse(_assistsController.text.isEmpty ? '0' : _assistsController.text),
-            appearances: int.parse(_appearancesController.text.isEmpty ? '0' : _appearancesController.text),
-            starts: int.parse(_startsController.text.isEmpty ? '0' : _startsController.text),
-            minutesPlayed: int.parse(_minutesPlayedController.text.isEmpty ? '0' : _minutesPlayedController.text),
-            yellowCards: _yellowCardsController.text.isEmpty ? null : int.parse(_yellowCardsController.text),
-            redCards: _redCardsController.text.isEmpty ? null : int.parse(_redCardsController.text),
+            assists: int.parse(_assistsController.text.isEmpty
+                ? '0'
+                : _assistsController.text),
+            appearances: int.parse(_appearancesController.text.isEmpty
+                ? '0'
+                : _appearancesController.text),
+            starts: int.parse(
+                _startsController.text.isEmpty ? '0' : _startsController.text),
+            minutesPlayed: int.parse(_minutesPlayedController.text.isEmpty
+                ? '0'
+                : _minutesPlayedController.text),
+            yellowCards: _yellowCardsController.text.isEmpty
+                ? null
+                : int.parse(_yellowCardsController.text),
+            redCards: _redCardsController.text.isEmpty
+                ? null
+                : int.parse(_redCardsController.text),
           );
         } else {
           // Update existing stats
@@ -92,18 +103,29 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
             season: _seasonController.text,
             level: _selectedLevel!,
             goals: int.parse(_goalsController.text),
-            assists: int.parse(_assistsController.text.isEmpty ? '0' : _assistsController.text),
-            appearances: int.parse(_appearancesController.text.isEmpty ? '0' : _appearancesController.text),
-            starts: int.parse(_startsController.text.isEmpty ? '0' : _startsController.text),
-            minutesPlayed: int.parse(_minutesPlayedController.text.isEmpty ? '0' : _minutesPlayedController.text),
-            yellowCards: _yellowCardsController.text.isEmpty ? null : int.parse(_yellowCardsController.text),
-            redCards: _redCardsController.text.isEmpty ? null : int.parse(_redCardsController.text),
+            assists: int.parse(_assistsController.text.isEmpty
+                ? '0'
+                : _assistsController.text),
+            appearances: int.parse(_appearancesController.text.isEmpty
+                ? '0'
+                : _appearancesController.text),
+            starts: int.parse(
+                _startsController.text.isEmpty ? '0' : _startsController.text),
+            minutesPlayed: int.parse(_minutesPlayedController.text.isEmpty
+                ? '0'
+                : _minutesPlayedController.text),
+            yellowCards: _yellowCardsController.text.isEmpty
+                ? null
+                : int.parse(_yellowCardsController.text),
+            redCards: _redCardsController.text.isEmpty
+                ? null
+                : int.parse(_redCardsController.text),
           );
         }
 
         if (mounted) {
           setState(() => _isLoading = false);
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('success.profile_updated'.tr()),
@@ -115,7 +137,7 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
       } catch (e) {
         if (mounted) {
           setState(() => _isLoading = false);
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Failed to save stats: ${e.toString()}'),
@@ -131,7 +153,9 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.stats == null ? 'dashboard.update_stats'.tr() : 'Edit Stats'),
+        title: Text(widget.stats == null
+            ? 'dashboard.update_stats'.tr()
+            : 'Edit Stats'),
         backgroundColor: AppColors.primaryBlue,
       ),
       body: Form(
@@ -171,7 +195,7 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _selectedLevel,
+              initialValue: _selectedLevel,
               decoration: InputDecoration(
                 labelText: 'profile.competition_level'.tr(),
                 border: const OutlineInputBorder(),
@@ -279,7 +303,8 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
             TextFormField(
               controller: _yellowCardsController,
               decoration: InputDecoration(
-                labelText: '${'profile.yellow_cards'.tr()} (${'common.optional'.tr()})',
+                labelText:
+                    '${'profile.yellow_cards'.tr()} (${'common.optional'.tr()})',
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.warning_amber),
               ),
@@ -289,7 +314,8 @@ class _SaveStatsScreenState extends State<SaveStatsScreen> {
             TextFormField(
               controller: _redCardsController,
               decoration: InputDecoration(
-                labelText: '${'profile.red_cards'.tr()} (${'common.optional'.tr()})',
+                labelText:
+                    '${'profile.red_cards'.tr()} (${'common.optional'.tr()})',
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.warning),
               ),

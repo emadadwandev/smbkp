@@ -9,7 +9,7 @@ import '../../../../../core/network/api_client.dart';
 import '../../../../../injection.dart';
 
 class UploadPhotosScreen extends StatefulWidget {
-  const UploadPhotosScreen({Key? key}) : super(key: key);
+  const UploadPhotosScreen({super.key});
 
   @override
   State<UploadPhotosScreen> createState() => _UploadPhotosScreenState();
@@ -30,7 +30,7 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
         maxHeight: 1024,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
         setState(() {
           _profilePhoto = image;
@@ -54,7 +54,7 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
         maxHeight: 1080,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
         setState(() {
           _heroImage = image;
@@ -77,7 +77,7 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
         maxHeight: 1080,
         imageQuality: 85,
       );
-      
+
       if (images.isNotEmpty) {
         setState(() {
           // Limit to 5 gallery photos
@@ -286,7 +286,8 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
               ),
-              itemCount: _selectedImages.length + (_selectedImages.length < 5 ? 1 : 0),
+              itemCount:
+                  _selectedImages.length + (_selectedImages.length < 5 ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == _selectedImages.length) {
                   return InkWell(
@@ -382,7 +383,10 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
-            onPressed: (_profilePhoto != null || _heroImage != null || _selectedImages.isNotEmpty) && !_isUploading
+            onPressed: (_profilePhoto != null ||
+                        _heroImage != null ||
+                        _selectedImages.isNotEmpty) &&
+                    !_isUploading
                 ? _uploadPhotos
                 : null,
             style: ElevatedButton.styleFrom(
@@ -403,7 +407,8 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
                   )
                 : Text(
                     'common.submit'.tr(),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
           ),
         ),
@@ -431,7 +436,8 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.add_photo_alternate, size: 48, color: Colors.grey[400]),
+                    Icon(Icons.add_photo_alternate,
+                        size: 48, color: Colors.grey[400]),
                     const SizedBox(height: 8),
                     Text(
                       label,
@@ -468,7 +474,8 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
                               color: AppColors.primaryBlue,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                            child: const Icon(Icons.edit,
+                                color: Colors.white, size: 20),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -480,7 +487,8 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.delete, color: Colors.white, size: 20),
+                            child: const Icon(Icons.delete,
+                                color: Colors.white, size: 20),
                           ),
                         ),
                       ],

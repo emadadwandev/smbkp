@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'injection.dart';
 import 'app/routes.dart';
 import 'core/themes/app_themes.dart';
@@ -40,19 +41,22 @@ import 'features/coach/profile/presentation/pages/coach_edit_profile_screen.dart
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Firebase
+
+  // Initialize Firebase with platform-specific options
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     print('✅ Firebase initialized successfully');
   } catch (e) {
     print('⚠️ Firebase initialization failed: $e');
-    print('Note: Make sure google-services.json (Android) and GoogleService-Info.plist (iOS) are configured');
+    print(
+        'Note: Make sure google-services.json (Android) and GoogleService-Info.plist (iOS) are configured');
   }
-  
+
   // Initialize EasyLocalization
   await EasyLocalization.ensureInitialized();
-  
+
   // Initialize Dependency Injection
   await configureDependencies();
 
@@ -60,22 +64,22 @@ void main() async {
   try {
     final firebaseService = getIt<FirebaseService>();
     await firebaseService.requestNotificationPermission();
-    
+
     // Register device with backend
     final notificationService = getIt<NotificationService>();
     await notificationService.registerDevice();
-    
+
     firebaseService.setupForegroundMessageHandler((message) {
       print("Foreground Message: ${message.notification?.title}");
     });
-    
+
     firebaseService.setupBackgroundMessageHandler((message) {
-       print("Background Message: ${message.notification?.title}");
+      print("Background Message: ${message.notification?.title}");
     });
   } catch (e) {
     print('⚠️ Notification setup failed: $e');
   }
-  
+
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -89,7 +93,7 @@ void main() async {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
   ));
-  
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
@@ -109,13 +113,13 @@ class ScoutMenaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
-    
+
     return BlocBuilder<ThemeCubit, ThemeMode>(
       builder: (context, themeMode) {
         return MaterialApp(
           title: 'ScoutMena',
           debugShowCheckedModeBanner: false,
-          
+
           // Localization
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
@@ -125,20 +129,20 @@ class ScoutMenaApp extends StatelessWidget {
           ],
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          
+
           // Theme
           themeMode: themeMode,
           theme: AppThemes.lightTheme(
-            fontFamily: isArabic 
-              ? AppTextStyles.fontFamilyArabic 
-              : AppTextStyles.fontFamilyEnglish,
+            fontFamily: isArabic
+                ? AppTextStyles.fontFamilyArabic
+                : AppTextStyles.fontFamilyEnglish,
           ),
           darkTheme: AppThemes.darkTheme(
-            fontFamily: isArabic 
-              ? AppTextStyles.fontFamilyArabic 
-              : AppTextStyles.fontFamilyEnglish,
+            fontFamily: isArabic
+                ? AppTextStyles.fontFamilyArabic
+                : AppTextStyles.fontFamilyEnglish,
           ),
-          
+
           // Routes
           initialRoute: AppRoutes.splash,
           routes: {
@@ -151,25 +155,26 @@ class ScoutMenaApp extends StatelessWidget {
             AppRoutes.backendTest: (context) => const BackendTestScreen(),
             AppRoutes.settings: (context) => const SettingsScreen(),
             AppRoutes.playerDashboard: (context) => BlocProvider(
-              create: (context) => getIt<PlayerProfileBloc>(),
-              child: const PlayerDashboardScreen(),
-            ),
+                  create: (context) => getIt<PlayerProfileBloc>(),
+                  child: const PlayerDashboardScreen(),
+                ),
             // AppRoutes.playerProfileSetup moved to onGenerateRoute to handle arguments
             // AppRoutes.scoutProfileSetup moved to onGenerateRoute to handle arguments
             AppRoutes.scoutDashboard: (context) => BlocProvider(
-              create: (context) => getIt<ScoutProfileBloc>(),
-              child: const ScoutDashboardScreen(),
-            ),
+                  create: (context) => getIt<ScoutProfileBloc>(),
+                  child: const ScoutDashboardScreen(),
+                ),
             // AppRoutes.coachProfileSetup moved to onGenerateRoute to handle arguments
             AppRoutes.coachDashboard: (context) => BlocProvider(
-              create: (context) => getIt<CoachProfileBloc>(),
-              child: const CoachDashboardScreen(),
-            ),
+                  create: (context) => getIt<CoachProfileBloc>(),
+                  child: const CoachDashboardScreen(),
+                ),
             '/coach/edit-profile': (context) => BlocProvider(
-              create: (context) => getIt<CoachProfileBloc>(),
-              child: const CoachEditProfileScreen(),
-            ),
-            AppRoutes.contactRequests: (context) => const ContactRequestsScreen(),
+                  create: (context) => getIt<CoachProfileBloc>(),
+                  child: const CoachEditProfileScreen(),
+                ),
+            AppRoutes.contactRequests: (context) =>
+                const ContactRequestsScreen(),
             AppRoutes.notifications: (context) => const NotificationsScreen(),
             // Role selection moved to onGenerateRoute to handle arguments
             // TODO: Add other routes as screens are implemented
@@ -178,7 +183,8 @@ class ScoutMenaApp extends StatelessWidget {
             // Handle routes with arguments
             if (settings.name == AppRoutes.otp) {
               final args = settings.arguments as Map<String, dynamic>?;
-              print('DEBUG: Navigating to OTP Screen with args: $args'); // Debug print
+              print(
+                  'DEBUG: Navigating to OTP Screen with args: $args'); // Debug print
               return MaterialPageRoute(
                 builder: (context) => OTPVerificationScreen(
                   phoneNumber: args?['phone'] ?? '',
@@ -189,7 +195,7 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (settings.name == AppRoutes.roleSelection) {
               final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
@@ -198,7 +204,7 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (settings.name == AppRoutes.register) {
               final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
@@ -208,7 +214,7 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (settings.name == '/awaiting-consent') {
               final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
@@ -217,7 +223,7 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (settings.name == AppRoutes.verificationDocuments) {
               final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
@@ -235,13 +241,13 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (settings.name == '/verification-pending') {
               return MaterialPageRoute(
                 builder: (context) => const VerificationPendingScreen(),
               );
             }
-            
+
             if (settings.name == AppRoutes.scoutProfileSetup) {
               final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
@@ -261,7 +267,7 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (settings.name == AppRoutes.playerProfileSetup) {
               final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
@@ -271,7 +277,7 @@ class ScoutMenaApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             return null;
           },
         );

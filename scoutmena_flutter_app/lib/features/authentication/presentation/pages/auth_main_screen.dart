@@ -110,7 +110,8 @@ class _AuthMainScreenState extends State<AuthMainScreen> {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(AppRoutes.roleSelection);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.roleSelection);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryBlue,
@@ -171,13 +172,15 @@ class _AuthMainScreenState extends State<AuthMainScreen> {
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
-                        onTap: () => _launchUrl('https://scoutmena.com/page/terms'),
+                        onTap: () =>
+                            _launchUrl('https://scoutmena.com/page/terms'),
                         child: Text(
                           'Terms & Conditions',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.primaryBlue,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.primaryBlue,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                       ),
                       Text(
@@ -187,13 +190,15 @@ class _AuthMainScreenState extends State<AuthMainScreen> {
                             ),
                       ),
                       GestureDetector(
-                        onTap: () => _launchUrl('https://scoutmena.com/page/privacy'),
+                        onTap: () =>
+                            _launchUrl('https://scoutmena.com/page/privacy'),
                         child: Text(
                           'Privacy Policy',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.primaryBlue,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.primaryBlue,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                       ),
                     ],

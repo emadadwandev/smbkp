@@ -62,7 +62,8 @@ class PlayerProfileScreen extends StatelessWidget {
                   )
                 : Container(
                     color: AppColors.primaryBlue.withOpacity(0.2),
-                    child: const Icon(Icons.person, size: 100, color: Colors.white54),
+                    child: const Icon(Icons.person,
+                        size: 100, color: Colors.white54),
                   ),
             const DecoratedBox(
               decoration: BoxDecoration(
@@ -159,11 +160,16 @@ class PlayerProfileScreen extends StatelessWidget {
             children: [
               _buildStatItem('Height', '${player.heightCm ?? "-"} cm'),
               _buildVerticalDivider(),
-              _buildStatItem('Foot', player.preferredFoot?.toUpperCase() ?? "-"),
+              _buildStatItem(
+                  'Foot', player.preferredFoot?.toUpperCase() ?? "-"),
               _buildVerticalDivider(),
               _buildStatItem('Nat.', player.nationality),
               _buildVerticalDivider(),
-              _buildStatItem('Gender', player.gender != null ? 'profile.gender_${player.gender}'.tr() : "-"),
+              _buildStatItem(
+                  'Gender',
+                  player.gender != null
+                      ? 'profile.gender_${player.gender}'.tr()
+                      : "-"),
             ],
           ),
         ],

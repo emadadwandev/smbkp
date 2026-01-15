@@ -5,6 +5,7 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../app/routes.dart';
 import '../../../../../core/services/auth_service.dart';
 import '../../../../../core/services/player_service.dart';
+import '../../../../../core/services/tracking_service.dart';
 import '../../../../../injection.dart';
 import '../../../profile/presentation/bloc/player_profile_bloc.dart';
 import '../../../profile/presentation/pages/edit_profile_screen.dart';
@@ -42,7 +43,26 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
       // Load player profile on first build
       context.read<PlayerProfileBloc>().add(const LoadPlayerProfile());
       _loadRecentRequests();
+      _requestTrackingPermissionIfNeeded();
       _isInitialized = true;
+    }
+  }
+
+  Future<void> _requestTrackingPermissionIfNeeded() async {
+    try {
+      final trackingService = getIt<TrackingService>();
+      final shouldRequest = await trackingService.shouldRequestTracking();
+
+      if (shouldRequest && mounted) {
+        // Wait a bit so user has seen the app first
+        await Future.delayed(const Duration(seconds: 3));
+
+        if (mounted) {
+          await trackingService.requestTrackingAuthorization();
+        }
+      }
+    } catch (e) {
+      debugPrint('Error requesting tracking permission: $e');
     }
   }
 
@@ -65,9 +85,10 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
       listener: (context, state) {
         if (state is PlayerProfileError) {
           // Check for profile not found error and redirect to creation
-          if (state.message.contains('Profile not found') || 
+          if (state.message.contains('Profile not found') ||
               state.message.contains('create your profile first')) {
-            Navigator.of(context).pushReplacementNamed(AppRoutes.playerProfileSetup);
+            Navigator.of(context)
+                .pushReplacementNamed(AppRoutes.playerProfileSetup);
           }
         }
       },
@@ -125,7 +146,9 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<PlayerProfileBloc>().add(const LoadPlayerProfile());
+                    context
+                        .read<PlayerProfileBloc>()
+                        .add(const LoadPlayerProfile());
                   },
                   child: Text('common.retry'.tr()),
                 ),
@@ -240,7 +263,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
 
         if (state is PlayerProfileLoaded) {
           completion = '${state.profile.calculateCompletionPercentage()}%';
-          
+
           if (state.analytics != null) {
             profileViews = state.analytics!['total_views']?.toString() ?? '0';
             // videoViews and contactRequests would come from analytics or other services
@@ -398,7 +421,9 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
           )
         else
           Column(
-            children: displayRequests.map((request) => _buildRequestItem(request)).toList(),
+            children: displayRequests
+                .map((request) => _buildRequestItem(request))
+                .toList(),
           ),
       ],
     );
@@ -415,7 +440,9 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
         leading: CircleAvatar(
           backgroundColor: AppColors.primaryBlue.withOpacity(0.1),
           child: Text(
-            request.senderName.isNotEmpty ? request.senderName[0].toUpperCase() : '?',
+            request.senderName.isNotEmpty
+                ? request.senderName[0].toUpperCase()
+                : '?',
             style: TextStyle(color: AppColors.primaryBlue),
           ),
         ),
@@ -443,7 +470,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
           ),
         ),
         onTap: () {
-           Navigator.pushNamed(context, AppRoutes.contactRequests);
+          Navigator.pushNamed(context, AppRoutes.contactRequests);
         },
       ),
     );
@@ -530,7 +557,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
               builder: (context, state) {
                 int completionPercentage = 0;
                 if (state is PlayerProfileLoaded) {
-                  completionPercentage = state.profile.calculateCompletionPercentage();
+                  completionPercentage =
+                      state.profile.calculateCompletionPercentage();
                 }
 
                 return Column(
@@ -584,7 +612,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider.value(
                                     value: bloc,
-                                    child: EditProfileScreen(profile: currentState.profile),
+                                    child: EditProfileScreen(
+                                        profile: currentState.profile),
                                   ),
                                 ),
                               );
@@ -599,10 +628,13 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const UploadPhotosScreen(),
+                                builder: (context) =>
+                                    const UploadPhotosScreen(),
                               ),
                             );
-                            context.read<PlayerProfileBloc>().add(const LoadPlayerProfile());
+                            context
+                                .read<PlayerProfileBloc>()
+                                .add(const LoadPlayerProfile());
                           },
                         ),
                         _buildQuickActionButton(
@@ -612,10 +644,13 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const UploadVideosScreen(),
+                                builder: (context) =>
+                                    const UploadVideosScreen(),
                               ),
                             );
-                            context.read<PlayerProfileBloc>().add(const LoadPlayerProfile());
+                            context
+                                .read<PlayerProfileBloc>()
+                                .add(const LoadPlayerProfile());
                           },
                         ),
                         _buildQuickActionButton(
@@ -637,7 +672,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MatchReportsScreen(),
+                                builder: (context) =>
+                                    const MatchReportsScreen(),
                               ),
                             );
                           },
@@ -654,7 +690,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider.value(
                                     value: bloc,
-                                    child: EditAttributesScreen(profile: currentState.profile),
+                                    child: EditAttributesScreen(
+                                        profile: currentState.profile),
                                   ),
                                 ),
                               );
@@ -674,11 +711,14 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => Scaffold(
                                     appBar: AppBar(
-                                      title: Text('dashboard.career_timeline'.tr()),
+                                      title: Text(
+                                          'dashboard.career_timeline'.tr()),
                                       backgroundColor: AppColors.primaryBlue,
                                     ),
                                     body: CareerTimelineWidget(
-                                      careerHistory: currentState.profile.careerHistory ?? [],
+                                      careerHistory:
+                                          currentState.profile.careerHistory ??
+                                              [],
                                     ),
                                   ),
                                 ),
@@ -699,7 +739,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider.value(
                                     value: bloc,
-                                    child: EditCareerScreen(profile: currentState.profile),
+                                    child: EditCareerScreen(
+                                        profile: currentState.profile),
                                   ),
                                 ),
                               );
@@ -825,66 +866,84 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Personal Information
                 _buildSectionHeader('profile.personal_info'.tr()),
-                _buildInfoRow('profile.nationality'.tr(), profile.nationality ?? '-'),
+                _buildInfoRow(
+                    'profile.nationality'.tr(), profile.nationality ?? '-'),
                 _buildInfoRow('profile.city'.tr(), profile.city ?? '-'),
                 _buildInfoRow('profile.country'.tr(), profile.country),
-                _buildInfoRow('profile.gender'.tr(), profile.gender != null ? 'profile.gender_${profile.gender}'.tr() : '-'),
+                _buildInfoRow(
+                    'profile.gender'.tr(),
+                    profile.gender != null
+                        ? 'profile.gender_${profile.gender}'.tr()
+                        : '-'),
                 _buildInfoRow('profile.bio'.tr(), profile.bio ?? '-'),
                 const SizedBox(height: 24),
 
                 // Physical Data
                 _buildSectionHeader('profile.physical_data'.tr()),
-                _buildInfoRow('profile.height'.tr(), '${profile.heightCm ?? '-'} cm'),
-                _buildInfoRow('profile.weight'.tr(), '${profile.weightKg ?? '-'} kg'),
-                _buildInfoRow('profile.preferred_foot'.tr(), profile.preferredFoot ?? '-'),
+                _buildInfoRow(
+                    'profile.height'.tr(), '${profile.heightCm ?? '-'} cm'),
+                _buildInfoRow(
+                    'profile.weight'.tr(), '${profile.weightKg ?? '-'} kg'),
+                _buildInfoRow('profile.preferred_foot'.tr(),
+                    profile.preferredFoot ?? '-'),
                 if (profile.physicalData != null)
-                  ...profile.physicalData!.entries.map((e) => _buildInfoRow('attributes.${e.key}'.tr(), e.value.toString())),
+                  ...profile.physicalData!.entries.map((e) => _buildInfoRow(
+                      'attributes.${e.key}'.tr(), e.value.toString())),
                 const SizedBox(height: 24),
 
                 // Technical Data
-                if (profile.technicalData != null && profile.technicalData!.isNotEmpty) ...[
+                if (profile.technicalData != null &&
+                    profile.technicalData!.isNotEmpty) ...[
                   _buildSectionHeader('profile.technical_data'.tr()),
-                  ...profile.technicalData!.entries.map((e) => _buildInfoRow('attributes.${e.key}'.tr(), e.value.toString())),
+                  ...profile.technicalData!.entries.map((e) => _buildInfoRow(
+                      'attributes.${e.key}'.tr(), e.value.toString())),
                   const SizedBox(height: 24),
                 ],
 
                 // Tactical Data
-                if (profile.tacticalData != null && profile.tacticalData!.isNotEmpty) ...[
+                if (profile.tacticalData != null &&
+                    profile.tacticalData!.isNotEmpty) ...[
                   _buildSectionHeader('profile.tactical_data'.tr()),
-                  ...profile.tacticalData!.entries.map((e) => _buildInfoRow('attributes.${e.key}'.tr(), e.value.toString())),
+                  ...profile.tacticalData!.entries.map((e) => _buildInfoRow(
+                      'attributes.${e.key}'.tr(), e.value.toString())),
                   const SizedBox(height: 24),
                 ],
 
                 // Training Progress
-                if (profile.trainingData != null && profile.trainingData!.isNotEmpty) ...[
+                if (profile.trainingData != null &&
+                    profile.trainingData!.isNotEmpty) ...[
                   _buildSectionHeader('profile.training_progress'.tr()),
-                  ...profile.trainingData!.entries.map((e) => _buildInfoRow(e.key, e.value.toString())),
+                  ...profile.trainingData!.entries
+                      .map((e) => _buildInfoRow(e.key, e.value.toString())),
                   const SizedBox(height: 24),
                 ],
 
                 // Career History
-                if (profile.careerHistory != null && profile.careerHistory!.isNotEmpty) ...[
+                if (profile.careerHistory != null &&
+                    profile.careerHistory!.isNotEmpty) ...[
                   _buildSectionHeader('dashboard.career_timeline'.tr()),
                   CareerTimelineWidget(careerHistory: profile.careerHistory!),
                   const SizedBox(height: 24),
                 ],
 
                 // Achievements
-                if (profile.achievements != null && profile.achievements!.isNotEmpty) ...[
+                if (profile.achievements != null &&
+                    profile.achievements!.isNotEmpty) ...[
                   _buildSectionHeader('profile.achievements'.tr()),
                   ...profile.achievements!.map((e) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text(e)),
-                      ],
-                    ),
-                  )),
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.emoji_events,
+                                color: Colors.amber, size: 20),
+                            const SizedBox(width: 8),
+                            Expanded(child: Text(e)),
+                          ],
+                        ),
+                      )),
                   const SizedBox(height: 24),
                 ],
 
@@ -900,7 +959,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                             MaterialPageRoute(
                               builder: (context) => BlocProvider.value(
                                 value: bloc,
-                                child: EditProfileScreen(profile: state.profile),
+                                child:
+                                    EditProfileScreen(profile: state.profile),
                               ),
                             ),
                           );
@@ -910,7 +970,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                         label: Text('common.edit'.tr()),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryBlue,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -920,7 +981,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PlayerProfileScreen(playerId: profile.id!),
+                                builder: (context) =>
+                                    PlayerProfileScreen(playerId: profile.id!),
                               ),
                             );
                           }
@@ -928,7 +990,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                         icon: const Icon(Icons.visibility),
                         label: Text('dashboard.view_public'.tr()),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                         ),
                       ),
                     ],
@@ -1033,7 +1096,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
         builder: (builderContext, state) {
           String userName = 'Player';
           String? photoUrl;
-          
+
           if (state is PlayerProfileLoaded) {
             userName = state.profile.fullName;
             photoUrl = state.profile.profilePhotoUrl;
@@ -1044,13 +1107,17 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
             children: [
               UserAccountsDrawerHeader(
                 accountName: Text(userName),
-                accountEmail: const Text(''), 
+                accountEmail: const Text(''),
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
+                  backgroundImage:
+                      photoUrl != null ? NetworkImage(photoUrl) : null,
                   backgroundColor: Colors.white,
-                  child: photoUrl == null 
-                    ? Text(userName.isNotEmpty ? userName[0].toUpperCase() : 'P', style: TextStyle(fontSize: 24, color: AppColors.primaryBlue))
-                    : null,
+                  child: photoUrl == null
+                      ? Text(
+                          userName.isNotEmpty ? userName[0].toUpperCase() : 'P',
+                          style: TextStyle(
+                              fontSize: 24, color: AppColors.primaryBlue))
+                      : null,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBlue,
@@ -1088,7 +1155,8 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const SettingsScreen()),
                   );
                 },
               ),
@@ -1101,7 +1169,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                 ),
                 onTap: () async {
                   Navigator.pop(context); // Close drawer
-                  
+
                   // Show confirmation dialog
                   final bool? confirm = await showDialog<bool>(
                     context: context,
@@ -1141,7 +1209,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                       if (mounted) {
                         // Close loading dialog
                         Navigator.of(context).pop();
-                        
+
                         // Navigate to main auth screen
                         Navigator.pushNamedAndRemoveUntil(
                           context,
@@ -1153,7 +1221,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                       if (mounted) {
                         // Close loading dialog
                         Navigator.of(context).pop();
-                        
+
                         // Show error but still navigate to login
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -1161,7 +1229,7 @@ class _PlayerDashboardScreenState extends State<PlayerDashboardScreen> {
                             backgroundColor: Colors.red,
                           ),
                         );
-                        
+
                         // Navigate anyway
                         Navigator.pushNamedAndRemoveUntil(
                           context,

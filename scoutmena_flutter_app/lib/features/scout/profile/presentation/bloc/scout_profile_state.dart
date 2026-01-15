@@ -96,7 +96,8 @@ class ScoutProfilePendingVerification extends ScoutProfileState {
 
   const ScoutProfilePendingVerification({
     required this.profile,
-    this.message = 'Your account is under verification. You will be notified once approved.',
+    this.message =
+        'Your account is under verification. You will be notified once approved.',
   });
 
   @override

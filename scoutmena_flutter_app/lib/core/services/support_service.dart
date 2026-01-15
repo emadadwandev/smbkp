@@ -134,7 +134,8 @@ class DeleteAccountResponse {
       message: json['message'] ?? 'Account deletion request submitted',
       requestId: json['data']?['request_id'] as int?,
       requestNumber: json['data']?['request_number'] as String?,
-      scheduledDeletionDate: json['data']?['scheduled_deletion_date'] as String?,
+      scheduledDeletionDate:
+          json['data']?['scheduled_deletion_date'] as String?,
     );
   }
 }

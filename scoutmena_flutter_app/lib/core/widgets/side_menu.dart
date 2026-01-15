@@ -25,7 +25,7 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Drawer(
       child: Column(
         children: [
@@ -38,7 +38,8 @@ class SideMenu extends StatelessWidget {
                   context,
                   icon: Icons.dashboard_outlined,
                   title: 'dashboard.home'.tr(),
-                  onTap: () => Navigator.pop(context), // Close drawer, already on dashboard
+                  onTap: () => Navigator.pop(
+                      context), // Close drawer, already on dashboard
                 ),
                 if (userRole.toLowerCase() == 'scout')
                   _buildMenuItem(
@@ -49,7 +50,8 @@ class SideMenu extends StatelessWidget {
                       Navigator.pop(context);
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AddMatchReportScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const AddMatchReportScreen()),
                       );
                       if (result == true && onMatchReportAdded != null) {
                         onMatchReportAdded!();
@@ -95,8 +97,12 @@ class SideMenu extends StatelessWidget {
                     final isDarkMode = state == ThemeMode.dark;
                     return _buildMenuItem(
                       context,
-                      icon: isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-                      title: isDarkMode ? 'settings.theme_light'.tr() : 'settings.theme_dark'.tr(),
+                      icon: isDarkMode
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined,
+                      title: isDarkMode
+                          ? 'settings.theme_light'.tr()
+                          : 'settings.theme_dark'.tr(),
                       onTap: () {
                         context.read<ThemeCubit>().toggleTheme();
                       },
@@ -168,7 +174,8 @@ class SideMenu extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),

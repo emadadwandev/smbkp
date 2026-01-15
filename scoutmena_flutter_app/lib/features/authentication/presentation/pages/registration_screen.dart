@@ -13,10 +13,10 @@ class RegistrationScreen extends StatefulWidget {
   final String role;
 
   const RegistrationScreen({
-    Key? key,
+    super.key,
     required this.phoneNumber,
     required this.role,
-  }) : super(key: key);
+  });
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -242,7 +242,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'auth.otp_sent'.tr() + ' $phoneNumber',
+                                  '${'auth.otp_sent'.tr()} $phoneNumber',
                                 ),
                               ),
                             );
@@ -329,27 +329,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    if (_selectedDateOfBirth == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('errors.select_date_of_birth'.tr()),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+    // Date of Birth is now optional
+    // Phone verification is now optional
 
-    if (!_isPhoneVerified || _verificationId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('auth.verify_phone_first'.tr()),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    if (_requiresParentalConsent) {
+    // Check parental consent only if date of birth is provided and user is under 16
+    if (_selectedDateOfBirth != null && _requiresParentalConsent) {
       if (_parentNameController.text.isEmpty ||
           _parentEmailController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -375,28 +359,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         email: _emailController.text,
-        phone: phoneToRegister,
+        phone: _isPhoneVerified ? phoneToRegister : null,
         password: _passwordController.text,
-        dateOfBirth: _selectedDateOfBirth!.toIso8601String().split(
-          'T',
-        )[0], // YYYY-MM-DD format
-        gender: _selectedGender,
+        dateOfBirth: _selectedDateOfBirth != null
+            ? _selectedDateOfBirth!.toIso8601String().split('T')[0]
+            : null, // YYYY-MM-DD format (optional)
+        gender: _selectedGender, // Optional but keep default
         accountType: widget.role,
-        country: _selectedCountry,
-        verificationId: _verificationId!,
-        parentName: _requiresParentalConsent
-            ? _parentNameController.text
-            : null,
-        parentEmail: _requiresParentalConsent
-            ? _parentEmailController.text
-            : null,
+        country: _selectedCountry, // Optional but keep default
+        verificationId: _isPhoneVerified ? _verificationId : null,
+        parentName:
+            _requiresParentalConsent ? _parentNameController.text : null,
+        parentEmail:
+            _requiresParentalConsent ? _parentEmailController.text : null,
         parentPhone:
             _requiresParentalConsent && _parentPhoneController.text.isNotEmpty
-            ? _parentPhoneController.text
-            : null,
-        parentRelationship: _requiresParentalConsent
-            ? _parentRelationship
-            : null,
+                ? _parentPhoneController.text
+                : null,
+        parentRelationship:
+            _requiresParentalConsent ? _parentRelationship : null,
       );
 
       // Store auth data
@@ -423,8 +404,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           Navigator.of(context).pushReplacementNamed(
             '/awaiting-consent',
             arguments: {
-              'parentEmail':
-                  response.parentalConsent?.parentEmail ??
+              'parentEmail': response.parentalConsent?.parentEmail ??
                   _parentEmailController.text,
             },
           );
@@ -753,7 +733,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Phone Number
+                // Phone Number (Optional)
+                Text(
+                  '${'auth.phone_number'.tr()} (${'common.optional'.tr()})',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: theme.textTheme.bodyMedium?.color,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Useful for direct contact from scouts and coaches',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.hintColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -772,7 +769,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                             useEmoji: true,
                           ),
-                          ignoreBlank: false,
+                          ignoreBlank: true,
                           autoValidateMode: AutovalidateMode.disabled,
                           selectorTextStyle: TextStyle(
                             color: theme.textTheme.bodyMedium?.color,
@@ -834,14 +831,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Date of Birth
+                // Date of Birth (Optional)
                 InkWell(
                   onTap: _selectDateOfBirth,
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'auth.date_of_birth'.tr(),
+                      labelText:
+                          '${'auth.date_of_birth'.tr()} (${'common.optional'.tr()})',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.calendar_today_outlined),
+                      helperText: 'This helps us personalize your experience',
+                      helperMaxLines: 2,
                     ),
                     child: Text(
                       _selectedDateOfBirth != null
@@ -859,13 +859,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Gender
+                // Gender (Optional)
                 Text(
-                  'auth.gender'.tr(),
+                  '${'auth.gender'.tr()} (${'common.optional'.tr()})',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: theme.textTheme.bodyMedium?.color,
+                  ),
+                ),
+                Text(
+                  'This helps scouts find players matching team needs',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.hintColor,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -901,13 +908,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Country
+                // Country (Optional)
                 DropdownButtonFormField<String>(
-                  value: _selectedCountry,
+                  initialValue: _selectedCountry,
                   decoration: InputDecoration(
-                    labelText: 'auth.country'.tr(),
+                    labelText:
+                        '${'auth.country'.tr()} (${'common.optional'.tr()})',
                     border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.public_outlined),
+                    helperText: 'Helps connect you with local opportunities',
+                    helperMaxLines: 2,
                   ),
                   items: _countries.map((country) {
                     return DropdownMenuItem(
@@ -1065,7 +1075,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                         // Parent Relationship
                         DropdownButtonFormField<String>(
-                          value: _parentRelationship,
+                          initialValue: _parentRelationship,
                           decoration: InputDecoration(
                             labelText: 'auth.relationship'.tr(),
                             border: const OutlineInputBorder(),
@@ -1149,7 +1159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               color: theme.textTheme.bodyMedium?.color,
                             ),
                             children: [
-                              TextSpan(text: 'auth.i_agree_to'.tr() + ' '),
+                              TextSpan(text: '${'auth.i_agree_to'.tr()} '),
                               TextSpan(
                                 text: 'auth.terms_and_conditions'.tr(),
                                 style: TextStyle(
@@ -1214,7 +1224,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         children: [
                           TextSpan(
-                            text: 'auth.already_have_account'.tr() + ' ',
+                            text: '${'auth.already_have_account'.tr()} ',
                           ),
                           TextSpan(
                             text: 'auth.login'.tr(),

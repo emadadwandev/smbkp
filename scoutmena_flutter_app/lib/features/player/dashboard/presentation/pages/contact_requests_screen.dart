@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/services/player_service.dart';
 import '../../../../../injection.dart';
@@ -78,9 +77,13 @@ class _ContactRequestsScreenState extends State<ContactRequestsScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
-              ? Center(child: Text('Error: $_error', style: const TextStyle(color: Colors.red)))
+              ? Center(
+                  child: Text('Error: $_error',
+                      style: const TextStyle(color: Colors.red)))
               : _requests.isEmpty
-                  ? const Center(child: Text('No contact requests yet', style: TextStyle(color: AppColors.textSecondary)))
+                  ? const Center(
+                      child: Text('No contact requests yet',
+                          style: TextStyle(color: AppColors.textSecondary)))
                   : ListView.builder(
                       itemCount: _requests.length,
                       itemBuilder: (context, index) {
@@ -112,7 +115,8 @@ class _ContactRequestsScreenState extends State<ContactRequestsScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: _getStatusColor(request.status).withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
@@ -131,7 +135,8 @@ class _ContactRequestsScreenState extends State<ContactRequestsScreen> {
             const SizedBox(height: 4),
             Text(
               request.senderRole ?? 'Scout',
-              style: const TextStyle(color: AppColors.primaryBlue, fontSize: 14),
+              style:
+                  const TextStyle(color: AppColors.primaryBlue, fontSize: 14),
             ),
             const SizedBox(height: 8),
             if (request.message != null) ...[
@@ -147,13 +152,16 @@ class _ContactRequestsScreenState extends State<ContactRequestsScreen> {
                 children: [
                   TextButton(
                     onPressed: () => _respond(request.id, 'declined'),
-                    child: const Text('Decline', style: TextStyle(color: Colors.red)),
+                    child: const Text('Decline',
+                        style: TextStyle(color: Colors.red)),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () => _respond(request.id, 'approved'),
-                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen),
-                    child: const Text('Approve', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryGreen),
+                    child: const Text('Approve',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),

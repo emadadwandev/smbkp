@@ -51,7 +51,12 @@ class RecommendedPlayerCard extends StatelessWidget {
                 color: Theme.of(context).colorScheme.surface,
               ),
               child: imageUrl == null
-                  ? Icon(Icons.person, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), size: 32)
+                  ? Icon(Icons.person,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7),
+                      size: 32)
                   : null,
             ),
             const SizedBox(height: 8),
@@ -75,7 +80,8 @@ class RecommendedPlayerCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.star, color: Theme.of(context).primaryColor, size: 12),
+                Icon(Icons.star,
+                    color: Theme.of(context).primaryColor, size: 12),
                 const SizedBox(width: 4),
                 Text(
                   rating.toString(),
@@ -90,7 +96,10 @@ class RecommendedPlayerCard extends StatelessWidget {
                   child: Text(
                     position,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7),
                       fontSize: 12,
                     ),
                     overflow: TextOverflow.ellipsis,

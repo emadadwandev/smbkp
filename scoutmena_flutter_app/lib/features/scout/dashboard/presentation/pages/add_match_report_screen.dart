@@ -79,7 +79,8 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
               surface: AppColors.cardBackground,
               onSurface: AppColors.textPrimary,
             ),
-            dialogBackgroundColor: AppColors.scaffoldBackground,
+            dialogTheme:
+                DialogThemeData(backgroundColor: AppColors.scaffoldBackground),
           ),
           child: child!,
         );
@@ -106,10 +107,12 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
       });
 
       try {
-        final playersToWatch = _playersToWatch.map((p) => {
-          'name': p['name']!.text,
-          'jersey': p['jersey']!.text,
-        }).toList();
+        final playersToWatch = _playersToWatch
+            .map((p) => {
+                  'name': p['name']!.text,
+                  'jersey': p['jersey']!.text,
+                })
+            .toList();
 
         await getIt<ScoutService>().createMatchReport(
           tournamentName: _tournamentController.text,
@@ -124,7 +127,8 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Match Report Submitted Successfully')),
+            const SnackBar(
+                content: Text('Match Report Submitted Successfully')),
           );
           Navigator.pop(context, true);
         }
@@ -153,7 +157,8 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
         elevation: 0,
         title: const Text(
           'Add Match Report',
-          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.textPrimary, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
@@ -208,7 +213,8 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
                 child: InputDecorator(
                   decoration: InputDecoration(
                     labelText: 'Match Date',
-                    prefixIcon: const Icon(Icons.calendar_today, color: AppColors.textSecondary),
+                    prefixIcon: const Icon(Icons.calendar_today,
+                        color: AppColors.textSecondary),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey[800]!),
@@ -229,7 +235,6 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
                   ),
                 ),
               ),
-              
               const SizedBox(height: 24),
               _buildSectionTitle('Teams & Result'),
               const SizedBox(height: 16),
@@ -264,7 +269,6 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
                 label: 'MVP Player',
                 icon: Icons.star_outline,
               ),
-
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -274,7 +278,8 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
                     onPressed: _addPlayerField,
                     icon: const Icon(Icons.add, size: 18),
                     label: const Text('Add Player'),
-                    style: TextButton.styleFrom(foregroundColor: AppColors.primaryBlue),
+                    style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primaryBlue),
                   ),
                 ],
               ),
@@ -305,14 +310,14 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
                       ),
                       if (_playersToWatch.length > 1)
                         IconButton(
-                          icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                          icon: const Icon(Icons.remove_circle_outline,
+                              color: Colors.red),
                           onPressed: () => _removePlayerField(index),
                         ),
                     ],
                   ),
                 );
-              }).toList(),
-              
+              }),
               const SizedBox(height: 32),
             ],
           ),
@@ -350,7 +355,8 @@ class _AddMatchReportScreenState extends State<AddMatchReportScreen> {
       },
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: icon != null ? Icon(icon, color: AppColors.textSecondary) : null,
+        prefixIcon:
+            icon != null ? Icon(icon, color: AppColors.textSecondary) : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey[800]!),

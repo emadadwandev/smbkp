@@ -1,6 +1,5 @@
 import 'package:injectable/injectable.dart';
 import '../network/api_client.dart';
-import '../constants/api_constants.dart';
 
 @lazySingleton
 class PlayerService {

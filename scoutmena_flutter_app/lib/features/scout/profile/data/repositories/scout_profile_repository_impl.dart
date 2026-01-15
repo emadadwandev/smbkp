@@ -17,7 +17,7 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   Future<ScoutProfileEntity?> getProfile() async {
     try {
       final response = await apiClient.get('/scout/profile');
-      
+
       if (response.data['success'] == true) {
         final profileData = response.data['data'];
         return _mapToEntity(profileData);
@@ -31,10 +31,12 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   }
 
   @override
-  Future<ScoutProfileEntity> createProfile(Map<String, dynamic> profileData) async {
+  Future<ScoutProfileEntity> createProfile(
+      Map<String, dynamic> profileData) async {
     try {
-      final response = await apiClient.post('/scout/profile', data: profileData);
-      
+      final response =
+          await apiClient.post('/scout/profile', data: profileData);
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -47,10 +49,11 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   }
 
   @override
-  Future<ScoutProfileEntity> updateProfile(Map<String, dynamic> profileData) async {
+  Future<ScoutProfileEntity> updateProfile(
+      Map<String, dynamic> profileData) async {
     try {
       final response = await apiClient.put('/scout/profile', data: profileData);
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -66,7 +69,7 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   Future<List<String>> uploadVerificationDocuments(List<File> documents) async {
     try {
       final formData = FormData();
-      
+
       for (var i = 0; i < documents.length; i++) {
         formData.files.add(MapEntry(
           'verification_documents[$i]',
@@ -81,14 +84,15 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
         '/scout/profile/verification-documents',
         formData,
       );
-      
+
       if (response.data['success'] == true) {
         final urls = (response.data['data']['document_urls'] as List<dynamic>)
             .map((e) => e as String)
             .toList();
         return urls;
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to upload documents');
+        throw Exception(
+            response.data['message'] ?? 'Failed to upload documents');
       }
     } catch (e) {
       throw Exception('Failed to upload verification documents: $e');
@@ -106,7 +110,7 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
       });
 
       final response = await apiClient.upload('/scout/profile/photo', formData);
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -122,7 +126,7 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   Future<ScoutProfileEntity> deleteProfilePhoto() async {
     try {
       final response = await apiClient.delete('/scout/profile/photo');
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
@@ -138,12 +142,13 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   Future<ScoutProfileEntity> refreshProfile() async {
     try {
       final response = await apiClient.get('/scout/profile');
-      
+
       if (response.data['success'] == true) {
         final data = response.data['data'];
         return _mapToEntity(data);
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to refresh profile');
+        throw Exception(
+            response.data['message'] ?? 'Failed to refresh profile');
       }
     } catch (e) {
       throw Exception('Failed to refresh scout profile: $e');
@@ -153,12 +158,14 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
   @override
   Future<Map<String, dynamic>> getVerificationStatus() async {
     try {
-      final response = await apiClient.get('/scout/profile/verification-status');
-      
+      final response =
+          await apiClient.get('/scout/profile/verification-status');
+
       if (response.data['success'] == true) {
         return response.data['data'] as Map<String, dynamic>;
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to get verification status');
+        throw Exception(
+            response.data['message'] ?? 'Failed to get verification status');
       }
     } catch (e) {
       throw Exception('Failed to get verification status: $e');
@@ -191,21 +198,22 @@ class ScoutProfileRepositoryImpl implements ScoutProfileRepository {
       contactEmail: json['contact_email']?.toString(),
       contactPhone: json['contact_phone']?.toString(),
       socialLinks: json['social_links'] != null && json['social_links'] is Map
-          ? (json['social_links'] as Map).map((key, value) => 
-              MapEntry(key.toString(), value?.toString() ?? ''))
+          ? (json['social_links'] as Map).map(
+              (key, value) => MapEntry(key.toString(), value?.toString() ?? ''))
           : null,
       profilePhotoUrl: json['profile_photo_url']?.toString(),
       isVerified: json['is_verified'] == true,
       isActive: json['is_active'] == true,
       verificationStatus: json['verification_status']?.toString(),
-      verificationDocumentUrls: (json['verification_document_urls'] as List<dynamic>?)
-          ?.map((e) => e?.toString() ?? '')
-          .where((e) => e.isNotEmpty)
-          .toList() ??
-          (json['verification_documents'] as List<dynamic>?)
-          ?.map((e) => e?.toString() ?? '')
-          .where((e) => e.isNotEmpty)
-          .toList(),
+      verificationDocumentUrls:
+          (json['verification_document_urls'] as List<dynamic>?)
+                  ?.map((e) => e?.toString() ?? '')
+                  .where((e) => e.isNotEmpty)
+                  .toList() ??
+              (json['verification_documents'] as List<dynamic>?)
+                  ?.map((e) => e?.toString() ?? '')
+                  .where((e) => e.isNotEmpty)
+                  .toList(),
       verifiedAt: json['verified_at'] != null
           ? DateTime.tryParse(json['verified_at'].toString())
           : null,

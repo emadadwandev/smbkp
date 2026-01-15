@@ -9,7 +9,7 @@ import '../pages/add_edit_match_stat_screen.dart';
 class MatchStatsListWidget extends StatelessWidget {
   final List<PlayerMatchStat> stats;
 
-  const MatchStatsListWidget({Key? key, required this.stats}) : super(key: key);
+  const MatchStatsListWidget({super.key, required this.stats});
 
   @override
   Widget build(BuildContext context) {

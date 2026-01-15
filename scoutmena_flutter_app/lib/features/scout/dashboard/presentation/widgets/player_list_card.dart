@@ -27,10 +27,13 @@ class PlayerListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locationParts = [city, country].where((e) => e != null && e.isNotEmpty).toList();
-    final locationText = locationParts.isNotEmpty ? locationParts.join(', ') : nationality;
+    final locationParts =
+        [city, country].where((e) => e != null && e.isNotEmpty).toList();
+    final locationText =
+        locationParts.isNotEmpty ? locationParts.join(', ') : nationality;
     final displayName = name.isNotEmpty ? name : 'Unknown Player';
-    final displayPosition = primaryPosition.isNotEmpty ? primaryPosition : 'Position N/A';
+    final displayPosition =
+        primaryPosition.isNotEmpty ? primaryPosition : 'Position N/A';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -72,7 +75,9 @@ class PlayerListCard extends StatelessWidget {
                   height: 60,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.3), width: 2),
+                    border: Border.all(
+                        color: Theme.of(context).primaryColor.withOpacity(0.3),
+                        width: 2),
                     image: profilePhotoUrl != null
                         ? DecorationImage(
                             image: NetworkImage(profilePhotoUrl!),
@@ -84,7 +89,9 @@ class PlayerListCard extends StatelessWidget {
                   child: profilePhotoUrl == null
                       ? Center(
                           child: Text(
-                            displayName.isNotEmpty ? displayName.substring(0, 1).toUpperCase() : '?',
+                            displayName.isNotEmpty
+                                ? displayName.substring(0, 1).toUpperCase()
+                                : '?',
                             style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: 24,
@@ -113,9 +120,12 @@ class PlayerListCard extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(0.1),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
@@ -132,7 +142,12 @@ class PlayerListCard extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 currentClub!,
-                                style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), fontSize: 13),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.7),
+                                    fontSize: 13),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -140,19 +155,36 @@ class PlayerListCard extends StatelessWidget {
                           else
                             Text(
                               "Free Agent",
-                              style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), fontSize: 13),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.7),
+                                  fontSize: 13),
                             ),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(Icons.location_on, size: 14, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
+                          Icon(Icons.location_on,
+                              size: 14,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.7)),
                           const SizedBox(width: 4),
                           Expanded(
                             child: Text(
-                              locationText.isNotEmpty ? locationText : 'Location Unknown',
-                              style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), fontSize: 13),
+                              locationText.isNotEmpty
+                                  ? locationText
+                                  : 'Location Unknown',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.7),
+                                  fontSize: 13),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -163,7 +195,12 @@ class PlayerListCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
+                Icon(Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.7)),
               ],
             ),
           ),

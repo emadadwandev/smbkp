@@ -2,9 +2,9 @@ import '../../domain/entities/academy_entity.dart';
 
 class AcademyModel extends AcademyEntity {
   const AcademyModel({
-    required String id,
-    required String name,
-  }) : super(id: id, name: name);
+    required super.id,
+    required super.name,
+  });
 
   factory AcademyModel.fromJson(Map<String, dynamic> json) {
     return AcademyModel(

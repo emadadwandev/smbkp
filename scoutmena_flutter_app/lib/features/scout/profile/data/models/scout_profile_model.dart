@@ -60,21 +60,21 @@ class ScoutProfileModel extends Equatable {
     if (specializationsRaw is List && specializationsRaw.isNotEmpty) {
       specializations = specializationsRaw.map((e) => e.toString()).toList();
     }
-    
+
     // Parse leagues safely
     List<String>? leaguesOfInterest;
     final leaguesRaw = json['leagues_of_interest'] ?? json['leagues'];
     if (leaguesRaw is List && leaguesRaw.isNotEmpty) {
       leaguesOfInterest = leaguesRaw.map((e) => e.toString()).toList();
     }
-    
+
     // Parse certificates safely
     List<String>? certificates;
     final certificatesRaw = json['certificates'];
     if (certificatesRaw is List && certificatesRaw.isNotEmpty) {
       certificates = certificatesRaw.map((e) => e.toString()).toList();
     }
-    
+
     // Parse social links safely
     Map<String, String>? socialLinks;
     final socialLinksRaw = json['social_links'];
@@ -97,10 +97,11 @@ class ScoutProfileModel extends Equatable {
         }
       });
     }
-    
+
     // Parse verification documents safely
     List<String>? verificationDocumentUrls;
-    final docsRaw = json['verification_document_urls'] ?? json['verification_documents'];
+    final docsRaw =
+        json['verification_document_urls'] ?? json['verification_documents'];
     if (docsRaw is List && docsRaw.isNotEmpty) {
       verificationDocumentUrls = docsRaw.map((e) => e.toString()).toList();
     }
@@ -108,7 +109,7 @@ class ScoutProfileModel extends Equatable {
     // Parse name from user object if not at root
     String firstName = json['first_name']?.toString() ?? '';
     String lastName = json['last_name']?.toString() ?? '';
-    
+
     if (firstName.isEmpty && lastName.isEmpty && json['user'] != null) {
       final user = json['user'];
       if (user is Map<String, dynamic>) {
@@ -128,7 +129,7 @@ class ScoutProfileModel extends Equatable {
         // which might be just how it was printed, but if it's a Map, the above works.
       }
     }
-    
+
     return ScoutProfileModel(
       id: json['id']?.toString(),
       userId: json['user_id']?.toString(),

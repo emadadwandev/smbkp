@@ -18,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _profileViewAlerts = true;
   bool _contactRequestAlerts = true;
   bool _videoUploadStatus = true;
-  
+
   String _selectedLanguage = 'en';
   String _selectedTheme = 'system';
 
@@ -93,11 +93,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     try {
       // Call backend logout endpoint
       // final response = await dio.post('/api/v1/auth/logout');
-      
+
       // Clear local storage
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
-      
+
       // Navigate to login screen
       if (!mounted) return;
       Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
@@ -188,17 +188,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
         ),
-        
+
         // Notifications section
         ExpansionTile(
-          leading: Icon(Icons.notifications_outlined, color: AppColors.primaryBlue),
+          leading:
+              Icon(Icons.notifications_outlined, color: AppColors.primaryBlue),
           title: Text('settings.notifications'.tr()),
           children: [
             SwitchListTile(
               title: Text('settings.push_notifications'.tr()),
               subtitle: Text('settings.push_notifications_desc'.tr()),
               value: _pushNotifications,
-              activeColor: AppColors.primaryBlue,
+              activeThumbColor: AppColors.primaryBlue,
               onChanged: (value) {
                 setState(() => _pushNotifications = value);
                 _savePreference('push_notifications', value);
@@ -208,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: Text('settings.email_notifications'.tr()),
               subtitle: Text('settings.email_notifications_desc'.tr()),
               value: _emailNotifications,
-              activeColor: AppColors.primaryBlue,
+              activeThumbColor: AppColors.primaryBlue,
               onChanged: (value) {
                 setState(() => _emailNotifications = value);
                 _savePreference('email_notifications', value);
@@ -217,7 +218,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SwitchListTile(
               title: Text('settings.profile_view_alerts'.tr()),
               value: _profileViewAlerts,
-              activeColor: AppColors.primaryBlue,
+              activeThumbColor: AppColors.primaryBlue,
               onChanged: (value) {
                 setState(() => _profileViewAlerts = value);
                 _savePreference('profile_view_alerts', value);
@@ -226,7 +227,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SwitchListTile(
               title: Text('settings.contact_request_alerts'.tr()),
               value: _contactRequestAlerts,
-              activeColor: AppColors.primaryBlue,
+              activeThumbColor: AppColors.primaryBlue,
               onChanged: (value) {
                 setState(() => _contactRequestAlerts = value);
                 _savePreference('contact_request_alerts', value);
@@ -235,7 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SwitchListTile(
               title: Text('settings.video_upload_status'.tr()),
               value: _videoUploadStatus,
-              activeColor: AppColors.primaryBlue,
+              activeThumbColor: AppColors.primaryBlue,
               onChanged: (value) {
                 setState(() => _videoUploadStatus = value);
                 _savePreference('video_upload_status', value);
@@ -243,7 +244,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ],
         ),
-        
+
         // Language section
         ListTile(
           leading: Icon(Icons.language, color: AppColors.primaryBlue),
@@ -252,12 +253,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () => _showLanguageDialog(),
         ),
-        
+
         // Theme section
         ListTile(
           leading: Icon(Icons.palette_outlined, color: AppColors.primaryBlue),
           title: Text('settings.theme'.tr()),
-          subtitle: Text('settings.theme_${_selectedTheme}'.tr()),
+          subtitle: Text('settings.theme_$_selectedTheme'.tr()),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () => _showThemeDialog(),
         ),
@@ -291,17 +292,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           },
         ),
         ListTile(
-          leading: Icon(Icons.description_outlined, color: AppColors.primaryBlue),
+          leading:
+              Icon(Icons.description_outlined, color: AppColors.primaryBlue),
           title: Text('settings.terms_conditions'.tr()),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Terms & Conditions will open in web view')),
+              SnackBar(
+                  content: Text('Terms & Conditions will open in web view')),
             );
           },
         ),
         ListTile(
-          leading: Icon(Icons.privacy_tip_outlined, color: AppColors.primaryBlue),
+          leading:
+              Icon(Icons.privacy_tip_outlined, color: AppColors.primaryBlue),
           title: Text('settings.privacy_policy'.tr()),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () {

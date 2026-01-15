@@ -281,6 +281,8 @@
     "skills_attributes": "المهارات والصفات",
     "tactical_attributes": "الصفات التكتيكية",
     "academy": "أكاديمية",
+    "player_reported_stats": "إحصائيات يقدّمها اللاعب",
+    "stats_verification_notice": "الإحصائيات مقدمة من اللاعبين، وقد يتم التحقق منها من قبل المدربين و أو الاكاديميات و أو سكاوت مينا",
     "levels": {
       "youth": "ناشئين",
       "academy": "أكاديمية",

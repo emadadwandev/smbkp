@@ -21,7 +21,7 @@ class RoleOption {
 
 class RoleSelectionScreen extends StatefulWidget {
   final String? phoneNumber;
-  
+
   const RoleSelectionScreen({
     super.key,
     this.phoneNumber,
@@ -170,9 +170,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? role.color
-                : Theme.of(context).dividerColor,
+            color: isSelected ? role.color : Theme.of(context).dividerColor,
             width: isSelected ? 3 : 1,
           ),
           boxShadow: isSelected

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/services/otp_service.dart';
 import '../../../../injection.dart';
@@ -34,7 +33,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _sendResetLink() async {
     setState(() => _errorMessage = null);
-    
+
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
@@ -44,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       await _otpService.sendForgotPasswordEmail(
         email: _emailController.text.trim(),
       );
-      
+
       if (mounted) {
         setState(() {
           _isLoading = false;

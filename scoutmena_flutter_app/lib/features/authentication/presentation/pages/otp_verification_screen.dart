@@ -50,12 +50,13 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    print('DEBUG: OTPVerificationScreen initialized with accountType: ${widget.accountType}'); // Debug print
-    
+    print(
+        'DEBUG: OTPVerificationScreen initialized with accountType: ${widget.accountType}'); // Debug print
+
     if (widget.verificationId != null) {
       _verificationId = widget.verificationId;
     }
-    
+
     _startResendTimer();
   }
 
@@ -142,7 +143,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
 
   Future<void> _verifyOTP() async {
     final otp = _otpControllers.map((c) => c.text).join();
-    
+
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter the complete OTP')),
@@ -186,16 +187,22 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
         );
 
         // Store authentication token
-        print('DEBUG: Login successful. Token: ${loginResponse.token.substring(0, 10)}...');
-        await _secureStorage.write(key: AppConstants.accessTokenKey, value: loginResponse.token);
-        await _secureStorage.write(key: AppConstants.userIdKey, value: loginResponse.user.id);
-        await _secureStorage.write(key: AppConstants.userRoleKey, value: loginResponse.user.accountType);
+        print(
+            'DEBUG: Login successful. Token: ${loginResponse.token.substring(0, 10)}...');
+        await _secureStorage.write(
+            key: AppConstants.accessTokenKey, value: loginResponse.token);
+        await _secureStorage.write(
+            key: AppConstants.userIdKey, value: loginResponse.user.id);
+        await _secureStorage.write(
+            key: AppConstants.userRoleKey,
+            value: loginResponse.user.accountType);
 
         // Register device for notifications
         try {
           final notificationService = getIt<NotificationService>();
           print('DEBUG: Calling registerDevice with token');
-          await notificationService.registerDevice(authToken: loginResponse.token);
+          await notificationService.registerDevice(
+              authToken: loginResponse.token);
         } catch (e) {
           debugPrint('Failed to register device: $e');
         }
@@ -302,9 +309,10 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       maxLength: 1,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                       decoration: InputDecoration(
                         counterText: '',
                         contentPadding: EdgeInsets.zero,
@@ -345,7 +353,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.error_outline, color: Colors.red.shade700, size: 20),
+                      Icon(Icons.error_outline,
+                          color: Colors.red.shade700, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(

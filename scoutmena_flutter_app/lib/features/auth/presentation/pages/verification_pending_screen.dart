@@ -5,7 +5,7 @@ import '../../../../app/routes.dart';
 class VerificationPendingScreen extends StatelessWidget {
   final VoidCallback? onLogout;
 
-  const VerificationPendingScreen({Key? key, this.onLogout}) : super(key: key);
+  const VerificationPendingScreen({super.key, this.onLogout});
 
   @override
   Widget build(BuildContext context) {

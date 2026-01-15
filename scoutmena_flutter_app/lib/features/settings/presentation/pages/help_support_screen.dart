@@ -75,7 +75,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
 
   List<Map<String, String>> get _filteredFaqs {
     if (_searchQuery.isEmpty) return _faqItems;
-    
+
     return _faqItems.where((faq) {
       final question = faq['question']!.tr().toLowerCase();
       final answer = faq['answer']!.tr().toLowerCase();
@@ -151,7 +151,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ContactUsScreen(isFeedback: true),
+                          builder: (context) =>
+                              const ContactUsScreen(isFeedback: true),
                         ),
                       );
                     },

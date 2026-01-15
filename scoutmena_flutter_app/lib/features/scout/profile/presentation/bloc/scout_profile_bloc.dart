@@ -3,8 +3,10 @@ import 'package:injectable/injectable.dart';
 import '../../domain/usecases/get_scout_profile.dart';
 import '../../domain/usecases/create_scout_profile.dart' as create_usecase;
 import '../../domain/usecases/update_scout_profile.dart' as update_usecase;
-import '../../domain/usecases/upload_verification_documents.dart' as upload_docs_usecase;
-import '../../domain/usecases/upload_scout_profile_photo.dart' as upload_photo_usecase;
+import '../../domain/usecases/upload_verification_documents.dart'
+    as upload_docs_usecase;
+import '../../domain/usecases/upload_scout_profile_photo.dart'
+    as upload_photo_usecase;
 import 'scout_profile_event.dart';
 import 'scout_profile_state.dart';
 
@@ -14,7 +16,8 @@ class ScoutProfileBloc extends Bloc<ScoutProfileEvent, ScoutProfileState> {
   final GetScoutProfile getScoutProfile;
   final create_usecase.CreateScoutProfile createScoutProfile;
   final update_usecase.UpdateScoutProfile updateScoutProfile;
-  final upload_docs_usecase.UploadVerificationDocuments uploadVerificationDocuments;
+  final upload_docs_usecase.UploadVerificationDocuments
+      uploadVerificationDocuments;
   final upload_photo_usecase.UploadScoutProfilePhoto uploadScoutProfilePhoto;
 
   ScoutProfileBloc({
@@ -90,11 +93,12 @@ class ScoutProfileBloc extends Bloc<ScoutProfileEvent, ScoutProfileState> {
         emit(ScoutProfileCreated(profile));
       } catch (e) {
         // If profile already exists (409 Conflict or 400 Bad Request), try updating instead
-        if (e.toString().contains('409') || 
-            e.toString().contains('400') || 
+        if (e.toString().contains('409') ||
+            e.toString().contains('400') ||
             e.toString().toLowerCase().contains('already exists')) {
           final profile = await updateScoutProfile(profileData);
-          emit(ScoutProfileCreated(profile)); // Treat update as creation success for this flow
+          emit(ScoutProfileCreated(
+              profile)); // Treat update as creation success for this flow
         } else {
           rethrow;
         }

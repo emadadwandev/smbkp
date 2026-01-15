@@ -62,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               trailing: Switch(
                 value: isDark,
-                activeColor: AppColors.primaryBlue,
+                activeThumbColor: AppColors.primaryBlue,
                 onChanged: (value) {
                   context.read<ThemeCubit>().toggleTheme();
                 },

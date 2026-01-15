@@ -4,7 +4,8 @@ import '../../domain/usecases/create_coach_profile.dart' as create;
 import '../../domain/usecases/get_coach_profile.dart';
 import '../../domain/usecases/update_coach_profile.dart' as update;
 import '../../domain/usecases/upload_coach_profile_photo.dart' as upload_photo;
-import '../../domain/usecases/upload_coach_verification_documents.dart' as upload_docs;
+import '../../domain/usecases/upload_coach_verification_documents.dart'
+    as upload_docs;
 import 'coach_profile_event.dart';
 import 'coach_profile_state.dart';
 
@@ -15,7 +16,8 @@ class CoachProfileBloc extends Bloc<CoachProfileEvent, CoachProfileState> {
   final create.CreateCoachProfile createCoachProfile;
   final update.UpdateCoachProfile updateCoachProfile;
   final upload_photo.UploadCoachProfilePhoto uploadCoachProfilePhoto;
-  final upload_docs.UploadCoachVerificationDocuments uploadVerificationDocuments;
+  final upload_docs.UploadCoachVerificationDocuments
+      uploadVerificationDocuments;
 
   CoachProfileBloc({
     required this.getCoachProfile,
@@ -95,11 +97,12 @@ class CoachProfileBloc extends Bloc<CoachProfileEvent, CoachProfileState> {
         emit(CoachProfileCreated(profile));
       } catch (e) {
         // If profile already exists (409 Conflict or 400 Bad Request), try updating instead
-        if (e.toString().contains('409') || 
-            e.toString().contains('400') || 
+        if (e.toString().contains('409') ||
+            e.toString().contains('400') ||
             e.toString().toLowerCase().contains('already exists')) {
           final profile = await updateCoachProfile(profileData);
-          emit(CoachProfileCreated(profile)); // Treat update as creation success for this flow
+          emit(CoachProfileCreated(
+              profile)); // Treat update as creation success for this flow
         } else {
           rethrow;
         }
@@ -170,7 +173,7 @@ class CoachProfileBloc extends Bloc<CoachProfileEvent, CoachProfileState> {
     try {
       // Show upload progress
       emit(const UploadingCoachVerificationDocuments(0.0));
-      
+
       // Simulate initial progress
       await Future.delayed(const Duration(milliseconds: 300));
       emit(const UploadingCoachVerificationDocuments(0.3));

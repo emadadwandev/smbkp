@@ -84,7 +84,8 @@ class ProfessionalPlayerCard extends StatelessWidget {
                         top: 8,
                         left: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: _getScoreColor(completionScore),
                             borderRadius: BorderRadius.circular(12),
@@ -102,7 +103,7 @@ class ProfessionalPlayerCard extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Right Side: Info
               Expanded(
                 child: Padding(
@@ -129,7 +130,8 @@ class ProfessionalPlayerCard extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
                                     color: AppColors.primaryBlue,
                                     borderRadius: BorderRadius.circular(4),
@@ -150,14 +152,18 @@ class ProfessionalPlayerCard extends StatelessWidget {
                             InkWell(
                               onTap: onBookmark,
                               child: Icon(
-                                isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                                color: isBookmarked ? AppColors.primaryBlue : Colors.grey,
+                                isBookmarked
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                color: isBookmarked
+                                    ? AppColors.primaryBlue
+                                    : Colors.grey,
                               ),
                             ),
                         ],
                       ),
                       const Spacer(),
-                      
+
                       // Stats Row
                       Row(
                         children: [
@@ -173,7 +179,8 @@ class ProfessionalPlayerCard extends StatelessWidget {
                             Expanded(
                               child: Row(
                                 children: [
-                                  const Icon(Icons.shield_outlined, size: 14, color: Colors.grey),
+                                  const Icon(Icons.shield_outlined,
+                                      size: 14, color: Colors.grey),
                                   const SizedBox(width: 4),
                                   Expanded(
                                     child: Text(
@@ -193,14 +200,16 @@ class ProfessionalPlayerCard extends StatelessWidget {
                             InkWell(
                               onTap: onAddToTeam,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   color: AppColors.primaryBlue.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.add, size: 14, color: AppColors.primaryBlue),
+                                    Icon(Icons.add,
+                                        size: 14, color: AppColors.primaryBlue),
                                     const SizedBox(width: 4),
                                     Text(
                                       'Add to Team',

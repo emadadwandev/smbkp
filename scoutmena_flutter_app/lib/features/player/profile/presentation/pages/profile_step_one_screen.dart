@@ -20,7 +20,7 @@ class ProfileStepOneScreen extends StatefulWidget {
 
 class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Pre-filled from registration
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
@@ -28,7 +28,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
   late TextEditingController _phoneController;
   late TextEditingController _countryController;
   late DateTime? _dateOfBirth;
-  
+
   // Additional fields
   late TextEditingController _cityController;
   // late TextEditingController _nationalityController; // Replaced with dropdown
@@ -88,17 +88,21 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
       text: widget.initialData['country'] ?? '',
     );
     _dateOfBirth = widget.initialData['dateOfBirth'];
-    
+
     // Initialize additional fields
     _cityController = TextEditingController(
       text: widget.initialData['city'] ?? '',
     );
-    
+
     // Initialize Nationality
-    String? initialNat = widget.initialData['nationality'] ?? widget.initialData['country'];
+    String? initialNat =
+        widget.initialData['nationality'] ?? widget.initialData['country'];
     if (initialNat != null && initialNat.isNotEmpty) {
       final match = _countries.firstWhere(
-        (c) => c['nationality'] == initialNat || c['name'] == initialNat || c['code'] == initialNat,
+        (c) =>
+            c['nationality'] == initialNat ||
+            c['name'] == initialNat ||
+            c['code'] == initialNat,
         orElse: () => {},
       );
       if (match.isNotEmpty) {
@@ -107,7 +111,9 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
     }
 
     _displayNameController = TextEditingController(
-      text: widget.initialData['displayName'] ?? widget.initialData['firstName'] ?? '',
+      text: widget.initialData['displayName'] ??
+          widget.initialData['firstName'] ??
+          '',
     );
   }
 
@@ -127,20 +133,22 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
     if (_countryController.text.isEmpty) {
       _countryController.text = widget.initialData['country'] ?? '';
     }
-    if (_dateOfBirth == null) {
-      _dateOfBirth = widget.initialData['dateOfBirth'];
-    }
+    _dateOfBirth ??= widget.initialData['dateOfBirth'];
     if (_selectedNationality == null) {
-       String? initialNat = widget.initialData['nationality'] ?? widget.initialData['country'];
-       if (initialNat != null && initialNat.isNotEmpty) {
-          final match = _countries.firstWhere(
-            (c) => c['nationality'] == initialNat || c['name'] == initialNat || c['code'] == initialNat,
-            orElse: () => {},
-          );
-          if (match.isNotEmpty) {
-            _selectedNationality = match['nationality'];
-          }
-       }
+      String? initialNat =
+          widget.initialData['nationality'] ?? widget.initialData['country'];
+      if (initialNat != null && initialNat.isNotEmpty) {
+        final match = _countries.firstWhere(
+          (c) =>
+              c['nationality'] == initialNat ||
+              c['name'] == initialNat ||
+              c['code'] == initialNat,
+          orElse: () => {},
+        );
+        if (match.isNotEmpty) {
+          _selectedNationality = match['nationality'];
+        }
+      }
     }
   }
 
@@ -160,14 +168,15 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
   void _handleNext() {
     if (_formKey.currentState!.validate()) {
       String countryValue = _countryController.text.trim();
-      
+
       // Try to find the country code if the user entered a name
       final countryMatch = _countries.firstWhere(
-        (c) => c['name']?.toLowerCase() == countryValue.toLowerCase() || 
-               c['code']?.toLowerCase() == countryValue.toLowerCase(),
+        (c) =>
+            c['name']?.toLowerCase() == countryValue.toLowerCase() ||
+            c['code']?.toLowerCase() == countryValue.toLowerCase(),
         orElse: () => {},
       );
-      
+
       if (countryMatch.isNotEmpty) {
         countryValue = countryMatch['code']!;
       }
@@ -184,7 +193,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
         'nationality': _selectedNationality ?? '',
         'displayName': _displayNameController.text.trim(),
       };
-      
+
       widget.onNext(data);
     }
   }
@@ -206,7 +215,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
               // Progress indicator
               _buildProgressIndicator(1),
               const SizedBox(height: 24),
-              
+
               // Step title
               Text(
                 'profile.main_info'.tr(),
@@ -224,7 +233,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Pre-filled fields (editable)
               Text(
                 'profile.basic_information'.tr(),
@@ -234,42 +243,42 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               _buildReadOnlyField(
                 label: 'auth.first_name'.tr(),
                 controller: _firstNameController,
                 icon: Icons.person,
               ),
               const SizedBox(height: 16),
-              
+
               _buildReadOnlyField(
                 label: 'auth.last_name'.tr(),
                 controller: _lastNameController,
                 icon: Icons.person_outline,
               ),
               const SizedBox(height: 16),
-              
+
               _buildReadOnlyField(
                 label: 'auth.email'.tr(),
                 controller: _emailController,
                 icon: Icons.email,
               ),
               const SizedBox(height: 16),
-              
+
               _buildReadOnlyField(
                 label: 'auth.phone_number'.tr(),
                 controller: _phoneController,
                 icon: Icons.phone,
               ),
               const SizedBox(height: 16),
-              
+
               _buildReadOnlyField(
                 label: 'auth.country'.tr(),
                 controller: _countryController,
                 icon: Icons.flag,
               ),
               const SizedBox(height: 16),
-              
+
               if (_dateOfBirth != null)
                 _buildReadOnlyField(
                   label: 'auth.date_of_birth'.tr(),
@@ -277,7 +286,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                   icon: Icons.calendar_today,
                 ),
               const SizedBox(height: 32),
-              
+
               // Additional editable fields
               Text(
                 'profile.additional_information'.tr(),
@@ -287,7 +296,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               _buildTextField(
                 label: 'profile.city'.tr(),
                 controller: _cityController,
@@ -300,28 +309,32 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              
+
               DropdownButtonFormField<String>(
-                value: _selectedNationality,
+                initialValue: _selectedNationality,
                 isExpanded: true,
                 decoration: InputDecoration(
                   labelText: 'profile.nationality'.tr(),
-                  prefixIcon: const Icon(Icons.public, color: AppColors.primaryBlue),
+                  prefixIcon:
+                      const Icon(Icons.public, color: AppColors.primaryBlue),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.primaryBlue, width: 2),
+                    borderSide: const BorderSide(
+                        color: AppColors.primaryBlue, width: 2),
                   ),
                 ),
-                items: _countries.map((c) => DropdownMenuItem(
-                  value: c['nationality'],
-                  child: Text(
-                    c['name']!,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )).toList(),
+                items: _countries
+                    .map((c) => DropdownMenuItem(
+                          value: c['nationality'],
+                          child: Text(
+                            c['name']!,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList(),
                 onChanged: (v) => setState(() => _selectedNationality = v),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -331,7 +344,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              
+
               _buildTextField(
                 label: 'profile.display_name'.tr(),
                 controller: _displayNameController,
@@ -340,7 +353,7 @@ class _ProfileStepOneScreenState extends State<ProfileStepOneScreen> {
                 required: false,
               ),
               const SizedBox(height: 32),
-              
+
               // Next button
               SizedBox(
                 width: double.infinity,

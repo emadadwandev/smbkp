@@ -27,31 +27,31 @@ class ProfileStepTwoScreen extends StatefulWidget {
 
 class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Physical attributes
   late TextEditingController _heightController;
   late TextEditingController _weightController;
   String? _preferredFoot;
-  
+
   // Playing information
   String? _primaryPosition;
   List<String> _secondaryPositions = [];
   late TextEditingController _currentClubController;
   late TextEditingController _jerseyNumberController;
   DateTime? _careerStartDate;
-  
+
   // Academy Info
   List<AcademyEntity> _academies = [];
   String? _selectedAcademyId;
   late TextEditingController _otherAcademyController;
   bool _isLoadingAcademies = false;
-  
+
   // Professional info
   late TextEditingController _bioController;
   List<String> _achievements = [];
   late TextEditingController _agentNameController;
   late TextEditingController _agentEmailController;
-  
+
   final List<String> _positions = [
     'goalkeeper',
     'center_back',
@@ -65,13 +65,13 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
     'striker',
     'second_striker',
   ];
-  
+
   final List<String> _footOptions = ['left', 'right', 'both'];
 
   @override
   void initState() {
     super.initState();
-    
+
     _heightController = TextEditingController(
       text: widget.initialData['heightCm']?.toString() ?? '',
     );
@@ -79,9 +79,10 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
       text: widget.initialData['weightKg']?.toString() ?? '',
     );
     _preferredFoot = widget.initialData['preferredFoot'];
-    
+
     _primaryPosition = widget.initialData['primaryPosition'];
-    _secondaryPositions = List<String>.from(widget.initialData['secondaryPositions'] ?? []);
+    _secondaryPositions =
+        List<String>.from(widget.initialData['secondaryPositions'] ?? []);
     _currentClubController = TextEditingController(
       text: widget.initialData['currentClub'] ?? '',
     );
@@ -89,12 +90,12 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
       text: widget.initialData['jerseyNumber']?.toString() ?? '',
     );
     _careerStartDate = widget.initialData['careerStartDate'];
-    
+
     _selectedAcademyId = widget.initialData['academyId'];
     _otherAcademyController = TextEditingController(
       text: widget.initialData['academyName'] ?? '',
     );
-    
+
     _bioController = TextEditingController(
       text: widget.initialData['bio'] ?? '',
     );
@@ -131,35 +132,36 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
         );
         return;
       }
-      
+
       final data = {
         ...widget.initialData,
-        'heightCm': _heightController.text.isNotEmpty 
-            ? int.tryParse(_heightController.text) 
+        'heightCm': _heightController.text.isNotEmpty
+            ? int.tryParse(_heightController.text)
             : null,
-        'weightKg': _weightController.text.isNotEmpty 
-            ? int.tryParse(_weightController.text) 
+        'weightKg': _weightController.text.isNotEmpty
+            ? int.tryParse(_weightController.text)
             : null,
         'preferredFoot': _preferredFoot,
         'primaryPosition': _primaryPosition!,
         'secondaryPositions': _secondaryPositions,
         'currentClub': _currentClubController.text.trim(),
-        'jerseyNumber': _jerseyNumberController.text.isNotEmpty 
-            ? int.tryParse(_jerseyNumberController.text) 
+        'jerseyNumber': _jerseyNumberController.text.isNotEmpty
+            ? int.tryParse(_jerseyNumberController.text)
             : null,
         'careerStartDate': _careerStartDate,
         'academyId': _selectedAcademyId == 'other' ? null : _selectedAcademyId,
-        'academyName': _selectedAcademyId == 'other' ? _otherAcademyController.text.trim() : null,
+        'academyName': _selectedAcademyId == 'other'
+            ? _otherAcademyController.text.trim()
+            : null,
         'bio': _bioController.text.trim(),
         'achievements': _achievements,
         'agentName': _agentNameController.text.trim(),
         'agentEmail': _agentEmailController.text.trim(),
       };
-      
+
       widget.onNext(data);
     }
   }
-
 
   void _addAchievement(String achievement) {
     if (achievement.trim().isNotEmpty) {
@@ -178,11 +180,12 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
   Future<void> _selectCareerStartDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _careerStartDate ?? DateTime.now().subtract(const Duration(days: 1)),
+      initialDate:
+          _careerStartDate ?? DateTime.now().subtract(const Duration(days: 1)),
       firstDate: DateTime(1990),
       lastDate: DateTime.now().subtract(const Duration(days: 1)),
     );
-    
+
     if (picked != null) {
       setState(() {
         _careerStartDate = picked;
@@ -221,7 +224,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
               children: [
                 _buildProgressIndicator(2),
                 const SizedBox(height: 24),
-                
+
                 Text(
                   'profile.sport_data'.tr(),
                   style: const TextStyle(
@@ -238,11 +241,11 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Physical Attributes
                 _buildSectionTitle('profile.physical_attributes'.tr()),
                 const SizedBox(height: 16),
-                
+
                 Row(
                   children: [
                     Expanded(
@@ -267,7 +270,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
+
                 _buildDropdown(
                   label: 'profile.preferred_foot'.tr(),
                   value: _preferredFoot,
@@ -276,31 +279,34 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   itemBuilder: (foot) => 'profile.foot_$foot'.tr(),
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Playing Information
                 _buildSectionTitle('profile.playing_info'.tr()),
                 const SizedBox(height: 16),
-                
+
                 _buildDropdown(
                   label: 'profile.primary_position'.tr(),
                   value: _primaryPosition,
                   items: _positions,
-                  onChanged: (value) => setState(() => _primaryPosition = value),
+                  onChanged: (value) =>
+                      setState(() => _primaryPosition = value),
                   itemBuilder: (pos) => 'positions.$pos'.tr(),
                   required: true,
                 ),
                 const SizedBox(height: 16),
-                
+
                 _buildMultiSelectChips(
                   label: 'profile.secondary_positions'.tr(),
                   selectedItems: _secondaryPositions,
-                  allItems: _positions.where((p) => p != _primaryPosition).toList(),
-                  onChanged: (selected) => setState(() => _secondaryPositions = selected),
+                  allItems:
+                      _positions.where((p) => p != _primaryPosition).toList(),
+                  onChanged: (selected) =>
+                      setState(() => _secondaryPositions = selected),
                   itemBuilder: (pos) => 'positions.$pos'.tr(),
                   maxSelection: 3,
                 ),
                 const SizedBox(height: 16),
-                
+
                 _buildTextField(
                   label: 'profile.current_club'.tr(),
                   controller: _currentClubController,
@@ -322,7 +328,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   ),
                 ],
                 const SizedBox(height: 16),
-                
+
                 Row(
                   children: [
                     Expanded(
@@ -344,11 +350,11 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   ],
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Professional Info
                 _buildSectionTitle('profile.professional_info'.tr()),
                 const SizedBox(height: 16),
-                
+
                 _buildTextArea(
                   label: 'profile.bio'.tr(),
                   controller: _bioController,
@@ -356,10 +362,10 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   hint: 'profile.bio_hint'.tr(),
                 ),
                 const SizedBox(height: 16),
-                
+
                 _buildAchievementsList(),
                 const SizedBox(height: 16),
-                
+
                 _buildTextField(
                   label: 'profile.agent_name'.tr(),
                   controller: _agentNameController,
@@ -367,7 +373,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   required: false,
                 ),
                 const SizedBox(height: 16),
-                
+
                 _buildTextField(
                   label: 'profile.agent_email'.tr(),
                   controller: _agentEmailController,
@@ -376,7 +382,8 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   required: false,
                   validator: (value) {
                     if (value != null && value.isNotEmpty) {
-                      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      final emailRegex =
+                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                       if (!emailRegex.hasMatch(value)) {
                         return 'errors.invalid_email'.tr();
                       }
@@ -385,7 +392,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
                   },
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Navigation buttons
                 Row(
                   children: [
@@ -442,7 +449,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
 
   Widget _buildAcademyDropdown() {
     return DropdownButtonFormField<String>(
-      value: _selectedAcademyId,
+      initialValue: _selectedAcademyId,
       decoration: InputDecoration(
         labelText: 'profile.academy'.tr() + ' (optional)'.tr(),
         border: OutlineInputBorder(
@@ -464,7 +471,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
             value: academy.id,
             child: Text(academy.name),
           );
-        }).toList(),
+        }),
         DropdownMenuItem<String>(
           value: 'other',
           child: Text('common.other'.tr()),
@@ -477,7 +484,6 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
       },
     );
   }
-
 
   Widget _buildProgressIndicator(int currentStep) {
     return Row(
@@ -596,7 +602,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
     bool required = false,
   }) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(
         labelText: required ? '$label *' : label,
         border: OutlineInputBorder(
@@ -636,7 +642,9 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
           ),
         ),
         child: Text(
-          date != null ? DateFormat('yyyy-MM-dd').format(date) : 'profile.select_date'.tr(),
+          date != null
+              ? DateFormat('yyyy-MM-dd').format(date)
+              : 'profile.select_date'.tr(),
           style: TextStyle(
             color: date != null ? Colors.black : Colors.grey,
           ),
@@ -670,7 +678,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
           children: allItems.map((item) {
             final isSelected = selectedItems.contains(item);
             final canSelect = selectedItems.length < maxSelection || isSelected;
-            
+
             return FilterChip(
               label: Text(itemBuilder(item)),
               selected: isSelected,
@@ -748,7 +756,7 @@ class _ProfileStepTwoScreenState extends State<ProfileStepTwoScreen> {
 
   Future<void> _showAddAchievementDialog() async {
     final controller = TextEditingController();
-    
+
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(

@@ -11,15 +11,14 @@ import '../../../../../core/themes/app_colors.dart';
 /// Scout document upload screen
 /// Second step in scout registration: Upload verification documents
 class ScoutDocumentUploadScreen extends StatefulWidget {
-  const ScoutDocumentUploadScreen({Key? key}) : super(key: key);
+  const ScoutDocumentUploadScreen({super.key});
 
   @override
   State<ScoutDocumentUploadScreen> createState() =>
       _ScoutDocumentUploadScreenState();
 }
 
-class _ScoutDocumentUploadScreenState
-    extends State<ScoutDocumentUploadScreen> {
+class _ScoutDocumentUploadScreenState extends State<ScoutDocumentUploadScreen> {
   final List<File> _selectedDocuments = [];
   bool _isUploading = false;
 
@@ -99,8 +98,7 @@ class _ScoutDocumentUploadScreenState
           // Selected documents list
           if (_selectedDocuments.isNotEmpty) ...[
             Text(
-              'scout.selected_documents'.tr() +
-                  ' (${_selectedDocuments.length}/5)',
+              '${'scout.selected_documents'.tr()} (${_selectedDocuments.length}/5)',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -171,20 +169,20 @@ class _ScoutDocumentUploadScreenState
             ],
           ),
           const SizedBox(height: 12),
-          _buildInfoItem('• ' + 'scout.professional_id'.tr()),
-          _buildInfoItem('• ' + 'scout.scout_license'.tr()),
-          _buildInfoItem('• ' + 'scout.club_affiliation_letter'.tr()),
-          _buildInfoItem('• ' + 'scout.business_card'.tr()),
+          _buildInfoItem('• ${'scout.professional_id'.tr()}'),
+          _buildInfoItem('• ${'scout.scout_license'.tr()}'),
+          _buildInfoItem('• ${'scout.club_affiliation_letter'.tr()}'),
+          _buildInfoItem('• ${'scout.business_card'.tr()}'),
           const SizedBox(height: 12),
           Text(
-            'scout.accepted_formats'.tr() + ': PDF, JPG, PNG',
+            '${'scout.accepted_formats'.tr()}: PDF, JPG, PNG',
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.shade600,
             ),
           ),
           Text(
-            'scout.max_file_size'.tr() + ': 10MB',
+            '${'scout.max_file_size'.tr()}: 10MB',
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.shade600,
