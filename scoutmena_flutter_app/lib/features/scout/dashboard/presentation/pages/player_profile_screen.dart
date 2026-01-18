@@ -462,21 +462,37 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () => _showContactRequestDialog(context, profile),
+            onPressed: () {
+              // Contact request feature temporarily disabled - coming soon
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('scout.contact_feature_coming_soon'.tr()),
+                  backgroundColor: AppColors.primaryBlue,
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBlue,
+              backgroundColor: Colors.grey[400], // Disabled appearance
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text(
-              'scout.contact_request'.tr(),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'scout.contact_request'.tr(),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.access_time, size: 16),
+              ],
             ),
           ),
         ),

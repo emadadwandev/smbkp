@@ -377,6 +377,7 @@
     "contact_request": "Contact Request",
     "removed_bookmark": "Removed from bookmarks",
     "added_bookmark": "Added to bookmarks",
+    "contact_feature_coming_soon": "Contact feature is coming soon! Stay tuned.",
     "contact_player": "Contact {}",
     "contact_message_hint": "Send a message to express your interest.",
     "enter_message": "Enter your message (optional)",

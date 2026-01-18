@@ -2,7 +2,7 @@ name: scoutmena_app
 description: "ScoutMena - Digital talent discovery platform for football players and scouts"
 publish_to: 'none'
 
-version: 1.1.0+5
+version: 1.1.1+6
 
 environment:
   sdk: '>=3.4.0 <4.0.0'

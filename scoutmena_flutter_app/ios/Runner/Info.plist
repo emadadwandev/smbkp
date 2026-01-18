@@ -97,9 +97,13 @@
 	<key>FacebookDisplayName</key>
 	<string>ScoutMena</string>
 	
-	<!-- Facebook Queries Scheme -->
+	<!-- URL Schemes for url_launcher (Required for opening external links) -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<!-- HTTP/HTTPS schemes for opening web links -->
+		<string>http</string>
+		<string>https</string>
+		<!-- Facebook schemes -->
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
